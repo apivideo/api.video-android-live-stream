@@ -1,0 +1,3 @@
+include ':livestream-module'
+include ':app'
+rootProject.name = "app"
