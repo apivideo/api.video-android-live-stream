@@ -1,6 +1,7 @@
 package video.api.livestream_module
 
 import android.content.Context
+import android.util.Log
 import android.view.SurfaceView
 import com.pedro.encoder.input.video.CameraHelper
 import com.pedro.rtplibrary.base.Camera1Base
@@ -94,12 +95,24 @@ class ApiVideoLiveStream(private val config: Config) {
         start(liveStream.streamKey!!, surfaceView, context, connectChecker)
 
     fun start(
+        liveStream: LiveStream,
+        context: Context,
+        connectChecker: ConnectCheckerRtmp
+    ): Camera1Base =
+        start(liveStream.streamKey!!, null, context, connectChecker)
+
+    fun start(
         streamKey: String,
-        surfaceView: SurfaceView,
+        surfaceView: SurfaceView?,
         context: Context,
         connectChecker: ConnectCheckerRtmp
     ): Camera1Base {
-        val rtmpCamera1 = RtmpCamera1(surfaceView, connectChecker)
+        val rtmpCamera1: RtmpCamera1 = if(surfaceView != null){
+            RtmpCamera1(surfaceView, connectChecker)
+        }else{
+            RtmpCamera1(context, connectChecker)
+        }
+
 
         val audioReady = rtmpCamera1.prepareAudio(
             config.audioBitrate,
