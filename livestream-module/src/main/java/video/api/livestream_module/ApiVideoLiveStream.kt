@@ -1,11 +1,13 @@
 package video.api.livestream_module
 
 import android.content.Context
-import android.util.Log
+import android.os.Build
 import android.view.SurfaceView
+import androidx.annotation.RequiresApi
 import com.pedro.encoder.input.video.CameraHelper
-import com.pedro.rtplibrary.base.Camera1Base
-import com.pedro.rtplibrary.rtmp.RtmpCamera1
+import com.pedro.rtplibrary.base.Camera2Base
+import com.pedro.rtplibrary.rtmp.RtmpCamera2
+import com.pedro.rtplibrary.view.OpenGlView
 import net.ossrs.rtmp.ConnectCheckerRtmp
 import video.api.livestream_module.model.LiveStream
 import java.io.IOException
@@ -86,35 +88,73 @@ class ApiVideoLiveStream(private val config: Config) {
 
 
 
+    // SurfaceView
+    // LiveStream
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     fun start(
         liveStream: LiveStream,
+        url: String? = null,
         surfaceView: SurfaceView,
         context: Context,
         connectChecker: ConnectCheckerRtmp
-    ): Camera1Base =
-        start(liveStream.streamKey!!, surfaceView, context, connectChecker)
+    ): Camera2Base =
+        start(liveStream.streamKey!!,url, surfaceView, null, context, connectChecker)
 
+    // LiveStream
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     fun start(
         liveStream: LiveStream,
+        url: String? = null,
         context: Context,
         connectChecker: ConnectCheckerRtmp
-    ): Camera1Base =
-        start(liveStream.streamKey!!, null, context, connectChecker)
+    ): Camera2Base =
+        start(liveStream.streamKey!!,url,null, null, context, connectChecker)
 
+    //streamKey
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     fun start(
         streamKey: String,
-        surfaceView: SurfaceView?,
+        url: String? = null,
         context: Context,
         connectChecker: ConnectCheckerRtmp
-    ): Camera1Base {
-        val rtmpCamera1: RtmpCamera1 = if(surfaceView != null){
-            RtmpCamera1(surfaceView, connectChecker)
-        }else{
-            RtmpCamera1(context, connectChecker)
+    ): Camera2Base =
+        start(streamKey,url, null,null, context, connectChecker)
+
+    // SurfaceView
+    // LiveStream
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
+    fun start(
+        liveStream: LiveStream,
+        url: String? = null,
+        openGleView: OpenGlView,
+        context: Context,
+        connectChecker: ConnectCheckerRtmp
+    ): Camera2Base =
+        start(liveStream.streamKey!!,url, null, openGleView, context, connectChecker)
+
+
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
+    fun start(
+        streamKey: String,
+        url: String? = "rtmp://broadcast.api.video/s/",
+        surfaceView: SurfaceView?,
+        openGlView: OpenGlView?,
+        context: Context,
+        connectChecker: ConnectCheckerRtmp
+    ): Camera2Base {
+        val rtmpCamera2: RtmpCamera2 = when {
+            surfaceView != null -> {
+                RtmpCamera2(surfaceView, connectChecker)
+            }
+            openGlView != null -> {
+                RtmpCamera2(openGlView, connectChecker)
+            }
+            else -> {
+                RtmpCamera2(context,true,connectChecker)
+            }
         }
 
-
-        val audioReady = rtmpCamera1.prepareAudio(
+        val audioReady = rtmpCamera2.prepareAudio(
             config.audioBitrate,
             config.audioSampleRate,
             config.stereo,
@@ -122,7 +162,7 @@ class ApiVideoLiveStream(private val config: Config) {
             config.noiseSuppressor
         )
 
-        val videoReady = rtmpCamera1.prepareVideo(
+        val videoReady = rtmpCamera2.prepareVideo(
             config.videoQuality.width,
             config.videoQuality.height,
             config.videoFps,
@@ -132,9 +172,9 @@ class ApiVideoLiveStream(private val config: Config) {
         )
 
         if (audioReady && videoReady) {
-            rtmpCamera1.startStream("rtmp://broadcast.api.video/s/$streamKey")
+            rtmpCamera2.startStream(url+streamKey)
 
-            return rtmpCamera1
+            return rtmpCamera2
         }
 
         throw IOException("Could not start RTMP streaming. audioReady=$audioReady, videoReady=$videoReady")
