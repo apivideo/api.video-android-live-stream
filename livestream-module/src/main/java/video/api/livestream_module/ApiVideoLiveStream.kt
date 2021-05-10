@@ -11,24 +11,125 @@ import net.ossrs.rtmp.ConnectCheckerRtmp
 import video.api.livestream_module.model.LiveStream
 import java.io.IOException
 
+enum class Resolution(val width: Int, val height: Int) {
+    RESOLUTION_240(352, 240),
+    RESOLUTION_360(480, 360),
+    RESOLUTION_480(858, 480),
+    RESOLUTION_720(1280, 720),
+    RESOLUTION_1080(1920, 1080),
+    RESOLUTION_2160(3860, 2160),
+}
 
-class ApiVideoLiveStream(private val config: Config): SurfaceHolder.Callback {
-    private var rtmpCamera2: RtmpCamera2 = when {
-        config.surfaceView != null -> {
-            RtmpCamera2(config.surfaceView, config.connectChecker)
+class ApiVideoLiveStream(
+    private val context: Context,
+    private val connectChecker: ConnectCheckerRtmp,
+    private val openGlView: OpenGlView?,
+    private val surfaceView: SurfaceView?,
+) : SurfaceHolder.Callback {
+    var videoResolution: Resolution = Resolution.RESOLUTION_720
+        set(value) {
+            field = value
+            updateVideo()
         }
-        config.openGlView != null -> {
-            RtmpCamera2(config.openGlView, config.connectChecker)
+
+    var videoFps: Int = 30
+        set(value) {
+            field = value
+            updateVideo()
         }
-        else -> {
-            RtmpCamera2(config.context,true, config.connectChecker)
+
+    var videoBitrate: Int = 4500 * 1000
+        set(value) {
+            field = value
+            updateVideo()
         }
+
+    var videoCamera: CameraHelper.Facing = CameraHelper.Facing.BACK
+        set(value) {
+            field = value
+            if (field == CameraHelper.Facing.BACK && rtmpCamera2.isFrontCamera
+                || field == CameraHelper.Facing.FRONT && !rtmpCamera2.isFrontCamera) {
+                rtmpCamera2.switchCamera()
+            }
+        }
+
+    var audioMuted: Boolean = false
+        set(value) {
+            field = value
+            if (value) {
+                rtmpCamera2.disableAudio()
+            } else {
+                rtmpCamera2.enableAudio()
+            }
+        }
+
+    var stereo: Boolean = true
+        set(value) {
+            field = value
+            updateAudio()
+        }
+
+    var echoCanceler: Boolean = false
+        set(value) {
+            field = value
+            updateAudio()
+        }
+
+    var noiseSuppressor: Boolean = false
+        set(value) {
+            field = value
+            updateAudio()
+        }
+
+    var audioBitrate: Int = 128 * 1000
+        set(value) {
+            field = value
+            updateAudio()
+        }
+
+    var audioSampleRate: Int = 44100
+        set(value) {
+            field = value
+            updateAudio()
+        }
+
+    private fun updateVideo(): Boolean {
+        if (!rtmpCamera2.isStreaming) {
+            return rtmpCamera2.prepareVideo(
+                videoResolution.width,
+                videoResolution.height,
+                videoFps,
+                videoBitrate,
+                CameraHelper.getCameraOrientation(context)
+            )
+        }
+        return false
     }
 
-    init {
+    private fun updateAudio(): Boolean {
+        if (!rtmpCamera2.isStreaming) {
+            return rtmpCamera2.prepareAudio(
+                audioBitrate,
+                audioSampleRate,
+                stereo,
+                echoCanceler,
+                noiseSuppressor
+            )
+        }
+        return false
+    }
 
-        if (config.openGlView != null) {
-            config.openGlView.holder.addCallback(this)
+
+    private var rtmpCamera2: RtmpCamera2 = when {
+        surfaceView != null -> {
+            RtmpCamera2(surfaceView, connectChecker)
+        }
+        openGlView != null -> {
+            openGlView.holder.addCallback(this)
+            RtmpCamera2(openGlView, connectChecker)
+        }
+        else -> {
+            RtmpCamera2(context, true, connectChecker)
         }
     }
 
@@ -36,7 +137,7 @@ class ApiVideoLiveStream(private val config: Config): SurfaceHolder.Callback {
     }
 
     override fun surfaceChanged(p0: SurfaceHolder, p1: Int, p2: Int, p3: Int) {
-        rtmpCamera2.startPreview()
+        rtmpCamera2.startPreview(videoCamera)
     }
 
     override fun surfaceDestroyed(p0: SurfaceHolder) {
@@ -46,112 +147,21 @@ class ApiVideoLiveStream(private val config: Config): SurfaceHolder.Callback {
         rtmpCamera2.stopPreview()
     }
 
-    class Config private constructor(
-        val audioBitrate: Int,
-        val audioSampleRate: Int,
-        val stereo: Boolean,
-        val echoCanceler: Boolean,
-        val noiseSuppressor: Boolean,
-        val openGlView: OpenGlView?,
-        val surfaceView: SurfaceView?,
-        val context: Context,
-        val connectChecker: ConnectCheckerRtmp,
-        val videoBitrate: Int,
-        val videoQuality: Quality,
-        val videoFps: Int,
-    ) {
-
-        enum class Quality(val width: Int, val height: Int) {
-            QUALITY_240(352, 240),
-            QUALITY_480(858, 480),
-            QUALITY_720(1280, 720),
-            QUALITY_1080(1920, 1080),
-            QUALITY_2160(3860, 2160),
-        }
-
-        data class Builder(
-            val context: Context,
-            val connectChecker: ConnectCheckerRtmp,
-            var audioBitrate: Int = 128 * 1000,
-            var audioSampleRate: Int = 44100,
-            var audioStereo: Boolean = true,
-            var audioCancelEcho: Boolean = false,
-            var audioSuppressNoise: Boolean = false,
-            var openGlView: OpenGlView? = null,
-            var surfaceView: SurfaceView? = null,
-            var videoBitrate: Int = 4500 * 1000,
-            var videoQuality: Quality = Quality.QUALITY_720,
-            var videoFps: Int = 25,
-        ) {
-
-            fun audioBitrate(audioBitrate: Int) =
-                apply { this.audioBitrate = audioBitrate }
-
-            fun audioSampleRate(audioSampleRate: Int) =
-                apply { this.audioSampleRate = audioSampleRate }
-
-            fun stereo(stereo: Boolean) =
-                apply { this.audioStereo = stereo }
-
-            fun echoCanceler(audioCancelEcho: Boolean) =
-                apply { this.audioCancelEcho = audioCancelEcho }
-
-            fun openGlView(openGlView: OpenGlView?) =
-                apply { this.openGlView = openGlView }
-
-            fun surfaceView(surfaceView: SurfaceView?) =
-                apply { this.surfaceView = surfaceView }
-
-            fun noiseSuppressor(audioSuppressNoise: Boolean) =
-                apply { this.audioSuppressNoise = audioSuppressNoise }
-
-            fun videoBitrate(videoBitrate: Int) =
-                apply { this.videoBitrate = videoBitrate }
-
-            fun videoQuality(videoQuality: Quality) =
-                apply { this.videoQuality = videoQuality }
-
-            fun videoFps(videoFps: Int) =
-                apply { this.videoFps = videoFps }
-
-            fun build() = Config(
-                audioBitrate,
-                audioSampleRate,
-                audioStereo,
-                audioCancelEcho,
-                audioSuppressNoise,
-                openGlView,
-                surfaceView,
-                context,
-                connectChecker,
-                videoBitrate,
-                videoQuality,
-                videoFps,
-            )
-        }
-    }
-
     fun startStreaming(
         streamKey: String,
         url: String?,
     ): Camera2Base {
-        val audioReady = rtmpCamera2.prepareAudio(
-            config.audioBitrate,
-            config.audioSampleRate,
-            config.stereo,
-            config.echoCanceler,
-            config.noiseSuppressor
-        )
-        val videoReady = rtmpCamera2.prepareVideo(
-            config.videoQuality.width,
-            config.videoQuality.height,
-            config.videoFps,
-            config.videoBitrate,
-            CameraHelper.getCameraOrientation(config.context)
-        )
+        if (rtmpCamera2.isStreaming) {
+            throw IOException("Stream is already started")
+        }
+        val audioReady = updateAudio()
+        if (audioMuted) {
+            rtmpCamera2.disableAudio()
+        }
+        val videoReady = updateVideo()
         if (audioReady && videoReady) {
             val rtmp = url ?: "rtmp://broadcast.api.video/s/"
-            rtmpCamera2.startStream( rtmp+streamKey)
+            rtmpCamera2.startStream(rtmp + streamKey)
             return rtmpCamera2
         }
         throw IOException("Could not start RTMP streaming. audioReady=$audioReady, videoReady=$videoReady")
@@ -161,10 +171,10 @@ class ApiVideoLiveStream(private val config: Config): SurfaceHolder.Callback {
         liveStream: LiveStream,
         url: String? = "rtmp://broadcast.api.video/s/",
     ): Camera2Base {
-      return startStreaming(liveStream.streamKey!!, url)
+        return startStreaming(liveStream.streamKey!!, url)
     }
 
-    fun stopStreaming(){
+    fun stopStreaming() {
         rtmpCamera2.stopStream()
     }
 }
