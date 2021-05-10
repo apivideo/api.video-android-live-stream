@@ -59,7 +59,6 @@ class ApiVideoLiveStream(private val config: Config): SurfaceHolder.Callback {
         val videoBitrate: Int,
         val videoQuality: Quality,
         val videoFps: Int,
-        val videoHardwareRotation: Boolean,
     ) {
 
         enum class Quality(val width: Int, val height: Int) {
@@ -83,7 +82,6 @@ class ApiVideoLiveStream(private val config: Config): SurfaceHolder.Callback {
             var videoBitrate: Int = 4500 * 1000,
             var videoQuality: Quality = Quality.QUALITY_720,
             var videoFps: Int = 25,
-            var videoHardwareRotation: Boolean = false,
         ) {
 
             fun audioBitrate(audioBitrate: Int) =
@@ -116,9 +114,6 @@ class ApiVideoLiveStream(private val config: Config): SurfaceHolder.Callback {
             fun videoFps(videoFps: Int) =
                 apply { this.videoFps = videoFps }
 
-            fun videoHardwareRotation(videoHardwareRotation: Boolean) =
-                apply { this.videoHardwareRotation = videoHardwareRotation }
-
             fun build() = Config(
                 audioBitrate,
                 audioSampleRate,
@@ -132,7 +127,6 @@ class ApiVideoLiveStream(private val config: Config): SurfaceHolder.Callback {
                 videoBitrate,
                 videoQuality,
                 videoFps,
-                videoHardwareRotation,
             )
         }
     }
@@ -153,7 +147,6 @@ class ApiVideoLiveStream(private val config: Config): SurfaceHolder.Callback {
             config.videoQuality.height,
             config.videoFps,
             config.videoBitrate,
-            config.videoHardwareRotation,
             CameraHelper.getCameraOrientation(config.context)
         )
         if (audioReady && videoReady) {
