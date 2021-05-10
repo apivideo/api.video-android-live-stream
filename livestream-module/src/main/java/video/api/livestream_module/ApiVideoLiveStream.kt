@@ -1,9 +1,7 @@
 package video.api.livestream_module
 
 import android.content.Context
-import android.os.Build
 import android.view.SurfaceView
-import androidx.annotation.RequiresApi
 import com.pedro.encoder.input.video.CameraHelper
 import com.pedro.rtplibrary.base.Camera2Base
 import com.pedro.rtplibrary.rtmp.RtmpCamera2
@@ -13,12 +11,49 @@ import video.api.livestream_module.model.LiveStream
 import java.io.IOException
 
 class ApiVideoLiveStream(private val config: Config) {
+    private var videoReady : Boolean = false
+    private var audioReady : Boolean = false
+    private var rtmpCamera2: RtmpCamera2 = when {
+        config.surfaceView != null -> {
+            RtmpCamera2(config.surfaceView, config.connectChecker)
+        }
+        config.openGlView != null -> {
+            RtmpCamera2(config.openGlView, config.connectChecker)
+        }
+        else -> {
+            RtmpCamera2(config.context,true, config.connectChecker)
+        }
+    }
+
+    init {
+        audioReady = rtmpCamera2.prepareAudio(
+            config.audioBitrate,
+            config.audioSampleRate,
+            config.stereo,
+            config.echoCanceler,
+            config.noiseSuppressor
+        )
+
+        videoReady = rtmpCamera2.prepareVideo(
+            config.videoQuality.width,
+            config.videoQuality.height,
+            config.videoFps,
+            config.videoBitrate,
+            config.videoHardwareRotation,
+            CameraHelper.getCameraOrientation(config.context)
+        )
+    }
+
     class Config private constructor(
         val audioBitrate: Int,
         val audioSampleRate: Int,
         val stereo: Boolean,
         val echoCanceler: Boolean,
         val noiseSuppressor: Boolean,
+        val openGlView: OpenGlView?,
+        val surfaceView: SurfaceView?,
+        val context: Context,
+        val connectChecker: ConnectCheckerRtmp,
         val videoBitrate: Int,
         val videoQuality: Quality,
         val videoFps: Int,
@@ -34,11 +69,15 @@ class ApiVideoLiveStream(private val config: Config) {
         }
 
         data class Builder(
+            val context: Context,
+            val connectChecker: ConnectCheckerRtmp,
             var audioBitrate: Int = 128 * 1000,
             var audioSampleRate: Int = 44100,
             var audioStereo: Boolean = true,
             var audioCancelEcho: Boolean = false,
             var audioSuppressNoise: Boolean = false,
+            var openGlView: OpenGlView? = null,
+            var surfaceView: SurfaceView? = null,
             var videoBitrate: Int = 4500 * 1000,
             var videoQuality: Quality = Quality.QUALITY_720,
             var videoFps: Int = 25,
@@ -56,6 +95,12 @@ class ApiVideoLiveStream(private val config: Config) {
 
             fun echoCanceler(audioCancelEcho: Boolean) =
                 apply { this.audioCancelEcho = audioCancelEcho }
+
+            fun openGlView(openGlView: OpenGlView?) =
+                apply { this.openGlView = openGlView }
+
+            fun surfaceView(surfaceView: SurfaceView?) =
+                apply { this.surfaceView = surfaceView }
 
             fun noiseSuppressor(audioSuppressNoise: Boolean) =
                 apply { this.audioSuppressNoise = audioSuppressNoise }
@@ -78,6 +123,10 @@ class ApiVideoLiveStream(private val config: Config) {
                 audioStereo,
                 audioCancelEcho,
                 audioSuppressNoise,
+                openGlView,
+                surfaceView,
+                context,
+                connectChecker,
                 videoBitrate,
                 videoQuality,
                 videoFps,
@@ -86,97 +135,26 @@ class ApiVideoLiveStream(private val config: Config) {
         }
     }
 
-
-
-    // SurfaceView
-    // LiveStream
-    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
-    fun start(
-        liveStream: LiveStream,
-        url: String? = null,
-        surfaceView: SurfaceView,
-        context: Context,
-        connectChecker: ConnectCheckerRtmp
-    ): Camera2Base =
-        start(liveStream.streamKey!!,url, surfaceView, null, context, connectChecker)
-
-    // LiveStream
-    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
-    fun start(
-        liveStream: LiveStream,
-        url: String? = null,
-        context: Context,
-        connectChecker: ConnectCheckerRtmp
-    ): Camera2Base =
-        start(liveStream.streamKey!!,url,null, null, context, connectChecker)
-
-    //streamKey
-    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
-    fun start(
+    fun startStreaming(
         streamKey: String,
-        url: String? = null,
-        context: Context,
-        connectChecker: ConnectCheckerRtmp
-    ): Camera2Base =
-        start(streamKey,url, null,null, context, connectChecker)
-
-    // SurfaceView
-    // LiveStream
-    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
-    fun start(
-        liveStream: LiveStream,
-        url: String? = null,
-        openGleView: OpenGlView,
-        context: Context,
-        connectChecker: ConnectCheckerRtmp
-    ): Camera2Base =
-        start(liveStream.streamKey!!,url, null, openGleView, context, connectChecker)
-
-
-    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
-    fun start(
-        streamKey: String,
-        url: String? = "rtmp://broadcast.api.video/s/",
-        surfaceView: SurfaceView?,
-        openGlView: OpenGlView?,
-        context: Context,
-        connectChecker: ConnectCheckerRtmp
+        url: String?,
     ): Camera2Base {
-        val rtmpCamera2: RtmpCamera2 = when {
-            surfaceView != null -> {
-                RtmpCamera2(surfaceView, connectChecker)
-            }
-            openGlView != null -> {
-                RtmpCamera2(openGlView, connectChecker)
-            }
-            else -> {
-                RtmpCamera2(context,true,connectChecker)
-            }
-        }
-
-        val audioReady = rtmpCamera2.prepareAudio(
-            config.audioBitrate,
-            config.audioSampleRate,
-            config.stereo,
-            config.echoCanceler,
-            config.noiseSuppressor
-        )
-
-        val videoReady = rtmpCamera2.prepareVideo(
-            config.videoQuality.width,
-            config.videoQuality.height,
-            config.videoFps,
-            config.videoBitrate,
-            config.videoHardwareRotation,
-            CameraHelper.getCameraOrientation(context)
-        )
-
         if (audioReady && videoReady) {
-            rtmpCamera2.startStream(url+streamKey)
-
+            val rtmp = url ?: "rtmp://broadcast.api.video/s/"
+            rtmpCamera2.startStream( rtmp+streamKey)
             return rtmpCamera2
         }
-
         throw IOException("Could not start RTMP streaming. audioReady=$audioReady, videoReady=$videoReady")
+    }
+
+    fun startStreaming(
+        liveStream: LiveStream,
+        url: String? = "rtmp://broadcast.api.video/s/",
+    ): Camera2Base {
+      return startStreaming(liveStream.streamKey!!, url)
+    }
+
+    fun stopStreaming(){
+        rtmpCamera2.stopStream()
     }
 }
