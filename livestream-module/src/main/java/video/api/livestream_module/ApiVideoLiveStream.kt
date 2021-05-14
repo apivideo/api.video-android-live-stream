@@ -26,6 +26,8 @@ class ApiVideoLiveStream(
     private val openGlView: OpenGlView?,
     private val surfaceView: SurfaceView?,
 ) : SurfaceHolder.Callback {
+    private var videoNeedsRefresh = false
+
     var videoResolution: Resolution = Resolution.RESOLUTION_720
         set(value) {
             field = value
@@ -95,13 +97,23 @@ class ApiVideoLiveStream(
 
     private fun updateVideo(): Boolean {
         if (!rtmpCamera2.isStreaming) {
-            return rtmpCamera2.prepareVideo(
+            videoNeedsRefresh = false
+            if (rtmpCamera2.isOnPreview) {
+                rtmpCamera2.stopPreview()
+            }
+            val res = rtmpCamera2.prepareVideo(
                 videoResolution.width,
                 videoResolution.height,
                 videoFps,
                 videoBitrate,
                 CameraHelper.getCameraOrientation(context)
             )
+            if (openGlView != null && openGlView.holder.surface.isValid) {
+                rtmpCamera2.startPreview(videoCamera)
+            }
+            return res
+        } else {
+            videoNeedsRefresh = true
         }
         return false
     }
@@ -176,5 +188,8 @@ class ApiVideoLiveStream(
 
     fun stopStreaming() {
         rtmpCamera2.stopStream()
+        if (videoNeedsRefresh) {
+            updateVideo()
+        }
     }
 }
