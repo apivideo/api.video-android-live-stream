@@ -106,8 +106,3 @@ Copyright (c) 2020 api.video
 
    [rtmp-rtsp-stream-client-java]: <https://github.com/pedroSG94/rtmp-rtsp-stream-client-java>
    [Issues]: <https://github.com/apivideo/android-live-stream/issues>
-
-
-
-# Warning !!!
-***This module is still in development and will be published in coming weeks***
