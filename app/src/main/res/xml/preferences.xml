@@ -1,0 +1,78 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <PreferenceCategory app:title="@string/video">
+        <ListPreference
+            app:key="@string/video_resolution_key"
+            app:title="@string/video_resolution"
+            app:useSimpleSummaryProvider="true" />
+
+        <ListPreference
+            app:defaultValue="30"
+            app:entries="@array/FpsEntries"
+            app:entryValues="@array/FpsEntries"
+            app:key="@string/video_fps_key"
+            app:title="@string/video_fps"
+            app:useSimpleSummaryProvider="true" />
+
+        <SeekBarPreference
+            android:max="10000"
+            app:defaultValue="2000"
+            app:key="@string/video_bitrate_key"
+            app:min="500"
+            app:showSeekBarValue="true"
+            app:title="@string/bitrate"
+            app:useSimpleSummaryProvider="true" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="@string/audio">
+        <ListPreference
+            app:defaultValue="2"
+            app:entries="@array/AudioNumberOfChannelsEntries"
+            app:entryValues="@array/AudioNumberOfChannelsEntryValues"
+            app:key="@string/audio_number_of_channels_key"
+            app:title="@string/audio_number_of_channels"
+            app:useSimpleSummaryProvider="true" />
+
+        <ListPreference
+            app:defaultValue="128000"
+            app:entries="@array/AudioBitrateEntries"
+            app:entryValues="@array/AudioBitrateEntryValues"
+            app:key="@string/audio_bitrate_key"
+            app:title="@string/bitrate"
+            app:useSimpleSummaryProvider="true" />
+
+        <ListPreference
+            app:defaultValue="44100"
+            app:entries="@array/AudioSampleRateEntries"
+            app:entryValues="@array/AudioSampleRateEntryValues"
+            app:key="@string/audio_sample_rate_key"
+            app:title="@string/audio_sample_rate"
+            app:useSimpleSummaryProvider="true" />
+
+        <SwitchPreference
+            android:defaultValue="false"
+            app:key="@string/audio_enable_echo_canceler_key"
+            app:title="@string/audio_enable_echo_canceler" />
+
+        <SwitchPreference
+            android:defaultValue="false"
+            app:key="@string/audio_enable_noise_suppressor_key"
+            app:title="@string/audio_enable_noise_suppressor" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="@string/endpoint">
+        <EditTextPreference
+            android:defaultValue="@string/default_rtmp_endpoint"
+            app:key="@string/rtmp_endpoint_url_key"
+            app:title="@string/rtmp_endpoint_url"
+            app:useSimpleSummaryProvider="true" />
+
+        <EditTextPreference
+            android:defaultValue=""
+            app:key="@string/rtmp_stream_key_key"
+            app:title="@string/rtmp_stream_key"
+            app:useSimpleSummaryProvider="true" />
+    </PreferenceCategory>
+</PreferenceScreen>

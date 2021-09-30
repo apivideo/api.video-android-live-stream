@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:keepScreenOn="true">
+
+    <com.pedro.rtplibrary.view.OpenGlView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/openGlView"
+        app:keepAspectRatio="true"
+        app:aspectRatioMode="adjust"
+        app:AAEnabled="false"
+        app:numFilters="1"
+        app:isFlipHorizontal="false"
+        app:isFlipVertical="false"
+        />
+
+    <LinearLayout
+        android:id="@+id/controlLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <ImageButton
+            android:id="@+id/switchButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/circle_shape"
+            android:contentDescription="@string/switch_camera_source"
+            android:padding="2dp"
+            android:src="@drawable/ic_baseline_switch_camera_24" />
+
+        <ImageButton
+            android:id="@+id/muteButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/circle_shape"
+            android:contentDescription="@string/mute_audio_source"
+            android:padding="2dp"
+            android:src="@drawable/ic_baseline_mic_off_24" />
+
+    </LinearLayout>
+
+    <ToggleButton
+        android:id="@+id/liveButton"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/circle_toggle_button"
+        android:text="@string/live"
+        android:textColor="@color/white"
+        android:textOff="@string/live"
+        android:textOn="@string/stop"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
