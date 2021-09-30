@@ -9,7 +9,7 @@ On build.gradle add the following code in dependencies:
 ```xml
 dependencies {
     ...
-    implementation 'video.api:android-live-stream:0.1.5' // add this line
+    implementation 'video.api:android-live-stream:0.1.5'
 }
 ```
 ### Or import with a local aar
@@ -25,17 +25,19 @@ dependencies {
 
 ### Permissions:
 ```xml
-<manifest ...>
+<manifest>
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
 </manifest>
 ```
+Your application must dynamically require `android.permission.CAMERA` and `android.permission.RECORD_AUDIO`.
+
 ### Quick Start
-Your class must implement ConnectCheckerRtmp and override all methods 
+Implement a ConnectionChecker.
 
 ```kotlin
-class FirstFragment : Fragment(), ConnectCheckerRtmp{
+class FirstFragment : Fragment(), ConnectionChecker{
   private var openGlView: OpenGlView? = null
   private lateinit var apiVideo: ApiVideoLiveStream
   
@@ -45,38 +47,38 @@ class FirstFragment : Fragment(), ConnectCheckerRtmp{
         apiVideo = ApiVideoLiveStream(requireContext(),this,openGlView,null)
     }
     
-  override fun onConnectionSuccessRtmp() {
+  override fun onConnectionSuccess() {
       //Add your code here
   }
 
-  override fun onConnectionFailedRtmp(reason: String?) {
+  override fun onConnectionFailed(reason: String?) {
       //Add your code here
   }
 
-  override fun onNewBitrateRtmp(bitrate: Long) {
+  override fun onNewBitrate(bitrate: Long) {
       //Add your code here
   }
 
-  override fun onDisconnectRtmp() {
+  override fun onDisconnect() {
       //Add your code here
   }
 
-  override fun onAuthErrorRtmp() {
+  override fun onAuthError() {
       //Add your code here
   }
 
-  override fun onAuthSuccessRtmp() {
+  override fun onAuthSuccess() {
       //Add your code here
   }
 }
 ```
 
-To start your stream use startStreaming methode 
-
+To start your stream, use startStreaming` method
+``
 1. if you are broadcasting on api.video 
 
 ```kotlin
-apiVideo.startStreaming("YOUR_STREAM_KEY", null)
+apiVideo.startStreaming("YOUR_STREAM_KEY")
 ```
 2. else
 
