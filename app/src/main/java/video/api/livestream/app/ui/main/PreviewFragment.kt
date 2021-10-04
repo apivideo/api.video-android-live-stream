@@ -29,7 +29,7 @@ class PreviewFragment : Fragment() {
     override fun onResume() {
         super.onResume()
 
-        viewModel.buildLiveStream(binding.openGlView)
+        viewModel.buildLiveStream(binding.apiVideoView)
         binding.liveButton.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
                 viewModel.startStream()

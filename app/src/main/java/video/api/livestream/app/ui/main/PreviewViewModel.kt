@@ -5,7 +5,6 @@ import android.app.Application
 import androidx.annotation.RequiresPermission
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import com.pedro.rtplibrary.view.OpenGlView
 import video.api.livestream.ApiVideoLiveStream
 import video.api.livestream.app.ui.utils.Configuration
 import video.api.livestream.enums.CameraFacingDirection
@@ -13,6 +12,7 @@ import video.api.livestream.enums.Resolution
 import video.api.livestream.interfaces.IConnectionChecker
 import video.api.livestream.models.AudioConfig
 import video.api.livestream.models.VideoConfig
+import video.api.livestream.views.ApiVideoView
 
 class PreviewViewModel(application: Application) : AndroidViewModel(application),
     IConnectionChecker {
@@ -24,7 +24,7 @@ class PreviewViewModel(application: Application) : AndroidViewModel(application)
     val onDisconnect = MutableLiveData<Boolean>()
 
     @RequiresPermission(allOf = [Manifest.permission.RECORD_AUDIO, Manifest.permission.CAMERA])
-    fun buildLiveStream(openGlView: OpenGlView) {
+    fun buildLiveStream(apiVideoView: ApiVideoView) {
         val audioConfig = AudioConfig(
             bitrate = configuration.audio.bitrate,
             sampleRate = configuration.audio.sampleRate,
@@ -39,7 +39,7 @@ class PreviewViewModel(application: Application) : AndroidViewModel(application)
             camera = CameraFacingDirection.BACK
         )
         liveStream =
-            ApiVideoLiveStream(getApplication(), this, audioConfig, videoConfig, openGlView)
+            ApiVideoLiveStream(getApplication(), this, audioConfig, videoConfig, apiVideoView)
     }
 
     fun startStream() {

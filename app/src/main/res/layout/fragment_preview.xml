@@ -6,17 +6,16 @@
     android:background="@color/white"
     android:keepScreenOn="true">
 
-    <com.pedro.rtplibrary.view.OpenGlView
+    <video.api.livestream.views.ApiVideoView
+        android:id="@+id/apiVideoView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/openGlView"
-        app:keepAspectRatio="true"
-        app:aspectRatioMode="adjust"
         app:AAEnabled="false"
-        app:numFilters="1"
+        app:aspectRatioMode="adjust"
         app:isFlipHorizontal="false"
         app:isFlipVertical="false"
-        />
+        app:keepAspectRatio="true"
+        app:numFilters="1" />
 
     <LinearLayout
         android:id="@+id/controlLayout"
