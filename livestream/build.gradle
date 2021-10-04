@@ -1,5 +1,6 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
+apply plugin: 'org.jetbrains.dokka'
 apply from: 'maven-push.gradle'
 
 
@@ -27,6 +28,22 @@ android {
     }
     kotlinOptions {
         jvmTarget = '1.8'
+    }
+}
+
+dokkaHtml {
+    moduleName.set("api.video $project.name")
+    suppressInheritedMembers.set(true)
+
+    dokkaSourceSets {
+        named("main") {
+            includes.from("README.md")
+
+            noAndroidSdkLink.set(false)
+            skipDeprecated.set(true)
+            includeNonPublic.set(false)
+            skipEmptyPackages.set(true)
+        }
     }
 }
 

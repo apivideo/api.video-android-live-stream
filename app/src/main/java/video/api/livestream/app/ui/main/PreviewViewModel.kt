@@ -82,7 +82,4 @@ class PreviewViewModel(application: Application) : AndroidViewModel(application)
     override fun onDisconnect() {
         onDisconnect.postValue(true)
     }
-
-    override fun onNewBitrate(bitrate: Long) {
-    }
 }
