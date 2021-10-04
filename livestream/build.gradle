@@ -32,7 +32,7 @@ android {
 }
 
 dokkaHtml {
-    moduleName.set("api.video $project.name")
+    moduleName.set("api.video Android $project.name library")
     suppressInheritedMembers.set(true)
 
     dokkaSourceSets {
