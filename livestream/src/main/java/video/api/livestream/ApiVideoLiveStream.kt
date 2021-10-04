@@ -45,7 +45,6 @@ constructor(
         }
 
         override fun onConnectionFailedRtmp(reason: String) {
-            resetEncoders()
             connectionChecker.onConnectionFailed(reason)
         }
 
@@ -178,10 +177,6 @@ constructor(
                 rtmpCamera2.enableAudio()
             }
         }
-
-    private fun resetEncoders() {
-        rtmpCamera2.stopStream()
-    }
 
     /**
      * Configures audio and video encoders.
