@@ -1,92 +1,137 @@
 ![](https://github.com/apivideo/API_OAS_file/blob/master/apivideo_banner.png)
-# Api.Video Android Kotlin LiveStream Module
 
-This module is an easy way to broadcast livestream on api.video platform
+# [api.video](https://api.video) Android Kotlin Livestream library
+
+This library is an easy way to broadcast livestream to api.video platform on Android.
 
 ## Installation
+
 ### With maven
+
 On build.gradle add the following code in dependencies:
+
 ```xml
 dependencies {
-    ...
-    implementation 'video.api:android-live-stream:0.1.5'
+        ...
+        implementation 'video.api:android-live-stream:0.1.5'
 }
 ```
+
 ### Or import with a local aar
 
-1. Download the [latest release](https://github.com/apivideo/android-live-stream/releases) of the aar file.
+1. Download the [latest release](https://github.com/apivideo/android-livestream/releases) of the aar
+   file.
 2. Go to “File” > “Project Structure...”
 3. On "Modules" select the "+" button and select "Import .JAR/.AAR Package" then click "next"
 4. Select the AAR file you have just downloaded, and click "Finish"
-5. Then go to "Dependencies" select the the app module and add a new dependencies by clicking on the "+" button, then select "Module Dependency"
-(if there is no "Module Dependency", close the window and re-open it, it should be fine)
-6. select Api.Video module, click "ok"
+5. Then go to "Dependencies" select the the app module and add a new dependencies by clicking on
+   the "+" button, then select "Module Dependency"
+   (if there is no "Module Dependency", close the window and re-open it, it should be fine)
+6. select Api.Video library, click "ok"
 7. click on "Apply" and then "ok"
 
-### Permissions:
+## Sample
+
+A demo application demonstrates how to use this livestream library. See `/app` folder.
+
+## Permissions
+
 ```xml
+
 <manifest>
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
 </manifest>
 ```
-Your application must dynamically require `android.permission.CAMERA` and `android.permission.RECORD_AUDIO`.
 
-### Quick Start
-Implement a ConnectionChecker.
+Your application must dynamically require `android.permission.CAMERA`
+and `android.permission.RECORD_AUDIO`.
+
+## Getting Started
+
+1. Add [permissions](#permissions) to your `AndroidManifest.xml` and request them in your
+   Activity/Fragment.
+2. Add a `ApiVideoView` to your Activity/Fragment layout for the camera preview.
+
+```xml
+<video.api.livestream.views.ApiVideoView 
+    android:id="@+id/apiVideoView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:aspectRatioMode="adjust"
+    app:isFlipHorizontal="false"
+    app:isFlipVertical="false"
+    app:keepAspectRatio="true" />
+```
+
+3. Implement a `ConnectionChecker`.
 
 ```kotlin
-class FirstFragment : Fragment(), ConnectionChecker{
-  private var openGlView: OpenGlView? = null
-  private lateinit var apiVideo: ApiVideoLiveStream
-  
-  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        openGlView = view.findViewById(R.id.surfaceView)
-        apiVideo = ApiVideoLiveStream(requireContext(),this,openGlView,null)
+val connectionChecker = object : ConnectionChecker {
+    override fun onConnectionSuccess() {
+        //Add your code here
     }
-    
-  override fun onConnectionSuccess() {
-      //Add your code here
-  }
 
-  override fun onConnectionFailed(reason: String?) {
-      //Add your code here
-  }
+    override fun onConnectionFailed(reason: String?) {
+        //Add your code here
+    }
 
-  override fun onNewBitrate(bitrate: Long) {
-      //Add your code here
-  }
+    override fun onDisconnect() {
+        //Add your code here
+    }
 
-  override fun onDisconnect() {
-      //Add your code here
-  }
+    override fun onAuthError() {
+        //Add your code here
+    }
 
-  override fun onAuthError() {
-      //Add your code here
-  }
-
-  override fun onAuthSuccess() {
-      //Add your code here
-  }
+    override fun onAuthSuccess() {
+        //Add your code here
+    }
 }
 ```
 
-To start your stream, use startStreaming` method
-``
-1. if you are broadcasting on api.video 
+4. Creates an `ApiVideoLiveStream` instance.
 
 ```kotlin
-apiVideo.startStreaming("YOUR_STREAM_KEY")
-```
-2. else
+class MyFragment : Fragment(), ConnectionChecker {
+    private var apiVideoView: ApiVideoView? = null
+    private lateinit var apiVideo: ApiVideoLiveStream
 
-```kotlin
-apiVideo.startStreaming("YOUR_STREAM_KEY", "YOUR_RTMP_URL")
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val apiVideoView = view.findViewById(R.id.apiVideoView)
+        val audioConfig = AudioConfig(
+            bitrate = 128 * 1024, // 128 kbps
+            sampleRate = 48000,
+            stereo = true,
+            echoCanceler = true,
+            noiseSuppressor = true
+        )
+        val videoConfig = VideoConfig(
+            bitrate = 2 * 1024 * 1024, // 2 Mbps
+            resolution = Resolution.RESOLUTION_720,
+            fps = 30,
+            camera = CameraFacingDirection.BACK
+        )
+        apiVideo =
+            ApiVideoLiveStream(requireContext(), this, audioConfig, videoConfig, apiVideoView)
+    }
+}
 ```
 
-### Plugins
+5. Start your stream with `startStreaming` method
+
+For detailed information on this livestream library API, refers
+to [API documentation](https://apivideo.github.io/android-livestream/).
+
+### Documentation
+
+* [API documentation](https://apivideo.github.io/android-livestream/)
+* [api.video documentation](https://docs.api.video)
+
+### Dependencies
 
 We are using external library
 
@@ -95,16 +140,16 @@ We are using external library
 | rtmp-rtsp-stream-client-java | [https://github.com/pedroSG94/rtmp-rtsp-stream-client-java][rtmp-rtsp-stream-client-java] |
 
 ### FAQ
-If you have any questions, ask us here:  https://community.api.video .
-Or use [Issues].
+
+If you have any questions, ask us here:  https://community.api.video . Or use [Issues].
 
 License
 ----
 
-MIT License
-Copyright (c) 2020 api.video
+MIT License Copyright (c) 2020 api.video
 
 [//]: # (These are reference links used in the body of this note and get stripped out when the markdown processor does its job. There is no need to format nicely because it shouldn't be seen. Thanks SO - http://stackoverflow.com/questions/4823468/store-comments-in-markdown-syntax)
 
-   [rtmp-rtsp-stream-client-java]: <https://github.com/pedroSG94/rtmp-rtsp-stream-client-java>
-   [Issues]: <https://github.com/apivideo/android-live-stream/issues>
+[rtmp-rtsp-stream-client-java]: <https://github.com/pedroSG94/rtmp-rtsp-stream-client-java>
+
+[Issues]: <https://github.com/apivideo/android-live-stream/issues>
