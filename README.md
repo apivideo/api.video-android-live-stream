@@ -13,7 +13,7 @@ On build.gradle add the following code in dependencies:
 ```xml
 dependencies {
         ...
-        implementation 'video.api:android-live-stream:0.1.5'
+        implementation 'video.api:android-livestream:0.1.5'
 }
 ```
 
@@ -152,4 +152,4 @@ MIT License Copyright (c) 2020 api.video
 
 [rtmp-rtsp-stream-client-java]: <https://github.com/pedroSG94/rtmp-rtsp-stream-client-java>
 
-[Issues]: <https://github.com/apivideo/android-live-stream/issues>
+[Issues]: <https://github.com/apivideo/android-livestream/issues>
