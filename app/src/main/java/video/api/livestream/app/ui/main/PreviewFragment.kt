@@ -1,6 +1,7 @@
 package video.api.livestream.app.ui.main
 
 import android.annotation.SuppressLint
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -32,9 +33,17 @@ class PreviewFragment : Fragment() {
         viewModel.buildLiveStream(binding.apiVideoView)
         binding.liveButton.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
+                /**
+                 * Lock orientation in live to avoid stream interruption if
+                 * user turns the device.
+                 */
+                requireActivity().requestedOrientation =
+                    ActivityInfo.SCREEN_ORIENTATION_LOCKED
                 viewModel.startStream()
             } else {
                 viewModel.stopStream()
+                requireActivity().requestedOrientation =
+                    ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
             }
         }
 
@@ -48,11 +57,11 @@ class PreviewFragment : Fragment() {
         }
 
         viewModel.onAuthError.observe(viewLifecycleOwner) {
-            showError(getString(R.string.error), getString(R.string.authentication_failed))
+            manageError(getString(R.string.error), getString(R.string.authentication_failed))
         }
 
         viewModel.onConnectionFailed.observe(viewLifecycleOwner) {
-            showError(getString(R.string.error), it)
+            manageError(getString(R.string.error), it)
         }
 
         viewModel.onDisconnect.observe(viewLifecycleOwner) {
@@ -60,8 +69,10 @@ class PreviewFragment : Fragment() {
         }
     }
 
-    private fun showError(title: String, message: String) {
+    private fun manageError(title: String, message: String) {
         binding.liveButton.isChecked = false
+        requireActivity().requestedOrientation =
+            ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
         DialogHelper.showAlertDialog(requireContext(), title, message)
     }
 
