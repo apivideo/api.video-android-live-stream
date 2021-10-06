@@ -37,14 +37,20 @@ dokkaHtml {
 
     dokkaSourceSets {
         named("main") {
-            includes.from("README.md")
-
             noAndroidSdkLink.set(false)
             skipDeprecated.set(true)
             includeNonPublic.set(false)
             skipEmptyPackages.set(true)
         }
     }
+    pluginsMapConfiguration.set(
+        ["org.jetbrains.dokka.base.DokkaBase": """{ 
+                "customAssets" : [
+                    "${file("$rootDir/docs/docs_logo.svg")}",
+                    "${file("$rootDir/docs/logo-icon.svg")}"
+                ] 
+        }"""]
+    )
 }
 
 dependencies {
