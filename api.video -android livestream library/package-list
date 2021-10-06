@@ -1,0 +1,58 @@
+$dokka.format:html-v1
+$dokka.linkExtension:html
+$dokka.location:video.api.livestream.enums////PointingToDeclaration/api.video -android livestream library/video.api.livestream.enums/index.html
+$dokka.location:video.api.livestream.enums/CameraFacingDirection.BACK///PointingToDeclaration/api.video -android livestream library/video.api.livestream.enums/-camera-facing-direction/-b-a-c-k/index.html
+$dokka.location:video.api.livestream.enums/CameraFacingDirection.FRONT///PointingToDeclaration/api.video -android livestream library/video.api.livestream.enums/-camera-facing-direction/-f-r-o-n-t/index.html
+$dokka.location:video.api.livestream.enums/CameraFacingDirection///PointingToDeclaration/api.video -android livestream library/video.api.livestream.enums/-camera-facing-direction/index.html
+$dokka.location:video.api.livestream.enums/CameraFacingDirection/facing/#/PointingToDeclaration/api.video -android livestream library/video.api.livestream.enums/-camera-facing-direction/facing.html
+$dokka.location:video.api.livestream.enums/Resolution.Companion///PointingToDeclaration/api.video -android livestream library/video.api.livestream.enums/-resolution/-companion/index.html
+$dokka.location:video.api.livestream.enums/Resolution.Companion/valueOf/#android.util.Size/PointingToDeclaration/api.video -android livestream library/video.api.livestream.enums/-resolution/-companion/value-of.html
+$dokka.location:video.api.livestream.enums/Resolution.RESOLUTION_1080///PointingToDeclaration/api.video -android livestream library/video.api.livestream.enums/-resolution/-r-e-s-o-l-u-t-i-o-n_1080/index.html
+$dokka.location:video.api.livestream.enums/Resolution.RESOLUTION_2160///PointingToDeclaration/api.video -android livestream library/video.api.livestream.enums/-resolution/-r-e-s-o-l-u-t-i-o-n_2160/index.html
+$dokka.location:video.api.livestream.enums/Resolution.RESOLUTION_240///PointingToDeclaration/api.video -android livestream library/video.api.livestream.enums/-resolution/-r-e-s-o-l-u-t-i-o-n_240/index.html
+$dokka.location:video.api.livestream.enums/Resolution.RESOLUTION_360///PointingToDeclaration/api.video -android livestream library/video.api.livestream.enums/-resolution/-r-e-s-o-l-u-t-i-o-n_360/index.html
+$dokka.location:video.api.livestream.enums/Resolution.RESOLUTION_480///PointingToDeclaration/api.video -android livestream library/video.api.livestream.enums/-resolution/-r-e-s-o-l-u-t-i-o-n_480/index.html
+$dokka.location:video.api.livestream.enums/Resolution.RESOLUTION_720///PointingToDeclaration/api.video -android livestream library/video.api.livestream.enums/-resolution/-r-e-s-o-l-u-t-i-o-n_720/index.html
+$dokka.location:video.api.livestream.enums/Resolution///PointingToDeclaration/api.video -android livestream library/video.api.livestream.enums/-resolution/index.html
+$dokka.location:video.api.livestream.enums/Resolution/size/#/PointingToDeclaration/api.video -android livestream library/video.api.livestream.enums/-resolution/size.html
+$dokka.location:video.api.livestream.enums/Resolution/toString/#/PointingToDeclaration/api.video -android livestream library/video.api.livestream.enums/-resolution/to-string.html
+$dokka.location:video.api.livestream.interfaces////PointingToDeclaration/api.video -android livestream library/video.api.livestream.interfaces/index.html
+$dokka.location:video.api.livestream.interfaces/IConnectionChecker///PointingToDeclaration/api.video -android livestream library/video.api.livestream.interfaces/-i-connection-checker/index.html
+$dokka.location:video.api.livestream.interfaces/IConnectionChecker/onAuthError/#/PointingToDeclaration/api.video -android livestream library/video.api.livestream.interfaces/-i-connection-checker/on-auth-error.html
+$dokka.location:video.api.livestream.interfaces/IConnectionChecker/onAuthSuccess/#/PointingToDeclaration/api.video -android livestream library/video.api.livestream.interfaces/-i-connection-checker/on-auth-success.html
+$dokka.location:video.api.livestream.interfaces/IConnectionChecker/onConnectionFailed/#kotlin.String/PointingToDeclaration/api.video -android livestream library/video.api.livestream.interfaces/-i-connection-checker/on-connection-failed.html
+$dokka.location:video.api.livestream.interfaces/IConnectionChecker/onConnectionStarted/#kotlin.String/PointingToDeclaration/api.video -android livestream library/video.api.livestream.interfaces/-i-connection-checker/on-connection-started.html
+$dokka.location:video.api.livestream.interfaces/IConnectionChecker/onConnectionSuccess/#/PointingToDeclaration/api.video -android livestream library/video.api.livestream.interfaces/-i-connection-checker/on-connection-success.html
+$dokka.location:video.api.livestream.interfaces/IConnectionChecker/onDisconnect/#/PointingToDeclaration/api.video -android livestream library/video.api.livestream.interfaces/-i-connection-checker/on-disconnect.html
+$dokka.location:video.api.livestream.models////PointingToDeclaration/api.video -android livestream library/video.api.livestream.models/index.html
+$dokka.location:video.api.livestream.models/AudioConfig///PointingToDeclaration/api.video -android livestream library/video.api.livestream.models/-audio-config/index.html
+$dokka.location:video.api.livestream.models/AudioConfig/AudioConfig/#kotlin.Int#kotlin.Int#kotlin.Boolean#kotlin.Boolean#kotlin.Boolean/PointingToDeclaration/api.video -android livestream library/video.api.livestream.models/-audio-config/-audio-config.html
+$dokka.location:video.api.livestream.models/AudioConfig/bitrate/#/PointingToDeclaration/api.video -android livestream library/video.api.livestream.models/-audio-config/bitrate.html
+$dokka.location:video.api.livestream.models/AudioConfig/echoCanceler/#/PointingToDeclaration/api.video -android livestream library/video.api.livestream.models/-audio-config/echo-canceler.html
+$dokka.location:video.api.livestream.models/AudioConfig/noiseSuppressor/#/PointingToDeclaration/api.video -android livestream library/video.api.livestream.models/-audio-config/noise-suppressor.html
+$dokka.location:video.api.livestream.models/AudioConfig/sampleRate/#/PointingToDeclaration/api.video -android livestream library/video.api.livestream.models/-audio-config/sample-rate.html
+$dokka.location:video.api.livestream.models/AudioConfig/stereo/#/PointingToDeclaration/api.video -android livestream library/video.api.livestream.models/-audio-config/stereo.html
+$dokka.location:video.api.livestream.models/VideoConfig///PointingToDeclaration/api.video -android livestream library/video.api.livestream.models/-video-config/index.html
+$dokka.location:video.api.livestream.models/VideoConfig/VideoConfig/#kotlin.Int#video.api.livestream.enums.Resolution#kotlin.Int#video.api.livestream.enums.CameraFacingDirection/PointingToDeclaration/api.video -android livestream library/video.api.livestream.models/-video-config/-video-config.html
+$dokka.location:video.api.livestream.models/VideoConfig/bitrate/#/PointingToDeclaration/api.video -android livestream library/video.api.livestream.models/-video-config/bitrate.html
+$dokka.location:video.api.livestream.models/VideoConfig/camera/#/PointingToDeclaration/api.video -android livestream library/video.api.livestream.models/-video-config/camera.html
+$dokka.location:video.api.livestream.models/VideoConfig/fps/#/PointingToDeclaration/api.video -android livestream library/video.api.livestream.models/-video-config/fps.html
+$dokka.location:video.api.livestream.models/VideoConfig/resolution/#/PointingToDeclaration/api.video -android livestream library/video.api.livestream.models/-video-config/resolution.html
+$dokka.location:video.api.livestream.views////PointingToDeclaration/api.video -android livestream library/video.api.livestream.views/index.html
+$dokka.location:video.api.livestream.views/ApiVideoView///PointingToDeclaration/api.video -android livestream library/video.api.livestream.views/-api-video-view/index.html
+$dokka.location:video.api.livestream.views/ApiVideoView/ApiVideoView/#android.content.Context#android.util.AttributeSet/PointingToDeclaration/api.video -android livestream library/video.api.livestream.views/-api-video-view/-api-video-view.html
+$dokka.location:video.api.livestream.views/ApiVideoView/ApiVideoView/#android.content.Context/PointingToDeclaration/api.video -android livestream library/video.api.livestream.views/-api-video-view/-api-video-view.html
+$dokka.location:video.api.livestream////PointingToDeclaration/api.video -android livestream library/video.api.livestream/index.html
+$dokka.location:video.api.livestream/ApiVideoLiveStream///PointingToDeclaration/api.video -android livestream library/video.api.livestream/-api-video-live-stream/index.html
+$dokka.location:video.api.livestream/ApiVideoLiveStream/ApiVideoLiveStream/#android.content.Context#video.api.livestream.interfaces.IConnectionChecker#video.api.livestream.models.AudioConfig#video.api.livestream.models.VideoConfig#com.pedro.rtplibrary.view.OpenGlView?/PointingToDeclaration/api.video -android livestream library/video.api.livestream/-api-video-live-stream/-api-video-live-stream.html
+$dokka.location:video.api.livestream/ApiVideoLiveStream/camera/#/PointingToDeclaration/api.video -android livestream library/video.api.livestream/-api-video-live-stream/camera.html
+$dokka.location:video.api.livestream/ApiVideoLiveStream/isMuted/#/PointingToDeclaration/api.video -android livestream library/video.api.livestream/-api-video-live-stream/is-muted.html
+$dokka.location:video.api.livestream/ApiVideoLiveStream/startStreaming/#kotlin.String#kotlin.String/PointingToDeclaration/api.video -android livestream library/video.api.livestream/-api-video-live-stream/start-streaming.html
+$dokka.location:video.api.livestream/ApiVideoLiveStream/stopStreaming/#/PointingToDeclaration/api.video -android livestream library/video.api.livestream/-api-video-live-stream/stop-streaming.html
+$dokka.location:video.api.livestream/ApiVideoLiveStream/videoBitrate/#/PointingToDeclaration/api.video -android livestream library/video.api.livestream/-api-video-live-stream/video-bitrate.html
+video.api.livestream
+video.api.livestream.enums
+video.api.livestream.interfaces
+video.api.livestream.models
+video.api.livestream.views
+
