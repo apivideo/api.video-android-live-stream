@@ -13,7 +13,7 @@ On build.gradle add the following code in dependencies:
 ```xml
 dependencies {
         ...
-        implementation 'video.api:android-livestream:0.1.5'
+        implementation 'video.api:android-livestream:0.2.0'
 }
 ```
 
