@@ -6,7 +6,7 @@ This library is an easy way to broadcast livestream to api.video platform on And
 
 ## Installation
 
-### With maven
+### Gradle
 
 On build.gradle add the following code in dependencies:
 
@@ -16,19 +16,6 @@ dependencies {
         implementation 'video.api:android-livestream:0.2.0'
 }
 ```
-
-### Or import with a local aar
-
-1. Download the [latest release](https://github.com/apivideo/android-livestream/releases) of the aar
-   file.
-2. Go to “File” > “Project Structure...”
-3. On "Modules" select the "+" button and select "Import .JAR/.AAR Package" then click "next"
-4. Select the AAR file you have just downloaded, and click "Finish"
-5. Then go to "Dependencies" select the the app module and add a new dependencies by clicking on
-   the "+" button, then select "Module Dependency"
-   (if there is no "Module Dependency", close the window and re-open it, it should be fine)
-6. select Api.Video library, click "ok"
-7. click on "Apply" and then "ok"
 
 ## Sample
 
