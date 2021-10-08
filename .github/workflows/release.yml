@@ -1,7 +1,7 @@
 name: Publish package to the Maven Central Repository
 on:
   release:
-    types: [created]
+    types: [ created ]
 jobs:
   publish:
     runs-on: ubuntu-latest
@@ -14,8 +14,14 @@ jobs:
           distribution: 'adopt'
       - name: Validate Gradle wrapper
         uses: gradle/wrapper-validation-action@e6e38bacfdf1a337459f332974bb2327a31aaf4b
+      - name: Decode the secret key
+        run: echo $GPG_KEYRING_FILE_CONTENT | base64 --decode > ~/secring.gpg
+        env:
+          GPG_KEYRING_FILE_CONTENT: "${{ secrets.GPG_KEYRING_FILE_CONTENT }}"
       - name: Publish package
-        run: gradle publish
+        run: gradle publish -Psigning.secretKeyRingFile=$(echo ~/secring.gpg) -Psigning.password=$GPG_PASSWORD -Psigning.keyId=$GPG_KEY_ID
         env:
           NEXUS_USERNAME: ${{ secrets.OSSRH_USERNAME }}
           NEXUS_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
+          GPG_KEY_ID: ${{ secrets.GPG_KEY_ID }}
+          GPG_PASSWORD: ${{ secrets.GPG_PASSWORD }}
