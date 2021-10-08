@@ -17,5 +17,5 @@ jobs:
       - name: Publish package
         run: gradle publish
         env:
-          MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
-          MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN }}
+          NEXUS_USERNAME: ${{ secrets.OSSRH_USERNAME }}
+          NEXUS_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
