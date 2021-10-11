@@ -2,16 +2,17 @@ package video.api.livestream
 
 import android.Manifest
 import android.content.Context
+import android.util.Log
 import android.view.SurfaceHolder
 import androidx.annotation.RequiresPermission
 import com.pedro.encoder.input.video.CameraHelper
 import com.pedro.rtmp.utils.ConnectCheckerRtmp
 import com.pedro.rtplibrary.rtmp.RtmpCamera2
-import com.pedro.rtplibrary.view.OpenGlView
 import video.api.livestream.enums.CameraFacingDirection
 import video.api.livestream.interfaces.IConnectionChecker
 import video.api.livestream.models.AudioConfig
 import video.api.livestream.models.VideoConfig
+import video.api.livestream.views.ApiVideoView
 
 /**
  * Manages both livestream and camera preview.
@@ -20,18 +21,56 @@ class ApiVideoLiveStream
 /**
  * @param context application context
  * @param connectionChecker connection callbacks
- * @param audioConfig audio configuration
- * @param videoConfig video configuration
- * @param openGlView where to display preview. Could be null if you don't have a preview.
+ * @param initialAudioConfig initial audio configuration. Could be change later with [audioConfig] field.
+ * @param initialVideoConfig initial video configuration. Could be change later with [videoConfig] field.
+ * @param initialCamera initial camera. Could be change later with [camera] field.
+ * @param apiVideoView where to display preview. Could be null if you don't have a preview.
  */
 @RequiresPermission(allOf = [Manifest.permission.RECORD_AUDIO, Manifest.permission.CAMERA])
 constructor(
     private val context: Context,
     private val connectionChecker: IConnectionChecker,
-    private val audioConfig: AudioConfig,
-    private val videoConfig: VideoConfig,
-    openGlView: OpenGlView? = null
+    private val initialAudioConfig: AudioConfig,
+    private val initialVideoConfig: VideoConfig,
+    private val initialCamera: CameraFacingDirection = CameraFacingDirection.BACK,
+    private val apiVideoView: ApiVideoView? = null
 ) {
+
+    /**
+     * Set/get audio configuration once you have created the a [ApiVideoLiveStream] instance.
+     */
+    var audioConfig: AudioConfig = initialAudioConfig
+
+    /**
+     * Set/get video configuration once you have created the a [ApiVideoLiveStream] instance.
+     */
+    var videoConfig: VideoConfig = initialVideoConfig
+        /**
+         * Set new video configuration.
+         * It will restart preview if resolution has been changed.
+         * Encoders settings will be applied in next [startStreaming].
+         *
+         * @param value new video configuration
+         */
+        set(value) {
+            if (isStreaming) {
+                throw UnsupportedOperationException("You have to stop streaming first")
+            }
+            if (videoConfig.resolution != value.resolution) {
+                Log.i(
+                    this::class.simpleName,
+                    "Resolution has been changed from ${videoConfig.resolution} to ${value.resolution}. Restarting preview."
+                )
+                rtmpCamera2.stopPreview()
+                rtmpCamera2.startPreview(
+                    rtmpCamera2.cameraFacing,
+                    value.resolution.size.width,
+                    value.resolution.size.height
+                )
+            }
+            field = value
+        }
+
     /**
      * [ConnectCheckerRtmp] implementation.
      */
@@ -78,7 +117,7 @@ constructor(
          * Calls when the surface size has been changed. This is for internal purpose only. Do not call it.
          */
         override fun surfaceChanged(holder: SurfaceHolder, format: Int, width: Int, height: Int) {
-            rtmpCamera2.startPreview(videoConfig.camera.facing)
+            rtmpCamera2.startPreview(initialCamera.facing)
         }
 
         /**
@@ -96,17 +135,21 @@ constructor(
      * Internal RTMP stream object
      */
     private val rtmpCamera2: RtmpCamera2 = when {
-        openGlView != null -> {
-            openGlView.holder.addCallback(surfaceCallback)
-            RtmpCamera2(openGlView, connectCheckerRtmp)
+        apiVideoView != null -> {
+            apiVideoView.holder.addCallback(surfaceCallback)
+            RtmpCamera2(apiVideoView, connectCheckerRtmp)
         }
         else -> {
-            RtmpCamera2(context, true, connectCheckerRtmp)
+            RtmpCamera2(
+                context,
+                true,
+                connectCheckerRtmp
+            ).apply { startPreview(initialCamera.facing) }
         }
     }
 
     /**
-     * Get/set video bitrate during a stream in bps.
+     * Get/set video bitrate during a streaming in bps.
      * Value will be reset to provided [VideoConfig.bitrate] for a new stream.
      */
     var videoBitrate: Int
@@ -152,11 +195,13 @@ constructor(
         }
 
     init {
-        prepareEncoders()
+        prepareAudioEncoders()
+        prepareVideoEncoders()
+        rtmpCamera2.setLogs(false)
     }
 
     /**
-     * Mute/Unmute a stream
+     * Mute/Unmute microphone
      */
     var isMuted: Boolean
         /**
@@ -179,9 +224,9 @@ constructor(
         }
 
     /**
-     * Configures audio and video encoders.
+     * Configures audio encoders.
      */
-    private fun prepareEncoders() {
+    private fun prepareAudioEncoders() {
         rtmpCamera2.prepareAudio(
             audioConfig.bitrate,
             audioConfig.sampleRate,
@@ -189,6 +234,12 @@ constructor(
             audioConfig.echoCanceler,
             audioConfig.noiseSuppressor
         )
+    }
+
+    /**
+     * Configures video encoders.
+     */
+    private fun prepareVideoEncoders() {
         rtmpCamera2.prepareVideo(
             videoConfig.resolution.size.width,
             videoConfig.resolution.size.height,
@@ -198,16 +249,21 @@ constructor(
         )
     }
 
+    private fun prepareEncoders() {
+        prepareVideoEncoders()
+        prepareAudioEncoders()
+    }
+
     /**
      * Start a new RTMP stream.
      *
      * @param streamKey RTMP stream key. For security purpose, you must not expose it.
-     * @param url RTML Url. Default value is api.video RTMP broadcast url.
+     * @param url RTML Url. Default value (not set or null) is api.video RTMP broadcast url.
      * @see [stopStreaming]
      */
     fun startStreaming(
         streamKey: String,
-        url: String = context.getString(R.string.default_rtmp_url),
+        url: String? = context.getString(R.string.default_rtmp_url),
     ) {
         if (rtmpCamera2.isStreaming) {
             throw UnsupportedOperationException("Stream is already started")
@@ -224,5 +280,15 @@ constructor(
      */
     fun stopStreaming() =
         rtmpCamera2.stopStream()
+
+    /**
+     * Check the streaming state.
+     *
+     * @return true if you are streaming, false otherwise
+     * @see [startStreaming]
+     * @see [stopStreaming]
+     */
+    val isStreaming: Boolean
+        get() = rtmpCamera2.isStreaming
 
 }

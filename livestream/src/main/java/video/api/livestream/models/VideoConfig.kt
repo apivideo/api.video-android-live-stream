@@ -21,10 +21,5 @@ data class VideoConfig(
     /**
      * Video frame rate.
      */
-    val fps: Int,
-
-    /**
-     * Camera facing direction.
-     */
-    val camera: CameraFacingDirection
+    val fps: Int
 )
