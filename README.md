@@ -13,7 +13,7 @@ On build.gradle add the following code in dependencies:
 ```xml
 dependencies {
         ...
-        implementation 'video.api:android-livestream:0.2.0'
+        implementation 'video.api:android-livestream:0.3.0'
 }
 ```
 
@@ -99,11 +99,16 @@ class MyFragment : Fragment(), ConnectionChecker {
         val videoConfig = VideoConfig(
             bitrate = 2 * 1024 * 1024, // 2 Mbps
             resolution = Resolution.RESOLUTION_720,
-            fps = 30,
-            camera = CameraFacingDirection.BACK
+            fps = 30
         )
         apiVideo =
-            ApiVideoLiveStream(requireContext(), this, audioConfig, videoConfig, apiVideoView)
+           ApiVideoLiveStream(
+              context = getContext(),
+              connectionChecker = this,
+              initialAudioConfig = audioConfig,
+              initialVideoConfig = videoConfig,
+              apiVideoView = apiVideoView
+           )
     }
 }
 ```
