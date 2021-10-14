@@ -36,10 +36,15 @@ class PreviewViewModel(application: Application) : AndroidViewModel(application)
             bitrate = configuration.video.bitrate,
             resolution = Resolution.valueOf(configuration.video.resolution),
             fps = configuration.video.fps,
-            camera = CameraFacingDirection.BACK
         )
         liveStream =
-            ApiVideoLiveStream(getApplication(), this, audioConfig, videoConfig, apiVideoView)
+            ApiVideoLiveStream(
+                context = getApplication(),
+                connectionChecker = this,
+                initialAudioConfig = audioConfig,
+                initialVideoConfig = videoConfig,
+                apiVideoView = apiVideoView
+            )
     }
 
     fun startStream() {
