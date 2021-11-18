@@ -1,16 +1,29 @@
-[![badge](https://img.shields.io/twitter/follow/api_video?style=social)](https://twitter.com/intent/follow?screen_name=api_video)
-
-[![badge](https://img.shields.io/github/stars/apivideo/android-livestream?style=social)](https://github.com/apivideo/android-livestream)
-
-[![badge](https://img.shields.io/discourse/topics?server=https%3A%2F%2Fcommunity.api.video)](https://community.api.video)
-
+[![badge](https://img.shields.io/twitter/follow/api_video?style=social)](https://twitter.com/intent/follow?screen_name=api_video) &nbsp; [![badge](https://img.shields.io/github/stars/apivideo/api.video-android-live-stream?style=social)](https://github.com/apivideo/api.video-android-live-stream) &nbsp; [![badge](https://img.shields.io/discourse/topics?server=https%3A%2F%2Fcommunity.api.video)](https://community.api.video)
 ![](https://github.com/apivideo/API_OAS_file/blob/master/apivideo_banner.png)
+<h1 align="center">api.video Android live stream library</h1>
 
-[api.video](https://api.video) is an API that encodes on the go to facilitate immediate playback, enhancing viewer streaming experiences across multiple devices and platforms. You can stream live or on-demand online videos within minutes.
+[api.video](https://api.video) is the video infrastructure for product builders. Lightning fast video APIs for integrating, scaling, and managing on-demand & low latency live streaming features in your app.
 
-# [api.video](https://api.video) Android Kotlin Livestream library
+# Table of contents
+
+- [Table of contents](#table-of-contents)
+- [Project description](#project-description)
+- [Getting started](#getting-started)
+  - [Installation](#installation)
+    - [Gradle](#gradle)
+  - [Permissions](#permissions)
+  - [Code sample](#code-sample)
+- [Documentation](#documentation)
+- [Dependencies](#dependencies)
+- [Sample application](#sample-application)
+- [FAQ](#faq)
+
+# Project description
 
 This library is an easy way to broadcast livestream to api.video platform on Android.
+
+
+# Getting started
 
 ## Installation
 
@@ -24,10 +37,6 @@ dependencies {
         implementation 'video.api:android-livestream:0.3.0'
 }
 ```
-
-## Sample
-
-A demo application demonstrates how to use this livestream library. See `/app` folder.
 
 ## Permissions
 
@@ -43,7 +52,7 @@ A demo application demonstrates how to use this livestream library. See `/app` f
 Your application must dynamically require `android.permission.CAMERA`
 and `android.permission.RECORD_AUDIO`.
 
-## Getting Started
+## Code sample
 
 1. Add [permissions](#permissions) to your `AndroidManifest.xml` and request them in your
    Activity/Fragment.
@@ -124,14 +133,14 @@ class MyFragment : Fragment(), ConnectionChecker {
 5. Start your stream with `startStreaming` method
 
 For detailed information on this livestream library API, refers
-to [API documentation](https://apivideo.github.io/android-livestream/).
+to [API documentation](https://apivideo.github.io/api.video-android-live-stream/).
 
-### Documentation
+# Documentation
 
-* [API documentation](https://apivideo.github.io/android-livestream/)
+* [API documentation](https://apivideo.github.io/api.video-android-live-stream/)
 * [api.video documentation](https://docs.api.video)
 
-### Dependencies
+# Dependencies
 
 We are using external library
 
@@ -139,17 +148,18 @@ We are using external library
 | ------ | ------ |
 | rtmp-rtsp-stream-client-java | [https://github.com/pedroSG94/rtmp-rtsp-stream-client-java][rtmp-rtsp-stream-client-java] |
 
-### FAQ
+
+# Sample application
+
+A demo application demonstrates how to use this livestream library. See `/app` folder.
+
+# FAQ
 
 If you have any questions, ask us here:  https://community.api.video . Or use [Issues].
 
-License
-----
-
-MIT License Copyright (c) 2020 api.video
 
 [//]: # (These are reference links used in the body of this note and get stripped out when the markdown processor does its job. There is no need to format nicely because it shouldn't be seen. Thanks SO - http://stackoverflow.com/questions/4823468/store-comments-in-markdown-syntax)
 
 [rtmp-rtsp-stream-client-java]: <https://github.com/pedroSG94/rtmp-rtsp-stream-client-java>
 
-[Issues]: <https://github.com/apivideo/android-livestream/issues>
+[Issues]: <https://github.com/apivideo/api.video-android-live-stream/issues>
