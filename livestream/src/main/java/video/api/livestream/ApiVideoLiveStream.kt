@@ -263,14 +263,14 @@ constructor(
      */
     fun startStreaming(
         streamKey: String,
-        url: String? = context.getString(R.string.default_rtmp_url),
+        url: String = context.getString(R.string.default_rtmp_url),
     ) {
         if (rtmpCamera2.isStreaming) {
             throw UnsupportedOperationException("Stream is already started")
         }
 
         prepareEncoders()
-        rtmpCamera2.startStream(url + streamKey)
+        rtmpCamera2.startStream(url.addTrailingSlashIfNeeded() + streamKey)
     }
 
     /**
