@@ -31,9 +31,8 @@ This library is an easy way to broadcast livestream to api.video platform on And
 
 On build.gradle add the following code in dependencies:
 
-```xml
+```groovy
 dependencies {
-        ...
         implementation 'video.api:android-livestream:0.3.0'
 }
 ```
