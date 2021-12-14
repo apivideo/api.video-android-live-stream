@@ -1,4 +1,4 @@
-package video.api.livestream.app.ui.main
+package video.api.livestream.example.ui.main
 
 import android.Manifest
 import android.app.Application
@@ -6,7 +6,7 @@ import androidx.annotation.RequiresPermission
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import video.api.livestream.ApiVideoLiveStream
-import video.api.livestream.app.ui.utils.Configuration
+import video.api.livestream.example.ui.utils.Configuration
 import video.api.livestream.enums.CameraFacingDirection
 import video.api.livestream.enums.Resolution
 import video.api.livestream.interfaces.IConnectionChecker

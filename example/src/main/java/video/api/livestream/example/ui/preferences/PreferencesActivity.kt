@@ -1,4 +1,4 @@
-package video.api.livestream.app.ui.preferences
+package video.api.livestream.example.ui.preferences
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity

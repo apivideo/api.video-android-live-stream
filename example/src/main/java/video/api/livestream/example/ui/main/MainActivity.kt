@@ -1,4 +1,4 @@
-package video.api.livestream.app.ui.main
+package video.api.livestream.example.ui.main
 
 import android.Manifest
 import android.content.Intent
@@ -9,8 +9,8 @@ import androidx.appcompat.app.AppCompatActivity
 import com.tbruyelle.rxpermissions3.RxPermissions
 import video.api.livestream.app.R
 import video.api.livestream.app.databinding.ActivityMainBinding
-import video.api.livestream.app.ui.preferences.PreferencesActivity
-import video.api.livestream.app.ui.utils.DialogHelper
+import video.api.livestream.example.ui.preferences.PreferencesActivity
+import video.api.livestream.example.ui.utils.DialogHelper
 
 class MainActivity : AppCompatActivity() {
     private val binding: ActivityMainBinding by lazy {

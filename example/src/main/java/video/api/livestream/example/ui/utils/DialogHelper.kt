@@ -1,4 +1,4 @@
-package video.api.livestream.app.ui.utils
+package video.api.livestream.example.ui.utils
 
 import android.content.Context
 import android.content.DialogInterface

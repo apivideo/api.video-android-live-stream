@@ -12,7 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.App">
         <activity
-            android:name=".ui.main.MainActivity"
+            android:name="video.api.livestream.example.ui.main.MainActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.App.NoActionBar">
@@ -22,7 +22,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.preferences.PreferencesActivity" />
+        <activity android:name="video.api.livestream.example.ui.preferences.PreferencesActivity" />
     </application>
 
 </manifest>

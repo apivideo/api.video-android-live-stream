@@ -1,4 +1,4 @@
-package video.api.livestream.app.ui.main
+package video.api.livestream.example.ui.main
 
 import android.annotation.SuppressLint
 import android.content.pm.ActivityInfo
@@ -11,7 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import video.api.livestream.app.R
 import video.api.livestream.app.databinding.FragmentPreviewBinding
-import video.api.livestream.app.ui.utils.DialogHelper
+import video.api.livestream.example.ui.utils.DialogHelper
 
 class PreviewFragment : Fragment() {
     private val viewModel: PreviewViewModel by viewModels()
