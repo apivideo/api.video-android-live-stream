@@ -214,7 +214,7 @@ constructor(
         /**
          * Set mute value.
          *
-         * @param [Boolean.true] to mute audio, [Boolean.false] to unmute audio.
+         * @param value [Boolean.true] to mute audio, [Boolean.false] to unmute audio.
          */
         set(value) {
             if (value) {
