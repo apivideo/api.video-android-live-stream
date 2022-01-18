@@ -13,6 +13,7 @@ import video.api.livestream.interfaces.IConnectionChecker
 import video.api.livestream.models.AudioConfig
 import video.api.livestream.models.VideoConfig
 import video.api.livestream.views.ApiVideoView
+import java.lang.IllegalArgumentException
 
 /**
  * Manages both livestream and camera preview.
@@ -268,6 +269,9 @@ constructor(
     ) {
         if (rtmpCamera2.isStreaming) {
             throw UnsupportedOperationException("Stream is already started")
+        }
+        if (streamKey.isEmpty()) {
+            throw IllegalArgumentException("Stream key must not be empty")
         }
 
         prepareEncoders()

@@ -60,7 +60,7 @@ class PreviewFragment : Fragment() {
             manageError(getString(R.string.error), getString(R.string.authentication_failed))
         }
 
-        viewModel.onConnectionFailed.observe(viewLifecycleOwner) {
+        viewModel.onError.observe(viewLifecycleOwner) {
             manageError(getString(R.string.error), it)
         }
 

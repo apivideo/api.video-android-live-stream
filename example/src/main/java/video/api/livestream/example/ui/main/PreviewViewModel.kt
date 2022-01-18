@@ -19,7 +19,7 @@ class PreviewViewModel(application: Application) : AndroidViewModel(application)
     private lateinit var liveStream: ApiVideoLiveStream
     private val configuration = Configuration(getApplication())
 
-    val onConnectionFailed = MutableLiveData<String>()
+    val onError = MutableLiveData<String>()
     val onAuthError = MutableLiveData<Boolean>()
     val onDisconnect = MutableLiveData<Boolean>()
 
@@ -48,7 +48,11 @@ class PreviewViewModel(application: Application) : AndroidViewModel(application)
     }
 
     fun startStream() {
-        liveStream.startStreaming(configuration.endpoint.streamKey, configuration.endpoint.url)
+        try {
+            liveStream.startStreaming(configuration.endpoint.streamKey, configuration.endpoint.url)
+        } catch (e: Exception) {
+            onError.postValue(e.message)
+        }
     }
 
     fun stopStream() {
@@ -75,7 +79,7 @@ class PreviewViewModel(application: Application) : AndroidViewModel(application)
     }
 
     override fun onConnectionFailed(reason: String) {
-        onConnectionFailed.postValue(reason)
+        onError.postValue(reason)
     }
 
     override fun onConnectionStarted(url: String) {
