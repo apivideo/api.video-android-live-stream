@@ -84,6 +84,7 @@ constructor(
         }
 
         override fun onConnectionFailedRtmp(reason: String) {
+            rtmpCamera2.stopStream()
             connectionChecker.onConnectionFailed(reason)
         }
 
