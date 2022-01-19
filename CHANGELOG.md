@@ -1,6 +1,18 @@
 # Changelog
 All changes to this project will be documented in this file.
 
+## [0.3.2] - 2022-01-19
+- Catch onConnectionFailed to stop streaming without user
+- Throw an exception on `startStreaming` when stream key is empty
+- Remove jcenter as a dependency repository
+
+## [0.3.1] - 2021-12-14
+- Add a trailing slash at the end of the RTMP url in case it is missing
+- Rename project to live-stream
+
+## [0.3.0] - 2021-10-14
+- Add/Improve API: introducing videoConfig and audioConfig changes
+
 ## [0.3.0] - 2021-10-14
 - Add/Improve API: introducing videoConfig and audioConfig changes
   
