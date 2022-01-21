@@ -62,7 +62,7 @@ constructor(
                     this::class.simpleName,
                     "Resolution has been changed from ${videoConfig.resolution} to ${value.resolution}. Restarting preview."
                 )
-                rtmpCamera2.stopPreview()
+                stopPreview()
                 rtmpCamera2.startPreview(
                     rtmpCamera2.cameraFacing,
                     value.resolution.size.width,
@@ -126,10 +126,8 @@ constructor(
          * Calls when the surface size has been destroyed. This is for internal purpose only. Do not call it.
          */
         override fun surfaceDestroyed(holder: SurfaceHolder) {
-            if (rtmpCamera2.isStreaming) {
-                rtmpCamera2.stopStream()
-            }
-            rtmpCamera2.stopPreview()
+            stopStreaming()
+            stopPreview()
         }
     }
 
@@ -295,4 +293,23 @@ constructor(
     val isStreaming: Boolean
         get() = rtmpCamera2.isStreaming
 
+    /**
+     * Starts camera preview of [camera].
+     *
+     * The surface provided in the constructor already manages [startPreview] and [stopPreview].
+     * Use this method only if you need to explicitly start preview.
+     *
+     * @see [stopPreview]
+     */
+    fun startPreview() = rtmpCamera2.startPreview()
+
+    /**
+     * Stops camera preview.
+     *
+     * The surface provided in the constructor already manages [startPreview] and [stopPreview].
+     * Use this method only if you need to explicitly stop preview.
+     *
+     * @see [startPreview]
+     */
+    fun stopPreview() = rtmpCamera2.stopPreview()
 }
