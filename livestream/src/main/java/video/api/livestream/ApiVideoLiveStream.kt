@@ -197,8 +197,7 @@ constructor(
         }
 
     init {
-        prepareAudioEncoders()
-        prepareVideoEncoders()
+        prepareEncoders()
         rtmpCamera2.setLogs(false)
     }
 
@@ -267,7 +266,7 @@ constructor(
         streamKey: String,
         url: String = context.getString(R.string.default_rtmp_url),
     ) {
-        if (rtmpCamera2.isStreaming) {
+        if (isStreaming) {
             throw UnsupportedOperationException("Stream is already started")
         }
         if (streamKey.isEmpty()) {
