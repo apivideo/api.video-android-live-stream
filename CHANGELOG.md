@@ -1,6 +1,9 @@
 # Changelog
 All changes to this project will be documented in this file.
 
+## [0.3.3] - 2022-01-24
+- Add startPreview/stopPreview API
+
 ## [0.3.2] - 2022-01-19
 - Catch onConnectionFailed to stop streaming without user
 - Throw an exception on `startStreaming` when stream key is empty
