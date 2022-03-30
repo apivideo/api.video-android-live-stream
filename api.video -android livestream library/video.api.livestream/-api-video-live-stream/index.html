@@ -2,27 +2,31 @@
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
     <title>ApiVideoLiveStream</title>
-<link href="../../../../../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../../";</script><script type="text/javascript" src="../../../scripts/sourceset_dependencies.js" async="async"></script><link href="../../../styles/style.css" rel="Stylesheet"><link href="../../../styles/logo-styles.css" rel="Stylesheet"><link href="../../../styles/jetbrains-mono.css" rel="Stylesheet"><link href="../../../styles/main.css" rel="Stylesheet"><script type="text/javascript" src="../../../scripts/clipboard.js" async="async"></script><script type="text/javascript" src="../../../scripts/navigation-loader.js" async="async"></script><script type="text/javascript" src="../../../scripts/platform-content-handler.js" async="async"></script><script type="text/javascript" src="../../../scripts/main.js" async="async"></script><link href="../../../images/docs_logo.svg"><link href="../../../images/logo-icon.svg">  </head>
+<link href="../../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../../";</script>    <script>const storage = localStorage.getItem("dokka-dark-mode")
+const savedDarkMode = storage ? JSON.parse(storage) : false
+if(savedDarkMode === true){
+    document.getElementsByTagName("html")[0].classList.add("theme-dark")
+}</script>
+<script type="text/javascript" src="../../../scripts/sourceset_dependencies.js" async="async"></script><link href="../../../styles/style.css" rel="Stylesheet"><link href="../../../styles/jetbrains-mono.css" rel="Stylesheet"><link href="../../../styles/main.css" rel="Stylesheet"><link href="../../../styles/prism.css" rel="Stylesheet"><link href="../../../styles/logo-styles.css" rel="Stylesheet"><script type="text/javascript" src="../../../scripts/clipboard.js" async="async"></script><script type="text/javascript" src="../../../scripts/navigation-loader.js" async="async"></script><script type="text/javascript" src="../../../scripts/platform-content-handler.js" async="async"></script><script type="text/javascript" src="../../../scripts/main.js" defer="defer"></script><script type="text/javascript" src="../../../scripts/prism.js" async="async"></script><link href="../../../images/docs_logo.svg"><link href="../../../images/logo-icon.svg">  </head>
   <body>
+    <div class="navigation-wrapper" id="navigation-wrapper">
+      <div id="leftToggler"><span class="icon-toggler"></span></div>
+      <div class="library-name"><a href="../../../index.html">api.video Android livestream library</a></div>
+      <div></div>
+      <div class="pull-right d-flex"><button id="theme-toggle-button"><span id="theme-toggle"></span></button>
+        <div id="searchBar"></div>
+      </div>
+    </div>
     <div id="container">
-      <div id="leftColumn"><a href="../../../index.html">
-          <div id="logo"></div>
-        </a>
-        <div id="paneSearch"></div>
+      <div id="leftColumn">
         <div id="sideMenu"></div>
       </div>
       <div id="main">
-        <div id="leftToggler"><span class="icon-toggler"></span></div>
-<script type="text/javascript" src="../../../scripts/main.js"></script>        <div class="main-content" id="content" pageIds="api.video Android livestream library::video.api.livestream/ApiVideoLiveStream///PointingToDeclaration//2007460702">
-          <div class="navigation-wrapper" id="navigation-wrapper">
-            <div class="breadcrumbs"><a href="../../../index.html">api.video Android livestream library</a>/<a href="../index.html">video.api.livestream</a>/<a href="index.html">ApiVideoLiveStream</a></div>
-            <div class="pull-right d-flex">
-              <div id="searchBar"></div>
-            </div>
-          </div>
+        <div class="main-content" id="content" pageIds="api.video Android livestream library::video.api.livestream/ApiVideoLiveStream///PointingToDeclaration//2007460702">
+          <div class="breadcrumbs"><a href="../../../index.html">api.video Android livestream library</a>/<a href="../index.html">video.api.livestream</a>/<a href="index.html">ApiVideoLiveStream</a></div>
           <div class="cover ">
-            <h1 class="cover"><span>Api</span><wbr></wbr><span>Video</span><wbr></wbr><span>Live</span><wbr></wbr><span>Stream</span></h1>
-            <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":livestream:dokkaHtml/release"><div class="symbol monospace">class <a href="index.html">ApiVideoLiveStream</a> <span>@<a href="https://developer.android.com/reference/kotlin/androidx/annotation/RequiresPermission.html">RequiresPermission</a>(<span>allOf = [<span><span class="breakable-word">android.permission.RECORD_AUDIO</span>, </span><wbr></wbr><span><span class="breakable-word">android.permission.CAMERA</span></span><wbr></wbr>]</span><wbr></wbr>) </span>constructor(context: <a href="https://developer.android.com/reference/kotlin/android/content/Context.html">Context</a>, connectionChecker: <a href="../../video.api.livestream.interfaces/-i-connection-checker/index.html">IConnectionChecker</a>, initialAudioConfig: <a href="../../video.api.livestream.models/-audio-config/index.html">AudioConfig</a>, initialVideoConfig: <a href="../../video.api.livestream.models/-video-config/index.html">VideoConfig</a>, initialCamera: <a href="../../video.api.livestream.enums/-camera-facing-direction/index.html">CameraFacingDirection</a>, apiVideoView: <a href="../../video.api.livestream.views/-api-video-view/index.html">ApiVideoView</a>?)<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><p class="paragraph">Manages both livestream and camera preview.</p></div></div>
+            <h1 class="cover"><span>Api</span><wbr></wbr><span>Video</span><wbr></wbr><span>Live</span><wbr></wbr><span><span>Stream</span></span></h1>
+            <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":livestream:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword">class </span><a href="index.html">ApiVideoLiveStream</a> <span><span class="token annotation">@</span><a href="https://developer.android.com/reference/kotlin/androidx/annotation/RequiresPermission.html"><span class="token annotation">RequiresPermission</span></a><span class="token punctuation">(</span><span>allOf<span class="token operator"> = </span><span class="token punctuation">[</span><span><span class="breakable-word"><span class="token string">&quot;android.permission.RECORD_AUDIO&quot;</span></span><span class="token punctuation">, </span></span><wbr></wbr><span><span class="breakable-word"><span class="token string">&quot;android.permission.CAMERA&quot;</span></span></span><wbr></wbr><span class="token punctuation">]</span></span><wbr></wbr><span class="token punctuation">)</span> </span><span class="token keyword">constructor</span><span class="token punctuation">(</span>context<span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/android/content/Context.html">Context</a><span class="token punctuation">, </span>connectionChecker<span class="token operator">: </span><a href="../../video.api.livestream.interfaces/-i-connection-checker/index.html">IConnectionChecker</a><span class="token punctuation">, </span>initialAudioConfig<span class="token operator">: </span><a href="../../video.api.livestream.models/-audio-config/index.html">AudioConfig</a><span class="token punctuation">, </span>initialVideoConfig<span class="token operator">: </span><a href="../../video.api.livestream.models/-video-config/index.html">VideoConfig</a><span class="token punctuation">, </span>initialCamera<span class="token operator">: </span><a href="../../video.api.livestream.enums/-camera-facing-direction/index.html">CameraFacingDirection</a><span class="token punctuation">, </span>apiVideoView<span class="token operator">: </span><a href="../../video.api.livestream.views/-api-video-view/index.html">ApiVideoView</a><span class="token operator">?</span><span class="token punctuation">)</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><p class="paragraph">Manages both livestream and camera preview.</p></div></div>
           </div>
           <div class="tabbedcontent">
             <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="Constructors">Constructors</button><button class="section-tab" data-togglable="Functions">Functions</button><button class="section-tab" data-togglable="Properties">Properties</button></div>
@@ -31,12 +35,14 @@
               <div class="table" data-togglable="Constructors"><a data-name="-1401323287%2FConstructors%2F2007460702" anchor-label="ApiVideoLiveStream" id="-1401323287%2FConstructors%2F2007460702" data-filterable-set=":livestream:dokkaHtml/release"></a>
                 <div class="table-row" data-filterable-current=":livestream:dokkaHtml/release" data-filterable-set=":livestream:dokkaHtml/release">
                   <div class="main-subrow keyValue TabbedContent">
-                    <div class=""><span class="inline-flex"><a href="-api-video-live-stream.html">ApiVideoLiveStream</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1401323287%2FConstructors%2F2007460702"></span>
+                    <div class=""><span class="inline-flex">
+                        <div><a href="-api-video-live-stream.html"><span>Api</span><wbr></wbr><span>Video</span><wbr></wbr><span>Live</span><wbr></wbr><span><span>Stream</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1401323287%2FConstructors%2F2007460702"></span>
                           <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                         </span></span></div>
                     <div>
                       <div class="title">
-                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":livestream:dokkaHtml/release"><div class="symbol monospace"><div class="block"><div class="block">@<a href="https://developer.android.com/reference/kotlin/androidx/annotation/RequiresPermission.html">RequiresPermission</a>(<span>allOf = [<span><span class="breakable-word">android.permission.RECORD_AUDIO</span>, </span><wbr></wbr><span><span class="breakable-word">android.permission.CAMERA</span></span><wbr></wbr>]</span><wbr></wbr>)</div></div>fun <a href="-api-video-live-stream.html">ApiVideoLiveStream</a>(context: <a href="https://developer.android.com/reference/kotlin/android/content/Context.html">Context</a>, connectionChecker: <a href="../../video.api.livestream.interfaces/-i-connection-checker/index.html">IConnectionChecker</a>, initialAudioConfig: <a href="../../video.api.livestream.models/-audio-config/index.html">AudioConfig</a>, initialVideoConfig: <a href="../../video.api.livestream.models/-video-config/index.html">VideoConfig</a>, initialCamera: <a href="../../video.api.livestream.enums/-camera-facing-direction/index.html">CameraFacingDirection</a> = CameraFacingDirection.BACK, apiVideoView: <a href="../../video.api.livestream.views/-api-video-view/index.html">ApiVideoView</a>? = null)<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":livestream:dokkaHtml/release"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation">@</span><a href="https://developer.android.com/reference/kotlin/androidx/annotation/RequiresPermission.html"><span class="token annotation">RequiresPermission</span></a><span class="token punctuation">(</span><span>allOf<span class="token operator"> = </span><span class="token punctuation">[</span><span><span class="breakable-word"><span class="token string">&quot;android.permission.RECORD_AUDIO&quot;</span></span><span class="token punctuation">, </span></span><wbr></wbr><span><span class="breakable-word"><span class="token string">&quot;android.permission.CAMERA&quot;</span></span></span><wbr></wbr><span class="token punctuation">]</span></span><wbr></wbr><span class="token punctuation">)</span></div></div><span class="token keyword"></span><span class="token keyword">fun </span><a href="-api-video-live-stream.html"><span class="token function">ApiVideoLiveStream</span></a><span class="token punctuation">(</span>context<span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/android/content/Context.html">Context</a><span class="token punctuation">, </span>connectionChecker<span class="token operator">: </span><a href="../../video.api.livestream.interfaces/-i-connection-checker/index.html">IConnectionChecker</a><span class="token punctuation">, </span>initialAudioConfig<span class="token operator">: </span><a href="../../video.api.livestream.models/-audio-config/index.html">AudioConfig</a><span class="token punctuation">, </span>initialVideoConfig<span class="token operator">: </span><a href="../../video.api.livestream.models/-video-config/index.html">VideoConfig</a><span class="token punctuation">, </span>initialCamera<span class="token operator">: </span><a href="../../video.api.livestream.enums/-camera-facing-direction/index.html">CameraFacingDirection</a><span class="token operator"> = </span>CameraFacingDirection.BACK<span class="token punctuation">, </span>apiVideoView<span class="token operator">: </span><a href="../../video.api.livestream.views/-api-video-view/index.html">ApiVideoView</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">)</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
                       </div>
                     </div>
                   </div>
@@ -46,68 +52,60 @@
               <div class="table" data-togglable="Functions"><a data-name="-1758485775%2FFunctions%2F2007460702" anchor-label="startPreview" id="-1758485775%2FFunctions%2F2007460702" data-filterable-set=":livestream:dokkaHtml/release"></a>
                 <div class="table-row" data-filterable-current=":livestream:dokkaHtml/release" data-filterable-set=":livestream:dokkaHtml/release">
                   <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="start-preview.html">startPreview</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1758485775%2FFunctions%2F2007460702"></span>
+                    <div class=""><span class="inline-flex">
+                        <div><a href="start-preview.html"><span>start</span><wbr></wbr><span><span>Preview</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1758485775%2FFunctions%2F2007460702"></span>
                           <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                         </span></span></div>
                     <div>
-                      <div class="title"><div class="divergent-group" data-filterable-current=":livestream:dokkaHtml/release" data-filterable-set=":livestream:dokkaHtml/release"><div class="with-platform-tags"><span class="pull-right"></span></div>
-
-  <div>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":livestream:dokkaHtml/release"><div class="symbol monospace">fun <a href="start-preview.html">startPreview</a>()<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-  </div>
-<a data-name="-1758485775%2FFunctions%2F2007460702" anchor-label="startPreview" id="-1758485775%2FFunctions%2F2007460702" data-filterable-set=":livestream:dokkaHtml/release"></a><div class="brief "><a data-name="-1758485775%2FFunctions%2F2007460702" anchor-label="startPreview" id="-1758485775%2FFunctions%2F2007460702" data-filterable-set=":livestream:dokkaHtml/release"></a>Starts camera preview of <a href="camera.html">camera</a>.</div></div>
-</div>
+                      <div class="title">
+                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":livestream:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="start-preview.html"><span class="token function">startPreview</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Starts camera preview of <a href="camera.html">camera</a>.</p></div></div></div>
+                      </div>
                     </div>
                   </div>
                 </div>
 <a data-name="1343378418%2FFunctions%2F2007460702" anchor-label="startStreaming" id="1343378418%2FFunctions%2F2007460702" data-filterable-set=":livestream:dokkaHtml/release"></a>
                 <div class="table-row" data-filterable-current=":livestream:dokkaHtml/release" data-filterable-set=":livestream:dokkaHtml/release">
                   <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="start-streaming.html">startStreaming</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1343378418%2FFunctions%2F2007460702"></span>
+                    <div class=""><span class="inline-flex">
+                        <div><a href="start-streaming.html"><span>start</span><wbr></wbr><span><span>Streaming</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1343378418%2FFunctions%2F2007460702"></span>
                           <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                         </span></span></div>
                     <div>
-                      <div class="title"><div class="divergent-group" data-filterable-current=":livestream:dokkaHtml/release" data-filterable-set=":livestream:dokkaHtml/release"><div class="with-platform-tags"><span class="pull-right"></span></div>
-
-  <div>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":livestream:dokkaHtml/release"><div class="symbol monospace">fun <a href="start-streaming.html">startStreaming</a>(streamKey: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>, url: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a> = context.getString(R.string.default_rtmp_url))<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-  </div>
-<a data-name="1343378418%2FFunctions%2F2007460702" anchor-label="startStreaming" id="1343378418%2FFunctions%2F2007460702" data-filterable-set=":livestream:dokkaHtml/release"></a><div class="brief "><a data-name="1343378418%2FFunctions%2F2007460702" anchor-label="startStreaming" id="1343378418%2FFunctions%2F2007460702" data-filterable-set=":livestream:dokkaHtml/release"></a>Start a new RTMP stream.</div></div>
-</div>
+                      <div class="title">
+                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":livestream:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="start-streaming.html"><span class="token function">startStreaming</span></a><span class="token punctuation">(</span>streamKey<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span>url<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator"> = </span>context.getString(R.string.default_rtmp_url)<span class="token punctuation">)</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Start a new RTMP stream.</p></div></div></div>
+                      </div>
                     </div>
                   </div>
                 </div>
 <a data-name="122924125%2FFunctions%2F2007460702" anchor-label="stopPreview" id="122924125%2FFunctions%2F2007460702" data-filterable-set=":livestream:dokkaHtml/release"></a>
                 <div class="table-row" data-filterable-current=":livestream:dokkaHtml/release" data-filterable-set=":livestream:dokkaHtml/release">
                   <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="stop-preview.html">stopPreview</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="122924125%2FFunctions%2F2007460702"></span>
+                    <div class=""><span class="inline-flex">
+                        <div><a href="stop-preview.html"><span>stop</span><wbr></wbr><span><span>Preview</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="122924125%2FFunctions%2F2007460702"></span>
                           <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                         </span></span></div>
                     <div>
-                      <div class="title"><div class="divergent-group" data-filterable-current=":livestream:dokkaHtml/release" data-filterable-set=":livestream:dokkaHtml/release"><div class="with-platform-tags"><span class="pull-right"></span></div>
-
-  <div>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":livestream:dokkaHtml/release"><div class="symbol monospace">fun <a href="stop-preview.html">stopPreview</a>()<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-  </div>
-<a data-name="122924125%2FFunctions%2F2007460702" anchor-label="stopPreview" id="122924125%2FFunctions%2F2007460702" data-filterable-set=":livestream:dokkaHtml/release"></a><div class="brief "><a data-name="122924125%2FFunctions%2F2007460702" anchor-label="stopPreview" id="122924125%2FFunctions%2F2007460702" data-filterable-set=":livestream:dokkaHtml/release"></a>Stops camera preview.</div></div>
-</div>
+                      <div class="title">
+                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":livestream:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="stop-preview.html"><span class="token function">stopPreview</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Stops camera preview.</p></div></div></div>
+                      </div>
                     </div>
                   </div>
                 </div>
 <a data-name="1265745667%2FFunctions%2F2007460702" anchor-label="stopStreaming" id="1265745667%2FFunctions%2F2007460702" data-filterable-set=":livestream:dokkaHtml/release"></a>
                 <div class="table-row" data-filterable-current=":livestream:dokkaHtml/release" data-filterable-set=":livestream:dokkaHtml/release">
                   <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="stop-streaming.html">stopStreaming</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1265745667%2FFunctions%2F2007460702"></span>
+                    <div class=""><span class="inline-flex">
+                        <div><a href="stop-streaming.html"><span>stop</span><wbr></wbr><span><span>Streaming</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1265745667%2FFunctions%2F2007460702"></span>
                           <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                         </span></span></div>
                     <div>
-                      <div class="title"><div class="divergent-group" data-filterable-current=":livestream:dokkaHtml/release" data-filterable-set=":livestream:dokkaHtml/release"><div class="with-platform-tags"><span class="pull-right"></span></div>
-
-  <div>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":livestream:dokkaHtml/release"><div class="symbol monospace">fun <a href="stop-streaming.html">stopStreaming</a>()<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
-  </div>
-<a data-name="1265745667%2FFunctions%2F2007460702" anchor-label="stopStreaming" id="1265745667%2FFunctions%2F2007460702" data-filterable-set=":livestream:dokkaHtml/release"></a><div class="brief "><a data-name="1265745667%2FFunctions%2F2007460702" anchor-label="stopStreaming" id="1265745667%2FFunctions%2F2007460702" data-filterable-set=":livestream:dokkaHtml/release"></a>Stops running stream.</div></div>
-</div>
+                      <div class="title">
+                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":livestream:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="stop-streaming.html"><span class="token function">stopStreaming</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Stops running stream.</p></div></div></div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -116,12 +114,14 @@
               <div class="table" data-togglable="Properties"><a data-name="-1995610293%2FProperties%2F2007460702" anchor-label="audioConfig" id="-1995610293%2FProperties%2F2007460702" data-filterable-set=":livestream:dokkaHtml/release"></a>
                 <div class="table-row" data-filterable-current=":livestream:dokkaHtml/release" data-filterable-set=":livestream:dokkaHtml/release">
                   <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="audio-config.html">audioConfig</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1995610293%2FProperties%2F2007460702"></span>
+                    <div class=""><span class="inline-flex">
+                        <div><a href="audio-config.html">audioConfig</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1995610293%2FProperties%2F2007460702"></span>
                           <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                         </span></span></div>
                     <div>
                       <div class="title">
-                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":livestream:dokkaHtml/release"><a data-name="-1995610293%2FProperties%2F2007460702" anchor-label="audioConfig" id="-1995610293%2FProperties%2F2007460702" data-filterable-set=":livestream:dokkaHtml/release"></a><div class="symbol monospace">var <a href="audio-config.html">audioConfig</a>: <a href="../../video.api.livestream.models/-audio-config/index.html">AudioConfig</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><a data-name="-1995610293%2FProperties%2F2007460702" anchor-label="audioConfig" id="-1995610293%2FProperties%2F2007460702" data-filterable-set=":livestream:dokkaHtml/release"></a>Set/get audio configuration once you have created the a <a href="index.html">ApiVideoLiveStream</a> instance.</div></div></div>
+                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":livestream:dokkaHtml/release"><a data-name="-1995610293%2FProperties%2F2007460702" anchor-label="audioConfig" id="-1995610293%2FProperties%2F2007460702" data-filterable-set=":livestream:dokkaHtml/release"></a><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">var </span><a href="audio-config.html">audioConfig</a><span class="token operator">: </span><a href="../../video.api.livestream.models/-audio-config/index.html">AudioConfig</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><a data-name="-1995610293%2FProperties%2F2007460702" anchor-label="audioConfig" id="-1995610293%2FProperties%2F2007460702" data-filterable-set=":livestream:dokkaHtml/release"></a><p class="paragraph">Set/get audio configuration once you have created the a <a href="index.html">ApiVideoLiveStream</a> instance.</p></div></div></div>
                       </div>
                     </div>
                   </div>
@@ -129,12 +129,14 @@
 <a data-name="876820786%2FProperties%2F2007460702" anchor-label="camera" id="876820786%2FProperties%2F2007460702" data-filterable-set=":livestream:dokkaHtml/release"></a>
                 <div class="table-row" data-filterable-current=":livestream:dokkaHtml/release" data-filterable-set=":livestream:dokkaHtml/release">
                   <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="camera.html">camera</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="876820786%2FProperties%2F2007460702"></span>
+                    <div class=""><span class="inline-flex">
+                        <div><a href="camera.html">camera</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="876820786%2FProperties%2F2007460702"></span>
                           <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                         </span></span></div>
                     <div>
                       <div class="title">
-                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":livestream:dokkaHtml/release"><a data-name="876820786%2FProperties%2F2007460702" anchor-label="camera" id="876820786%2FProperties%2F2007460702" data-filterable-set=":livestream:dokkaHtml/release"></a><div class="symbol monospace">var <a href="camera.html">camera</a>: <a href="../../video.api.livestream.enums/-camera-facing-direction/index.html">CameraFacingDirection</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><a data-name="876820786%2FProperties%2F2007460702" anchor-label="camera" id="876820786%2FProperties%2F2007460702" data-filterable-set=":livestream:dokkaHtml/release"></a>Get/set current camera facing direction.</div></div></div>
+                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":livestream:dokkaHtml/release"><a data-name="876820786%2FProperties%2F2007460702" anchor-label="camera" id="876820786%2FProperties%2F2007460702" data-filterable-set=":livestream:dokkaHtml/release"></a><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">var </span><a href="camera.html">camera</a><span class="token operator">: </span><a href="../../video.api.livestream.enums/-camera-facing-direction/index.html">CameraFacingDirection</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><a data-name="876820786%2FProperties%2F2007460702" anchor-label="camera" id="876820786%2FProperties%2F2007460702" data-filterable-set=":livestream:dokkaHtml/release"></a><p class="paragraph">Get/set current camera facing direction.</p></div></div></div>
                       </div>
                     </div>
                   </div>
@@ -142,12 +144,14 @@
 <a data-name="-2054033726%2FProperties%2F2007460702" anchor-label="isMuted" id="-2054033726%2FProperties%2F2007460702" data-filterable-set=":livestream:dokkaHtml/release"></a>
                 <div class="table-row" data-filterable-current=":livestream:dokkaHtml/release" data-filterable-set=":livestream:dokkaHtml/release">
                   <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="is-muted.html">isMuted</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2054033726%2FProperties%2F2007460702"></span>
+                    <div class=""><span class="inline-flex">
+                        <div><a href="is-muted.html">isMuted</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2054033726%2FProperties%2F2007460702"></span>
                           <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                         </span></span></div>
                     <div>
                       <div class="title">
-                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":livestream:dokkaHtml/release"><a data-name="-2054033726%2FProperties%2F2007460702" anchor-label="isMuted" id="-2054033726%2FProperties%2F2007460702" data-filterable-set=":livestream:dokkaHtml/release"></a><div class="symbol monospace">var <a href="is-muted.html">isMuted</a>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><a data-name="-2054033726%2FProperties%2F2007460702" anchor-label="isMuted" id="-2054033726%2FProperties%2F2007460702" data-filterable-set=":livestream:dokkaHtml/release"></a>Mute/Unmute microphone</div></div></div>
+                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":livestream:dokkaHtml/release"><a data-name="-2054033726%2FProperties%2F2007460702" anchor-label="isMuted" id="-2054033726%2FProperties%2F2007460702" data-filterable-set=":livestream:dokkaHtml/release"></a><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">var </span><a href="is-muted.html">isMuted</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><a data-name="-2054033726%2FProperties%2F2007460702" anchor-label="isMuted" id="-2054033726%2FProperties%2F2007460702" data-filterable-set=":livestream:dokkaHtml/release"></a><p class="paragraph">Mute/Unmute microphone</p></div></div></div>
                       </div>
                     </div>
                   </div>
@@ -155,12 +159,14 @@
 <a data-name="-733924437%2FProperties%2F2007460702" anchor-label="isStreaming" id="-733924437%2FProperties%2F2007460702" data-filterable-set=":livestream:dokkaHtml/release"></a>
                 <div class="table-row" data-filterable-current=":livestream:dokkaHtml/release" data-filterable-set=":livestream:dokkaHtml/release">
                   <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="is-streaming.html">isStreaming</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-733924437%2FProperties%2F2007460702"></span>
+                    <div class=""><span class="inline-flex">
+                        <div><a href="is-streaming.html">isStreaming</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-733924437%2FProperties%2F2007460702"></span>
                           <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                         </span></span></div>
                     <div>
                       <div class="title">
-                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":livestream:dokkaHtml/release"><a data-name="-733924437%2FProperties%2F2007460702" anchor-label="isStreaming" id="-733924437%2FProperties%2F2007460702" data-filterable-set=":livestream:dokkaHtml/release"></a><div class="symbol monospace">val <a href="is-streaming.html">isStreaming</a>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><a data-name="-733924437%2FProperties%2F2007460702" anchor-label="isStreaming" id="-733924437%2FProperties%2F2007460702" data-filterable-set=":livestream:dokkaHtml/release"></a>Check the streaming state.</div></div></div>
+                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":livestream:dokkaHtml/release"><a data-name="-733924437%2FProperties%2F2007460702" anchor-label="isStreaming" id="-733924437%2FProperties%2F2007460702" data-filterable-set=":livestream:dokkaHtml/release"></a><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="is-streaming.html">isStreaming</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><a data-name="-733924437%2FProperties%2F2007460702" anchor-label="isStreaming" id="-733924437%2FProperties%2F2007460702" data-filterable-set=":livestream:dokkaHtml/release"></a><p class="paragraph">Check the streaming state.</p></div></div></div>
                       </div>
                     </div>
                   </div>
@@ -168,12 +174,14 @@
 <a data-name="1646406405%2FProperties%2F2007460702" anchor-label="videoBitrate" id="1646406405%2FProperties%2F2007460702" data-filterable-set=":livestream:dokkaHtml/release"></a>
                 <div class="table-row" data-filterable-current=":livestream:dokkaHtml/release" data-filterable-set=":livestream:dokkaHtml/release">
                   <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="video-bitrate.html">videoBitrate</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1646406405%2FProperties%2F2007460702"></span>
+                    <div class=""><span class="inline-flex">
+                        <div><a href="video-bitrate.html">videoBitrate</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1646406405%2FProperties%2F2007460702"></span>
                           <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                         </span></span></div>
                     <div>
                       <div class="title">
-                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":livestream:dokkaHtml/release"><a data-name="1646406405%2FProperties%2F2007460702" anchor-label="videoBitrate" id="1646406405%2FProperties%2F2007460702" data-filterable-set=":livestream:dokkaHtml/release"></a><div class="symbol monospace">var <a href="video-bitrate.html">videoBitrate</a>: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><a data-name="1646406405%2FProperties%2F2007460702" anchor-label="videoBitrate" id="1646406405%2FProperties%2F2007460702" data-filterable-set=":livestream:dokkaHtml/release"></a>Get/set video bitrate during a streaming in bps.</div></div></div>
+                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":livestream:dokkaHtml/release"><a data-name="1646406405%2FProperties%2F2007460702" anchor-label="videoBitrate" id="1646406405%2FProperties%2F2007460702" data-filterable-set=":livestream:dokkaHtml/release"></a><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">var </span><a href="video-bitrate.html">videoBitrate</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><a data-name="1646406405%2FProperties%2F2007460702" anchor-label="videoBitrate" id="1646406405%2FProperties%2F2007460702" data-filterable-set=":livestream:dokkaHtml/release"></a><p class="paragraph">Get/set video bitrate during a streaming in bps. Value will be reset to provided <a href="../../video.api.livestream.models/-video-config/bitrate.html">VideoConfig.bitrate</a> for a new stream.</p></div></div></div>
                       </div>
                     </div>
                   </div>
@@ -181,12 +189,14 @@
 <a data-name="1219828230%2FProperties%2F2007460702" anchor-label="videoConfig" id="1219828230%2FProperties%2F2007460702" data-filterable-set=":livestream:dokkaHtml/release"></a>
                 <div class="table-row" data-filterable-current=":livestream:dokkaHtml/release" data-filterable-set=":livestream:dokkaHtml/release">
                   <div class="main-subrow keyValue ">
-                    <div class=""><span class="inline-flex"><a href="video-config.html">videoConfig</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1219828230%2FProperties%2F2007460702"></span>
+                    <div class=""><span class="inline-flex">
+                        <div><a href="video-config.html">videoConfig</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1219828230%2FProperties%2F2007460702"></span>
                           <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                         </span></span></div>
                     <div>
                       <div class="title">
-                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":livestream:dokkaHtml/release"><a data-name="1219828230%2FProperties%2F2007460702" anchor-label="videoConfig" id="1219828230%2FProperties%2F2007460702" data-filterable-set=":livestream:dokkaHtml/release"></a><div class="symbol monospace">var <a href="video-config.html">videoConfig</a>: <a href="../../video.api.livestream.models/-video-config/index.html">VideoConfig</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><a data-name="1219828230%2FProperties%2F2007460702" anchor-label="videoConfig" id="1219828230%2FProperties%2F2007460702" data-filterable-set=":livestream:dokkaHtml/release"></a>Set/get video configuration once you have created the a <a href="index.html">ApiVideoLiveStream</a> instance.</div></div></div>
+                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":livestream:dokkaHtml/release"><a data-name="1219828230%2FProperties%2F2007460702" anchor-label="videoConfig" id="1219828230%2FProperties%2F2007460702" data-filterable-set=":livestream:dokkaHtml/release"></a><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">var </span><a href="video-config.html">videoConfig</a><span class="token operator">: </span><a href="../../video.api.livestream.models/-video-config/index.html">VideoConfig</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><a data-name="1219828230%2FProperties%2F2007460702" anchor-label="videoConfig" id="1219828230%2FProperties%2F2007460702" data-filterable-set=":livestream:dokkaHtml/release"></a><p class="paragraph">Set/get video configuration once you have created the a <a href="index.html">ApiVideoLiveStream</a> instance.</p></div></div></div>
                       </div>
                     </div>
                   </div>
@@ -195,7 +205,7 @@
             </div>
           </div>
         </div>
-        <div class="footer"><span class="go-to-top-icon"><a href="#content"></a></span><span>© 2022 Copyright</span><span class="pull-right"><span>Generated by </span><a href="https://github.com/Kotlin/dokka"><span>dokka</span><span class="padded-icon"></span></a></span></div>
+        <div class="footer"><span class="go-to-top-icon"><a href="#content" id="go-to-top-link"></a></span><span>© 2022 Copyright</span><span class="pull-right"><span>Generated by </span><a href="https://github.com/Kotlin/dokka"><span>dokka</span><span class="padded-icon"></span></a></span></div>
       </div>
     </div>
   </body>

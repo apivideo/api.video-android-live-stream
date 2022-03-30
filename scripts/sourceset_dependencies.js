@@ -1,1 +1,1 @@
-sourceset_dependencies='{":livestream:dokkaHtml/androidTestRelease":[],":livestream:dokkaHtml/debug":[],":livestream:dokkaHtml/main":[],":livestream:dokkaHtml/release":[]}'
+sourceset_dependencies='{":livestream:dokkaHtml/androidTestRelease":[],":livestream:dokkaHtml/debug":[],":livestream:dokkaHtml/main":[],":livestream:dokkaHtml/release":[],":livestream:dokkaHtml/testFixtures":[],":livestream:dokkaHtml/testFixturesDebug":[],":livestream:dokkaHtml/testFixturesRelease":[]}'
