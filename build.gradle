@@ -6,8 +6,8 @@ buildscript {
         versionName = "${properties['VERSION_NAME']}"
 
         // Kotlin
-        kotlin_version = "1.5.30"
-        dokka_version = "1.5.0"
+        kotlin_version = "1.6.10"
+        dokka_version = "1.6.10"
 
         // SDK and tools
         compileSdkVersion = 31
@@ -19,7 +19,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.0.2'
+        classpath 'com.android.tools.build:gradle:7.1.2'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "org.jetbrains.dokka:dokka-gradle-plugin:$dokka_version"
 
