@@ -56,21 +56,18 @@ class PreviewFragment : Fragment() {
             viewModel.toggleMute()
         }
 
-        viewModel.onAuthError.observe(viewLifecycleOwner) {
-            manageError(getString(R.string.error), getString(R.string.authentication_failed))
-        }
-
         viewModel.onError.observe(viewLifecycleOwner) {
+            binding.liveButton.isChecked = false
             manageError(getString(R.string.error), it)
         }
 
         viewModel.onDisconnect.observe(viewLifecycleOwner) {
+            binding.liveButton.isChecked = false
             showDisconnection()
         }
     }
 
     private fun manageError(title: String, message: String) {
-        binding.liveButton.isChecked = false
         requireActivity().requestedOrientation =
             ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
         DialogHelper.showAlertDialog(requireContext(), title, message)

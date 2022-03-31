@@ -13,6 +13,9 @@ buildscript {
         compileSdkVersion = 31
         minSdkVersion = 21
         targetSdkVersion = 31
+
+        // StreamPack
+        streamPackVersion = "2.1.0"
     }
     repositories {
         google()

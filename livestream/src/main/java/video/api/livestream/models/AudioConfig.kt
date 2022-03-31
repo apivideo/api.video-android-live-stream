@@ -1,5 +1,7 @@
 package video.api.livestream.models
 
+import android.media.AudioFormat
+
 /**
  * Describes audio configuration.
  */
@@ -31,4 +33,26 @@ data class AudioConfig(
      * [Boolean.false] to deactivate.
      */
     val noiseSuppressor: Boolean
-)
+) {
+    internal fun toSdkConfig(): io.github.thibaultbee.streampack.data.AudioConfig {
+        return io.github.thibaultbee.streampack.data.AudioConfig(
+            startBitrate = bitrate,
+            sampleRate = sampleRate,
+            channelConfig = if (stereo) AudioFormat.CHANNEL_IN_STEREO else AudioFormat.CHANNEL_IN_MONO,
+            enableEchoCanceler = echoCanceler,
+            enableNoiseSuppressor = noiseSuppressor
+        )
+    }
+
+    companion object {
+        internal fun fromSdkConfig(config: io.github.thibaultbee.streampack.data.AudioConfig): AudioConfig {
+            return AudioConfig(
+                bitrate = config.startBitrate,
+                sampleRate = config.sampleRate,
+                stereo = config.channelConfig == AudioFormat.CHANNEL_IN_STEREO,
+                echoCanceler = config.enableEchoCanceler,
+                noiseSuppressor = config.enableNoiseSuppressor
+            )
+        }
+    }
+}
