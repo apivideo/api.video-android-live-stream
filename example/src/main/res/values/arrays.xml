@@ -30,18 +30,4 @@
         <item>192000</item>
     </string-array>
 
-    <string-array name="AudioSampleRateEntries">
-        <item>5 kHz</item>
-        <item>11 kHz</item>
-        <item>22 kHz</item>
-        <item>44.1 kHz</item>
-    </string-array>
-
-    <string-array name="AudioSampleRateEntryValues">
-        <item>5500</item>
-        <item>11025</item>
-        <item>22050</item>
-        <item>44100</item>
-    </string-array>
-
 </resources>
