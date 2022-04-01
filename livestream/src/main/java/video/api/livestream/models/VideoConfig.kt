@@ -7,20 +7,20 @@ import video.api.livestream.enums.Resolution
  */
 class VideoConfig(
     /**
-     * Video bitrate in bps.
-     */
-    val bitrate: Int,
-
-    /**
      * Video resolution.
      * @see [Resolution]
      */
-    val resolution: Resolution,
+    val resolution: Resolution = Resolution.RESOLUTION_720,
+
+    /**
+     * Video bitrate in bps.
+     */
+    val bitrate: Int = getDefaultBitrate(resolution),
 
     /**
      * Video frame rate.
      */
-    val fps: Int
+    val fps: Int = 30
 ) {
     internal fun toSdkConfig(): io.github.thibaultbee.streampack.data.VideoConfig {
         return io.github.thibaultbee.streampack.data.VideoConfig(
@@ -37,6 +37,16 @@ class VideoConfig(
                 resolution = Resolution.valueOf(config.resolution),
                 fps = config.fps
             )
+        }
+
+        private fun getDefaultBitrate(resolution: Resolution): Int {
+            return when (resolution) {
+                Resolution.RESOLUTION_240 -> 800000
+                Resolution.RESOLUTION_360 -> 1000000
+                Resolution.RESOLUTION_480 -> 1300000
+                Resolution.RESOLUTION_720 -> 2000000
+                Resolution.RESOLUTION_1080 -> 3500000
+            }
         }
     }
 }
