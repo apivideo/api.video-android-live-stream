@@ -83,14 +83,6 @@ val connectionChecker = object : ConnectionChecker {
     override fun onDisconnect() {
         //Add your code here
     }
-
-    override fun onAuthError() {
-        //Add your code here
-    }
-
-    override fun onAuthSuccess() {
-        //Add your code here
-    }
 }
 ```
 
@@ -106,14 +98,14 @@ class MyFragment : Fragment(), ConnectionChecker {
 
         val apiVideoView = view.findViewById(R.id.apiVideoView)
         val audioConfig = AudioConfig(
-            bitrate = 128 * 1024, // 128 kbps
-            sampleRate = 48000,
+            bitrate = 128 * 1000, // 128 kbps
+            sampleRate = 44100, // 44.1 kHz
             stereo = true,
             echoCanceler = true,
             noiseSuppressor = true
         )
         val videoConfig = VideoConfig(
-            bitrate = 2 * 1024 * 1024, // 2 Mbps
+            bitrate = 2 * 1000 * 1000, // 2 Mbps
             resolution = Resolution.RESOLUTION_720,
             fps = 30
         )
@@ -133,6 +125,10 @@ class MyFragment : Fragment(), ConnectionChecker {
 
 For detailed information on this livestream library API, refers
 to [API documentation](https://apivideo.github.io/api.video-android-live-stream/).
+
+# Tips
+
+You can check device supported configurations by using the helper: `Helper`
 
 # Documentation
 
