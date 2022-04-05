@@ -1,6 +1,11 @@
 # Changelog
 All changes to this project will be documented in this file.
 
+## [1.0.0] - 2022-04-05
+- Add a configuration helper
+- Add video and audio configuration default value instead of using a builder
+- Change internal RTMP live stream library
+
 ## [0.3.3] - 2022-01-24
 - Add startPreview/stopPreview API
 
