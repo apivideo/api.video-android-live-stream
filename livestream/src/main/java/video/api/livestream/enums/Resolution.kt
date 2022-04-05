@@ -10,8 +10,7 @@ enum class Resolution(val size: Size) {
     RESOLUTION_360(Size(640, 360)),
     RESOLUTION_480(Size(858, 480)),
     RESOLUTION_720(Size(1280, 720)),
-    RESOLUTION_1080(Size(1920, 1080)),
-    RESOLUTION_2160(Size(3860, 2160));
+    RESOLUTION_1080(Size(1920, 1080));
 
     /**
      * Prints a [Resolution].

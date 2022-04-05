@@ -1,19 +1,23 @@
 package video.api.livestream
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Context
 import android.util.Log
 import android.view.SurfaceHolder
 import androidx.annotation.RequiresPermission
-import com.pedro.encoder.input.video.CameraHelper
-import com.pedro.rtmp.utils.ConnectCheckerRtmp
-import com.pedro.rtplibrary.rtmp.RtmpCamera2
+import io.github.thibaultbee.streampack.error.StreamPackError
+import io.github.thibaultbee.streampack.ext.rtmp.streamers.CameraRtmpLiveStreamer
+import io.github.thibaultbee.streampack.listeners.OnConnectionListener
+import io.github.thibaultbee.streampack.listeners.OnErrorListener
+import io.github.thibaultbee.streampack.utils.*
+import io.github.thibaultbee.streampack.views.getPreviewOutputSize
+import kotlinx.coroutines.runBlocking
 import video.api.livestream.enums.CameraFacingDirection
 import video.api.livestream.interfaces.IConnectionChecker
 import video.api.livestream.models.AudioConfig
 import video.api.livestream.models.VideoConfig
 import video.api.livestream.views.ApiVideoView
-import java.lang.IllegalArgumentException
 
 /**
  * Manages both livestream and camera preview.
@@ -34,13 +38,24 @@ constructor(
     private val initialAudioConfig: AudioConfig,
     private val initialVideoConfig: VideoConfig,
     private val initialCamera: CameraFacingDirection = CameraFacingDirection.BACK,
-    private val apiVideoView: ApiVideoView? = null
+    private val apiVideoView: ApiVideoView
 ) {
+    companion object {
+        private const val TAG = "ApiVideoLiveStream"
+    }
 
     /**
      * Set/get audio configuration once you have created the a [ApiVideoLiveStream] instance.
      */
     var audioConfig: AudioConfig = initialAudioConfig
+        @RequiresPermission(Manifest.permission.RECORD_AUDIO)
+        set(value) {
+            if (isStreaming) {
+                throw UnsupportedOperationException("You have to stop streaming first")
+            }
+            streamer.configure(audioConfig.toSdkConfig(), videoConfig.toSdkConfig())
+            field = value
+        }
 
     /**
      * Set/get video configuration once you have created the a [ApiVideoLiveStream] instance.
@@ -53,6 +68,7 @@ constructor(
          *
          * @param value new video configuration
          */
+        @RequiresPermission(allOf = [Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO])
         set(value) {
             if (isStreaming) {
                 throw UnsupportedOperationException("You have to stop streaming first")
@@ -63,45 +79,30 @@ constructor(
                     "Resolution has been changed from ${videoConfig.resolution} to ${value.resolution}. Restarting preview."
                 )
                 stopPreview()
-                rtmpCamera2.startPreview(
-                    rtmpCamera2.cameraFacing,
-                    value.resolution.size.width,
-                    value.resolution.size.height
-                )
+                streamer.configure(audioConfig.toSdkConfig(), videoConfig.toSdkConfig())
+                streamer.startPreview(apiVideoView.holder.surface)
             }
             field = value
         }
 
-    /**
-     * [ConnectCheckerRtmp] implementation.
-     */
-    private val connectCheckerRtmp = object : ConnectCheckerRtmp {
-        override fun onAuthErrorRtmp() {
-            connectionChecker.onAuthError()
+    private val connectionListener = object : OnConnectionListener {
+        override fun onFailed(message: String) {
+            connectionChecker.onConnectionFailed(message)
         }
 
-        override fun onAuthSuccessRtmp() {
-            connectionChecker.onAuthSuccess()
-        }
-
-        override fun onConnectionFailedRtmp(reason: String) {
-            rtmpCamera2.stopStream()
-            connectionChecker.onConnectionFailed(reason)
-        }
-
-        override fun onConnectionStartedRtmp(rtmpUrl: String) {
-            connectionChecker.onConnectionStarted(rtmpUrl)
-        }
-
-        override fun onConnectionSuccessRtmp() {
-            connectionChecker.onConnectionSuccess()
-        }
-
-        override fun onDisconnectRtmp() {
+        override fun onLost(message: String) {
             connectionChecker.onDisconnect()
         }
 
-        override fun onNewBitrateRtmp(bitrate: Long) {
+        override fun onSuccess() {
+            connectionChecker.onConnectionSuccess()
+        }
+    }
+
+    private val errorListener = object : OnErrorListener {
+        override fun onError(error: StreamPackError) {
+            _isStreaming = false
+            Log.e(TAG, "An error happened", error)
         }
     }
 
@@ -112,15 +113,32 @@ constructor(
         /**
          * Calls when the provided surface is created. This is for internal purpose only. Do not call it.
          */
+        @SuppressLint("MissingPermission")
         override fun surfaceCreated(holder: SurfaceHolder) {
+            // Selects appropriate preview size and configures view finder
+            streamer.camera.let {
+                val previewSize = getPreviewOutputSize(
+                    apiVideoView.display,
+                    context.getCameraCharacteristics(it),
+                    SurfaceHolder::class.java
+                )
+                Log.d(
+                    TAG,
+                    "View finder size: ${apiVideoView.width} x ${apiVideoView.height}"
+                )
+                Log.d(TAG, "Selected preview size: $previewSize")
+                apiVideoView.setAspectRatio(previewSize.width, previewSize.height)
+
+                // To ensure that size is set, initialize camera in the view's thread
+                apiVideoView.post { streamer.startPreview(apiVideoView.holder.surface) }
+            }
         }
 
         /**
          * Calls when the surface size has been changed. This is for internal purpose only. Do not call it.
          */
-        override fun surfaceChanged(holder: SurfaceHolder, format: Int, width: Int, height: Int) {
-            rtmpCamera2.startPreview(initialCamera.facing)
-        }
+        override fun surfaceChanged(holder: SurfaceHolder, format: Int, width: Int, height: Int) =
+            Unit
 
         /**
          * Calls when the surface size has been destroyed. This is for internal purpose only. Do not call it.
@@ -128,29 +146,20 @@ constructor(
         override fun surfaceDestroyed(holder: SurfaceHolder) {
             stopStreaming()
             stopPreview()
+            holder.removeCallback(this)
         }
     }
 
-    /**
-     * Internal RTMP stream object
-     */
-    private val rtmpCamera2: RtmpCamera2 = when {
-        apiVideoView != null -> {
-            apiVideoView.holder.addCallback(surfaceCallback)
-            RtmpCamera2(apiVideoView, connectCheckerRtmp)
-        }
-        else -> {
-            RtmpCamera2(
-                context,
-                true,
-                connectCheckerRtmp
-            ).apply { startPreview(initialCamera.facing) }
-        }
-    }
+    private val streamer = CameraRtmpLiveStreamer(
+        context = context,
+        enableAudio = true,
+        initialOnErrorListener = errorListener,
+        initialOnConnectionListener = connectionListener
+    )
 
     /**
      * Get/set video bitrate during a streaming in bps.
-     * Value will be reset to provided [VideoConfig.bitrate] for a new stream.
+     * Value will be reset to provided [VideoConfig.startBitrate] for a new stream.
      */
     var videoBitrate: Int
         /**
@@ -158,14 +167,14 @@ constructor(
          *
          * @return video bitrate in bps
          */
-        get() = rtmpCamera2.bitrate
+        get() = streamer.settings.video.bitrate
         /**
          * Set video bitrate.
          *
          * @param value video bitrate in bps
          */
         set(value) {
-            rtmpCamera2.setVideoBitrateOnFly(value)
+            streamer.settings.video.bitrate = value
         }
 
     /**
@@ -178,7 +187,7 @@ constructor(
          * @return facing direction of the current camera
          */
         get() {
-            return if (rtmpCamera2.cameraFacing == CameraHelper.Facing.FRONT) CameraFacingDirection.FRONT
+            return if (context.isFrontCamera(streamer.camera)) CameraFacingDirection.FRONT
             else CameraFacingDirection.BACK
         }
         /**
@@ -187,16 +196,21 @@ constructor(
          * @param value camera facing direction
          */
         set(value) {
-            if (((value == CameraFacingDirection.BACK) && (rtmpCamera2.cameraFacing == CameraHelper.Facing.FRONT))
-                || ((value == CameraFacingDirection.FRONT) && (rtmpCamera2.cameraFacing == CameraHelper.Facing.BACK))
+            if (((value == CameraFacingDirection.BACK) && (context.isFrontCamera(streamer.camera)))
+                || ((value == CameraFacingDirection.FRONT) && (context.isBackCamera(streamer.camera)))
             ) {
-                rtmpCamera2.switchCamera()
+                val cameraList = if (value == CameraFacingDirection.BACK) {
+                    context.getBackCameraList()
+                } else {
+                    context.getFrontCameraList()
+                }
+                streamer.camera = cameraList[0]
             }
         }
 
     init {
-        prepareEncoders()
-        rtmpCamera2.setLogs(false)
+        apiVideoView.holder.addCallback(surfaceCallback)
+        streamer.configure(audioConfig.toSdkConfig(), videoConfig.toSdkConfig())
     }
 
     /**
@@ -208,50 +222,15 @@ constructor(
          *
          * @return [Boolean.true] if audio is muted, [Boolean.false] if audio is not muted.
          */
-        get() = rtmpCamera2.isAudioMuted
+        get() = streamer.settings.audio.isMuted
         /**
          * Set mute value.
          *
          * @param value [Boolean.true] to mute audio, [Boolean.false] to unmute audio.
          */
         set(value) {
-            if (value) {
-                rtmpCamera2.disableAudio()
-            } else {
-                rtmpCamera2.enableAudio()
-            }
+            streamer.settings.audio.isMuted = value
         }
-
-    /**
-     * Configures audio encoders.
-     */
-    private fun prepareAudioEncoders() {
-        rtmpCamera2.prepareAudio(
-            audioConfig.bitrate,
-            audioConfig.sampleRate,
-            audioConfig.stereo,
-            audioConfig.echoCanceler,
-            audioConfig.noiseSuppressor
-        )
-    }
-
-    /**
-     * Configures video encoders.
-     */
-    private fun prepareVideoEncoders() {
-        rtmpCamera2.prepareVideo(
-            videoConfig.resolution.size.width,
-            videoConfig.resolution.size.height,
-            videoConfig.fps,
-            videoConfig.bitrate,
-            CameraHelper.getCameraOrientation(context)
-        )
-    }
-
-    private fun prepareEncoders() {
-        prepareVideoEncoders()
-        prepareAudioEncoders()
-    }
 
     /**
      * Start a new RTMP stream.
@@ -271,8 +250,10 @@ constructor(
             throw IllegalArgumentException("Stream key must not be empty")
         }
 
-        prepareEncoders()
-        rtmpCamera2.startStream(url.addTrailingSlashIfNeeded() + streamKey)
+        runBlocking {
+            streamer.startStream(url.addTrailingSlashIfNeeded() + streamKey)
+            _isStreaming = true
+        }
     }
 
     /**
@@ -280,8 +261,16 @@ constructor(
      *
      * @see [startStreaming]
      */
-    fun stopStreaming() =
-        rtmpCamera2.stopStream()
+    fun stopStreaming() {
+        streamer.stopStream()
+        _isStreaming = false
+    }
+
+
+    /**
+     * Hack for private setter of [isStreaming].
+     */
+    private var _isStreaming: Boolean = false
 
     /**
      * Check the streaming state.
@@ -291,7 +280,7 @@ constructor(
      * @see [stopStreaming]
      */
     val isStreaming: Boolean
-        get() = rtmpCamera2.isStreaming
+        get() = _isStreaming
 
     /**
      * Starts camera preview of [camera].
@@ -301,7 +290,8 @@ constructor(
      *
      * @see [stopPreview]
      */
-    fun startPreview() = rtmpCamera2.startPreview()
+    @RequiresPermission(Manifest.permission.CAMERA)
+    fun startPreview() = streamer.startPreview(apiVideoView.holder.surface)
 
     /**
      * Stops camera preview.
@@ -311,5 +301,5 @@ constructor(
      *
      * @see [startPreview]
      */
-    fun stopPreview() = rtmpCamera2.stopPreview()
+    fun stopPreview() = streamer.stopPreview()
 }

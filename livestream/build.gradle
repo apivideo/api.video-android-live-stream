@@ -61,5 +61,7 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
 
-    api 'com.github.pedroSG94.rtmp-rtsp-stream-client-java:rtplibrary:2.1.3'
+    api "io.github.thibaultbee:streampack:$streamPackVersion"
+    implementation "io.github.thibaultbee:streampack-extension-rtmp:$streamPackVersion"
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.2'
 }

@@ -44,8 +44,6 @@
 
         <ListPreference
             app:defaultValue="44100"
-            app:entries="@array/AudioSampleRateEntries"
-            app:entryValues="@array/AudioSampleRateEntryValues"
             app:key="@string/audio_sample_rate_key"
             app:title="@string/audio_sample_rate"
             app:useSimpleSummaryProvider="true" />

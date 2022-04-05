@@ -20,7 +20,6 @@ class PreviewViewModel(application: Application) : AndroidViewModel(application)
     private val configuration = Configuration(getApplication())
 
     val onError = MutableLiveData<String>()
-    val onAuthError = MutableLiveData<Boolean>()
     val onDisconnect = MutableLiveData<Boolean>()
 
     @RequiresPermission(allOf = [Manifest.permission.RECORD_AUDIO, Manifest.permission.CAMERA])
@@ -28,7 +27,7 @@ class PreviewViewModel(application: Application) : AndroidViewModel(application)
         val audioConfig = AudioConfig(
             bitrate = configuration.audio.bitrate,
             sampleRate = configuration.audio.sampleRate,
-            stereo = configuration.audio.numberOfChannels == 1,
+            stereo = configuration.audio.numberOfChannels == 2,
             echoCanceler = configuration.audio.enableEchoCanceler,
             noiseSuppressor = configuration.audio.enableEchoCanceler
         )
@@ -71,18 +70,8 @@ class PreviewViewModel(application: Application) : AndroidViewModel(application)
         liveStream.isMuted = !liveStream.isMuted
     }
 
-    override fun onAuthError() {
-        onAuthError.postValue(true)
-    }
-
-    override fun onAuthSuccess() {
-    }
-
     override fun onConnectionFailed(reason: String) {
         onError.postValue(reason)
-    }
-
-    override fun onConnectionStarted(url: String) {
     }
 
     override fun onConnectionSuccess() {

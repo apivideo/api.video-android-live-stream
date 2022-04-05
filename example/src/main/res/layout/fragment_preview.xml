@@ -9,13 +9,7 @@
     <video.api.livestream.views.ApiVideoView
         android:id="@+id/apiVideoView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:AAEnabled="false"
-        app:aspectRatioMode="adjust"
-        app:isFlipHorizontal="false"
-        app:isFlipVertical="false"
-        app:keepAspectRatio="true"
-        app:numFilters="1" />
+        android:layout_height="match_parent" />
 
     <LinearLayout
         android:id="@+id/controlLayout"
