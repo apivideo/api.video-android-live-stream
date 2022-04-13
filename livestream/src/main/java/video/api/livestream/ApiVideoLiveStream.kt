@@ -53,7 +53,7 @@ constructor(
             if (isStreaming) {
                 throw UnsupportedOperationException("You have to stop streaming first")
             }
-            streamer.configure(audioConfig.toSdkConfig(), videoConfig.toSdkConfig())
+            streamer.configure(value.toSdkConfig())
             field = value
         }
 
@@ -79,7 +79,7 @@ constructor(
                     "Resolution has been changed from ${videoConfig.resolution} to ${value.resolution}. Restarting preview."
                 )
                 stopPreview()
-                streamer.configure(audioConfig.toSdkConfig(), videoConfig.toSdkConfig())
+                streamer.configure(value.toSdkConfig())
                 streamer.startPreview(apiVideoView.holder.surface)
             }
             field = value
