@@ -1,6 +1,10 @@
 # Changelog
 All changes to this project will be documented in this file.
 
+## [1.1.0] - 2022-04-13
+- Fix audioConfig and videoConfig API
+- Improve stop live button look
+
 ## [1.0.0] - 2022-04-05
 - Add a configuration helper
 - Add video and audio configuration default value instead of using a builder
