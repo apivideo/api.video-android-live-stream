@@ -146,7 +146,6 @@ constructor(
         override fun surfaceDestroyed(holder: SurfaceHolder) {
             stopStreaming()
             stopPreview()
-            holder.removeCallback(this)
         }
     }
 
