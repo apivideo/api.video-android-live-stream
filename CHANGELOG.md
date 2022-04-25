@@ -1,7 +1,10 @@
 # Changelog
 All changes to this project will be documented in this file.
 
-## [1.1.0] - 2022-04-13
+## [1.0.2] - 2022-04-25
+- Do not remove SurfaceView callbacks when the Surface is destroyed.
+
+## [1.0.1] - 2022-04-13
 - Fix audioConfig and videoConfig API
 - Improve stop live button look
 
