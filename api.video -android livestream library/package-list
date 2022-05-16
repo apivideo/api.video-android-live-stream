@@ -2,8 +2,11 @@ $dokka.format:html-v1
 $dokka.linkExtension:html
 $dokka.location:video.api.livestream.enums////PointingToDeclaration/api.video -android livestream library/video.api.livestream.enums/index.html
 $dokka.location:video.api.livestream.enums/CameraFacingDirection.BACK///PointingToDeclaration/api.video -android livestream library/video.api.livestream.enums/-camera-facing-direction/-b-a-c-k/index.html
+$dokka.location:video.api.livestream.enums/CameraFacingDirection.Companion///PointingToDeclaration/api.video -android livestream library/video.api.livestream.enums/-camera-facing-direction/-companion/index.html
+$dokka.location:video.api.livestream.enums/CameraFacingDirection.Companion/fromCameraId/#android.content.Context#kotlin.String/PointingToDeclaration/api.video -android livestream library/video.api.livestream.enums/-camera-facing-direction/-companion/from-camera-id.html
 $dokka.location:video.api.livestream.enums/CameraFacingDirection.FRONT///PointingToDeclaration/api.video -android livestream library/video.api.livestream.enums/-camera-facing-direction/-f-r-o-n-t/index.html
 $dokka.location:video.api.livestream.enums/CameraFacingDirection///PointingToDeclaration/api.video -android livestream library/video.api.livestream.enums/-camera-facing-direction/index.html
+$dokka.location:video.api.livestream.enums/CameraFacingDirection/toCameraId/#android.content.Context/PointingToDeclaration/api.video -android livestream library/video.api.livestream.enums/-camera-facing-direction/to-camera-id.html
 $dokka.location:video.api.livestream.enums/Resolution.Companion///PointingToDeclaration/api.video -android livestream library/video.api.livestream.enums/-resolution/-companion/index.html
 $dokka.location:video.api.livestream.enums/Resolution.Companion/valueOf/#android.util.Size/PointingToDeclaration/api.video -android livestream library/video.api.livestream.enums/-resolution/-companion/value-of.html
 $dokka.location:video.api.livestream.enums/Resolution.RESOLUTION_1080///PointingToDeclaration/api.video -android livestream library/video.api.livestream.enums/-resolution/-r-e-s-o-l-u-t-i-o-n_1080/index.html
