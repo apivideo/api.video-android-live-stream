@@ -1,6 +1,10 @@
 # Changelog
 All changes to this project will be documented in this file.
 
+## [1.0.3] - 2022-06-13
+- Fix stream after a `stopPreview` call.
+- Disconnect if `startStream` fails.
+
 ## [1.0.2] - 2022-04-25
 - Do not remove SurfaceView callbacks when the Surface is destroyed.
 
