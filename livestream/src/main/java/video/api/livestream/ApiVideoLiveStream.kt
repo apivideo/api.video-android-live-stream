@@ -259,6 +259,8 @@ constructor(
      */
     fun stopStreaming() {
         streamer.stopStream()
+        streamer.disconnect()
+        connectionChecker.onDisconnect()
         _isStreaming = false
     }
 
