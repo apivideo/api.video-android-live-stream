@@ -26,6 +26,8 @@
             android:layout_height="wrap_content"
             android:background="@drawable/circle_shape"
             android:contentDescription="@string/switch_camera_source"
+            android:minWidth="48dp"
+            android:minHeight="48dp"
             android:padding="2dp"
             android:src="@drawable/ic_baseline_switch_camera_24" />
 
@@ -35,6 +37,8 @@
             android:layout_height="wrap_content"
             android:background="@drawable/circle_shape"
             android:contentDescription="@string/mute_audio_source"
+            android:minWidth="48dp"
+            android:minHeight="48dp"
             android:padding="2dp"
             android:src="@drawable/ic_baseline_mic_off_24" />
 
