@@ -232,7 +232,7 @@ constructor(
      * Start a new RTMP stream.
      *
      * @param streamKey RTMP stream key. For security purpose, you must not expose it.
-     * @param url RTML Url. Default value (not set or null) is api.video RTMP broadcast url.
+     * @param url RTMP Url. Default value (not set or null) is api.video RTMP broadcast url.
      * @see [stopStreaming]
      */
     fun startStreaming(
