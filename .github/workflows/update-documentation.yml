@@ -1,8 +1,9 @@
 name: Update readme.io documentation
+
 on:
-  push:
-    branches:
-      - master
+  release:
+    types: [published]
+
 jobs:
   update-documentation:
     runs-on: ubuntu-latest
