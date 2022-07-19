@@ -35,8 +35,8 @@ class ApiVideoLiveStream
 constructor(
     private val context: Context,
     private val connectionChecker: IConnectionChecker,
-    private val initialAudioConfig: AudioConfig,
-    private val initialVideoConfig: VideoConfig,
+    private val initialAudioConfig: AudioConfig? = null,
+    private val initialVideoConfig: VideoConfig? = null,
     private val initialCamera: CameraFacingDirection = CameraFacingDirection.BACK,
     private val apiVideoView: ApiVideoView
 ) {
@@ -47,9 +47,10 @@ constructor(
     /**
      * Set/get audio configuration once you have created the a [ApiVideoLiveStream] instance.
      */
-    var audioConfig: AudioConfig = initialAudioConfig
+    var audioConfig: AudioConfig? = initialAudioConfig
         @RequiresPermission(Manifest.permission.RECORD_AUDIO)
         set(value) {
+            require(value != null) { "Audio config must not be null" }
             if (isStreaming) {
                 throw UnsupportedOperationException("You have to stop streaming first")
             }
@@ -60,7 +61,7 @@ constructor(
     /**
      * Set/get video configuration once you have created the a [ApiVideoLiveStream] instance.
      */
-    var videoConfig: VideoConfig = initialVideoConfig
+    var videoConfig: VideoConfig? = initialVideoConfig
         /**
          * Set new video configuration.
          * It will restart preview if resolution has been changed.
@@ -70,17 +71,22 @@ constructor(
          */
         @RequiresPermission(allOf = [Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO])
         set(value) {
+            require(value != null) { "Audio config must not be null" }
             if (isStreaming) {
                 throw UnsupportedOperationException("You have to stop streaming first")
             }
-            if (videoConfig.resolution != value.resolution) {
+            if (videoConfig?.resolution != value.resolution) {
                 Log.i(
                     this::class.simpleName,
-                    "Resolution has been changed from ${videoConfig.resolution} to ${value.resolution}. Restarting preview."
+                    "Resolution has been changed from ${videoConfig?.resolution} to ${value.resolution}. Restarting preview."
                 )
                 stopPreview()
                 streamer.configure(value.toSdkConfig())
-                streamer.startPreview(apiVideoView.holder.surface)
+                try {
+                    startPreview()
+                } catch (e: UnsupportedOperationException) {
+                    Log.w(TAG, "${e.message}", e)
+                }
             }
             field = value
         }
@@ -130,11 +136,10 @@ constructor(
                 apiVideoView.setAspectRatio(previewSize.width, previewSize.height)
 
                 // To ensure that size is set, initialize camera in the view's thread
-                apiVideoView.post {
-                    streamer.startPreview(
-                        apiVideoView.holder.surface,
-                        initialCamera.toCameraId(context)
-                    )
+                if (videoConfig != null) {
+                    apiVideoView.post {
+                        streamer.startPreview(apiVideoView.holder.surface)
+                    }
                 }
             }
         }
@@ -206,7 +211,13 @@ constructor(
 
     init {
         apiVideoView.holder.addCallback(surfaceCallback)
-        streamer.configure(audioConfig.toSdkConfig(), videoConfig.toSdkConfig())
+        camera = initialCamera
+        audioConfig?.let {
+            streamer.configure(it.toSdkConfig())
+        }
+        videoConfig?.let {
+            streamer.configure(it.toSdkConfig())
+        }
     }
 
     /**
@@ -239,12 +250,10 @@ constructor(
         streamKey: String,
         url: String = context.getString(R.string.default_rtmp_url),
     ) {
-        if (isStreaming) {
-            throw UnsupportedOperationException("Stream is already started")
-        }
-        if (streamKey.isEmpty()) {
-            throw IllegalArgumentException("Stream key must not be empty")
-        }
+        require(!isStreaming) { "Stream is already running" }
+        require(streamKey.isNotEmpty()) { "Stream key must not be empty" }
+        require(audioConfig != null) { "Audio config must be set" }
+        require(videoConfig != null) { "Video config must be set" }
 
         runBlocking {
             streamer.startStream(url.addTrailingSlashIfNeeded() + streamKey)
@@ -289,7 +298,13 @@ constructor(
      * @see [stopPreview]
      */
     @RequiresPermission(Manifest.permission.CAMERA)
-    fun startPreview() = streamer.startPreview(apiVideoView.holder.surface)
+    fun startPreview() {
+        if (apiVideoView.holder.surface.isValid) {
+            streamer.startPreview(apiVideoView.holder.surface)
+        } else {
+            throw UnsupportedOperationException("surface is not valid")
+        }
+    }
 
     /**
      * Stops camera preview.
