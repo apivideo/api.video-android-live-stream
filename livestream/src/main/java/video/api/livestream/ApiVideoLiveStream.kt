@@ -315,4 +315,11 @@ constructor(
      * @see [startPreview]
      */
     fun stopPreview() = streamer.stopPreview()
+
+    /**
+     * Release internal elements.
+     *
+     * You won't be able to use this instance after calling this method.
+     */
+    fun release() = streamer.release()
 }

@@ -58,6 +58,11 @@ class PreviewViewModel(application: Application) : AndroidViewModel(application)
         liveStream.stopStreaming()
     }
 
+    override fun onCleared() {
+        super.onCleared()
+        liveStream.release()
+    }
+
     fun switchCamera() {
         if (liveStream.camera == CameraFacingDirection.BACK) {
             liveStream.camera = CameraFacingDirection.FRONT
