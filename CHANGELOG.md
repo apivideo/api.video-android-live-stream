@@ -1,6 +1,10 @@
 # Changelog
 All changes to this project will be documented in this file.
 
+## [1.1.0] - 2022-08-05
+- `initialVideoConfig` and `initialAudioConfig` are now optional
+- Multiple fixes on RTMP stream (to avoid ANR and to improve compatibility)
+
 ## [1.0.4] - 2022-06-28
 - Disconnect after a `stopStream`.
 
