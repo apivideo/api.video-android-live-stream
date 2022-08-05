@@ -12,7 +12,7 @@ import io.github.thibaultbee.streampack.listeners.OnConnectionListener
 import io.github.thibaultbee.streampack.listeners.OnErrorListener
 import io.github.thibaultbee.streampack.utils.*
 import io.github.thibaultbee.streampack.views.getPreviewOutputSize
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.*
 import video.api.livestream.enums.CameraFacingDirection
 import video.api.livestream.interfaces.IConnectionChecker
 import video.api.livestream.models.AudioConfig
@@ -43,6 +43,8 @@ constructor(
     companion object {
         private const val TAG = "ApiVideoLiveStream"
     }
+
+    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
 
     /**
      * Set/get audio configuration once you have created the a [ApiVideoLiveStream] instance.
@@ -252,12 +254,19 @@ constructor(
     ) {
         require(!isStreaming) { "Stream is already running" }
         require(streamKey.isNotEmpty()) { "Stream key must not be empty" }
+        require(url.isNotEmpty()) { "Url must not be empty" }
         require(audioConfig != null) { "Audio config must be set" }
         require(videoConfig != null) { "Video config must be set" }
 
-        runBlocking {
-            streamer.startStream(url.addTrailingSlashIfNeeded() + streamKey)
-            _isStreaming = true
+        scope.launch {
+            withContext(context = Dispatchers.IO) {
+                try {
+                    streamer.startStream(url.addTrailingSlashIfNeeded() + streamKey)
+                    _isStreaming = true
+                } catch (e: Exception) {
+                    Log.e(TAG, "Failed to start stream", e)
+                }
+            }
         }
     }
 
@@ -321,5 +330,8 @@ constructor(
      *
      * You won't be able to use this instance after calling this method.
      */
-    fun release() = streamer.release()
+    fun release() {
+        streamer.release()
+        scope.cancel()
+    }
 }
