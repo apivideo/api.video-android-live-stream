@@ -4,6 +4,9 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
 import android.util.Log
+import android.view.GestureDetector
+import android.view.MotionEvent
+import android.view.ScaleGestureDetector
 import android.view.SurfaceHolder
 import androidx.annotation.RequiresPermission
 import io.github.thibaultbee.streampack.error.StreamPackError
@@ -18,6 +21,7 @@ import video.api.livestream.interfaces.IConnectionChecker
 import video.api.livestream.models.AudioConfig
 import video.api.livestream.models.VideoConfig
 import video.api.livestream.views.ApiVideoView
+import kotlin.math.max
 
 /**
  * Manages both livestream and camera preview.
@@ -144,6 +148,9 @@ constructor(
                     }
                 }
             }
+
+            // TODO: Remove
+            pinchZoomEnabled = true
         }
 
         /**
@@ -334,4 +341,74 @@ constructor(
         streamer.release()
         scope.cancel()
     }
+
+    /**
+     * Double tap gesture.
+     * Unused as of now.
+     */
+    private val gesture = GestureDetector(apiVideoView.context, object: GestureDetector.SimpleOnGestureListener() {
+        override fun onDoubleTap(e: MotionEvent?): Boolean {
+            if(camera == CameraFacingDirection.BACK)
+                camera = CameraFacingDirection.FRONT
+            else
+                camera = CameraFacingDirection.BACK
+            //camera = (camera == CameraFacingDirection.BACK ? CameraFacingDirection.Front : CameraFacingDirection.BACK)
+            return super.onDoubleTap(e)
+        }
+    })
+
+    /**
+     * scaleFactor > 1 == Zooming in
+     * scaleFactor < 1 == Zooming out
+     *
+     * scaleFactor will start at a value of 1 when the gesture is begun.
+     * Then its value will persist until the gesture has ended.
+     * If we save the zoomRatio in savedScale when the gesture has begun,
+     * we can easily add a relative scale to the zoom.
+     *
+     * If we are zooming out, the scale is between 0-1.
+     * Meaning we can use this as a percentage from the savedScale
+     *
+     * Zooming in is linear zoom
+     * Zooming out is percentage zoom between 1f & savedScale
+     */
+    private val pinchGesture = ScaleGestureDetector(apiVideoView.context, object: ScaleGestureDetector.SimpleOnScaleGestureListener() {
+        private var savedScale: Float = 1f
+        override fun onScale(detector: ScaleGestureDetector?): Boolean {
+            if(detector!!.scaleFactor < 1) {
+                zoomRatio = max(1f,savedScale * detector!!.scaleFactor)
+            } else {
+                zoomRatio = savedScale + detector!!.scaleFactor - 1
+            }
+            return super.onScale(detector)
+        }
+
+        override fun onScaleBegin(detector: ScaleGestureDetector?): Boolean {
+            savedScale = zoomRatio
+            return super.onScaleBegin(detector)
+        }
+    });
+
+    /**
+     * Enables the pinch gesture.
+     * Defaults to false and is being set to true after surface creation.
+     */
+    var pinchZoomEnabled: Boolean = false
+        @SuppressLint("ClickableViewAccessibility")
+        set(value) {
+            field = value
+            if(value) apiVideoView.setOnTouchListener { _, event -> pinchGesture.onTouchEvent(event) }
+            else apiVideoView.setOnTouchListener(null)
+        }
+
+    /**
+     * Used to set the zoom ratio.
+     *
+     */
+    var zoomRatio: Float
+        get() = streamer.settings.camera.zoom.zoomRatio
+            ?: 1f
+        set(value) {
+            streamer.settings.camera.zoom.zoomRatio = value
+        }
 }
