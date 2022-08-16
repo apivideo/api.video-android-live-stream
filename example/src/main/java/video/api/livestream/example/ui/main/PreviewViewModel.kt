@@ -10,8 +10,7 @@ import video.api.livestream.example.ui.utils.Configuration
 import video.api.livestream.enums.CameraFacingDirection
 import video.api.livestream.enums.Resolution
 import video.api.livestream.interfaces.IConnectionChecker
-import video.api.livestream.models.AudioConfig
-import video.api.livestream.models.VideoConfig
+import video.api.livestream.models.*
 import video.api.livestream.views.ApiVideoView
 
 class PreviewViewModel(application: Application) : AndroidViewModel(application),
@@ -36,13 +35,27 @@ class PreviewViewModel(application: Application) : AndroidViewModel(application)
             resolution = Resolution.valueOf(configuration.video.resolution),
             fps = configuration.video.fps,
         )
+        val gestureConfig = GestureConfig(
+            enabled = true,
+            zoom = ZoomConfig(
+                enabled = true,
+                zoomInMultiplier = 1f,
+                zoomOutMultiplier = 1f
+            ),
+            switchCamera = SwitchCameraConfig(
+                enabled = true
+            )
+
+
+        )
         liveStream =
             ApiVideoLiveStream(
                 context = getApplication(),
                 connectionChecker = this,
                 initialAudioConfig = audioConfig,
                 initialVideoConfig = videoConfig,
-                apiVideoView = apiVideoView
+                apiVideoView = apiVideoView,
+                initialGestureConfig = gestureConfig
             )
     }
 
