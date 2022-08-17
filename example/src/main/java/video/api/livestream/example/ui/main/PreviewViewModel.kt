@@ -21,6 +21,12 @@ class PreviewViewModel(application: Application) : AndroidViewModel(application)
     val onError = MutableLiveData<String>()
     val onDisconnect = MutableLiveData<Boolean>()
 
+    var zoomRatio: Float
+        get() = liveStream.zoomRatio
+        set(value) {
+            liveStream.zoomRatio = value
+        }
+
     @RequiresPermission(allOf = [Manifest.permission.RECORD_AUDIO, Manifest.permission.CAMERA])
     fun buildLiveStream(apiVideoView: ApiVideoView) {
         val audioConfig = AudioConfig(
@@ -35,19 +41,6 @@ class PreviewViewModel(application: Application) : AndroidViewModel(application)
             resolution = Resolution.valueOf(configuration.video.resolution),
             fps = configuration.video.fps,
         )
-        val gestureConfig = GestureConfig(
-            enabled = true,
-            zoom = ZoomConfig(
-                enabled = true,
-                zoomInMultiplier = 1f,
-                zoomOutMultiplier = 1f
-            ),
-            switchCamera = SwitchCameraConfig(
-                enabled = true
-            )
-
-
-        )
         liveStream =
             ApiVideoLiveStream(
                 context = getApplication(),
@@ -55,7 +48,6 @@ class PreviewViewModel(application: Application) : AndroidViewModel(application)
                 initialAudioConfig = audioConfig,
                 initialVideoConfig = videoConfig,
                 apiVideoView = apiVideoView,
-                initialGestureConfig = gestureConfig
             )
     }
 
