@@ -5,9 +5,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Build
 import android.util.Log
-import android.view.GestureDetector
-import android.view.MotionEvent
-import android.view.ScaleGestureDetector
 import android.view.SurfaceHolder
 import androidx.annotation.RequiresPermission
 import io.github.thibaultbee.streampack.error.StreamPackError
@@ -20,10 +17,8 @@ import kotlinx.coroutines.*
 import video.api.livestream.enums.CameraFacingDirection
 import video.api.livestream.interfaces.IConnectionChecker
 import video.api.livestream.models.AudioConfig
-import video.api.livestream.models.GestureConfig
 import video.api.livestream.models.VideoConfig
 import video.api.livestream.views.ApiVideoView
-import kotlin.math.max
 
 /**
  * Manages both livestream and camera preview.
@@ -43,7 +38,6 @@ constructor(
     private val connectionChecker: IConnectionChecker,
     private val initialAudioConfig: AudioConfig? = null,
     private val initialVideoConfig: VideoConfig? = null,
-    private val initialGestureConfig: GestureConfig? = null,
     private val initialCamera: CameraFacingDirection = CameraFacingDirection.BACK,
     private val apiVideoView: ApiVideoView
 ) {
@@ -100,29 +94,6 @@ constructor(
             field = value
         }
 
-    /**
-     *  Set/get gesture configuration once you have created the a [ApiVideoLiveStream] instance.
-     */
-    var gestureConfig: GestureConfig? = null
-        @SuppressLint("ClickableViewAccessibility")
-    set(value) {
-        require(value != null) { "Gesture config must not be null" }
-        field = value
-        if(value.enabled) {
-            apiVideoView.setOnTouchListener { _, event ->
-                // Streampack does not support zooming previous to Android 11
-                if (Build.VERSION.SDK_INT > Build.VERSION_CODES.R) {
-                    value.zoom.enabled && pinchGesture.onTouchEvent(event)
-                }
-                value.switchCamera.enabled && gesture.onTouchEvent(event)
-            }
-        }
-        else {
-            apiVideoView.setOnTouchListener(null)
-            return
-        }
-    }
-
     private val connectionListener = object : OnConnectionListener {
         override fun onFailed(message: String) {
             connectionChecker.onConnectionFailed(message)
@@ -174,10 +145,6 @@ constructor(
                     }
                 }
             }
-
-            // Used to set the gestures after the surface creation.
-            // Setting it by default as with audio/videoConfig will cause the gestures to not be active.
-            gestureConfig = initialGestureConfig
         }
 
         /**
@@ -370,60 +337,7 @@ constructor(
     }
 
     /**
-     * Simple taps on preview.
-     * Used for double tap to switch the camera facing.
-     */
-    private val gesture = GestureDetector(apiVideoView.context, object: GestureDetector.SimpleOnGestureListener() {
-
-        override fun onDoubleTap(e: MotionEvent?): Boolean {
-            camera = if(camera == CameraFacingDirection.BACK)
-                CameraFacingDirection.FRONT
-            else
-                CameraFacingDirection.BACK
-            return super.onDoubleTap(e)
-        }
-
-        override fun onDown(e: MotionEvent?): Boolean {
-            // Voodoo - https://stackoverflow.com/a/22552866
-            return true
-        }
-    })
-
-    /**
-     * scaleFactor > 1 == Zooming in
-     * scaleFactor < 1 == Zooming out
-     *
-     * scaleFactor will start at a value of 1 when the gesture is begun.
-     * Then its value will persist until the gesture has ended.
-     * If we save the zoomRatio in savedScale when the gesture has begun,
-     * we can easily add a relative scale to the zoom.
-     *
-     * If we are zooming out, the scale is between 0-1.
-     * Meaning we can use this as a percentage from the savedScale
-     *
-     * Zooming in is linear zoom
-     * Zooming out is percentage zoom between 1f & savedScale
-     */
-    private val pinchGesture = ScaleGestureDetector(apiVideoView.context, object: ScaleGestureDetector.SimpleOnScaleGestureListener() {
-        private var savedScale: Float = 1f
-        override fun onScale(detector: ScaleGestureDetector?): Boolean {
-            zoomRatio = if(detector!!.scaleFactor < 1) {
-                max(1f,savedScale * detector.scaleFactor * gestureConfig!!.zoom.zoomOutMultiplier)
-            } else {
-                savedScale + ((detector.scaleFactor - 1) * gestureConfig!!.zoom.zoomInMultiplier)
-            }
-            return super.onScale(detector)
-        }
-
-        override fun onScaleBegin(detector: ScaleGestureDetector?): Boolean {
-            savedScale = zoomRatio
-            return super.onScaleBegin(detector)
-        }
-    })
-
-    /**
      * Used to set the zoom ratio.
-     *
      */
     var zoomRatio: Float
         get() = streamer.settings.camera.zoom.zoomRatio
