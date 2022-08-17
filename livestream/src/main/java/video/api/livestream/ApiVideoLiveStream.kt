@@ -342,8 +342,6 @@ constructor(
     var zoomRatio: Float
         get() = streamer.settings.camera.zoom.zoomRatio
         set(value) {
-            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.R) {
                 streamer.settings.camera.zoom.zoomRatio = value
-            }
         }
 }
