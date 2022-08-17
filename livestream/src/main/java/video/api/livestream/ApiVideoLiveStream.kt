@@ -3,7 +3,6 @@ package video.api.livestream
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
-import android.os.Build
 import android.util.Log
 import android.view.SurfaceHolder
 import androidx.annotation.RequiresPermission
@@ -242,6 +241,26 @@ constructor(
             streamer.settings.audio.isMuted = value
         }
 
+
+    /**
+     * Set/get the zoom ratio.
+     */
+    var zoomRatio: Float
+        /**
+         * Get the zoom ratio.
+         *
+         * @return the zoom ratio
+         */
+        get() = streamer.settings.camera.zoom.zoomRatio
+        /**
+         * Set the zoom ratio.
+         *
+         * @param value the zoom ratio
+         */
+        set(value) {
+            streamer.settings.camera.zoom.zoomRatio = value
+        }
+
     /**
      * Start a new RTMP stream.
      *
@@ -335,13 +354,4 @@ constructor(
         streamer.release()
         scope.cancel()
     }
-
-    /**
-     * Used to set the zoom ratio.
-     */
-    var zoomRatio: Float
-        get() = streamer.settings.camera.zoom.zoomRatio
-        set(value) {
-                streamer.settings.camera.zoom.zoomRatio = value
-        }
 }
