@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.ScaleGestureDetector
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
@@ -17,6 +18,45 @@ class PreviewFragment : Fragment() {
     private val viewModel: PreviewViewModel by viewModels()
     private lateinit var binding: FragmentPreviewBinding
 
+    /**
+     * Zooming gesture
+     *
+     * scaleFactor > 1 == Zooming in
+     * scaleFactor < 1 == Zooming out
+     *
+     * scaleFactor will start at a value of 1 when the gesture is begun.
+     * Then its value will persist until the gesture has ended.
+     * If we save the zoomRatio in savedScale when the gesture has begun,
+     * we can easily add a relative scale to the zoom.
+     *
+     * If we are zooming out, the scale is between 0-1.
+     * Meaning we can use this as a percentage from the savedScale
+     *
+     * Zooming in is linear zoom
+     * Zooming out is percentage zoom between 1f & savedScale
+     */
+    private val pinchGesture: ScaleGestureDetector by lazy {
+        ScaleGestureDetector(
+            binding.apiVideoView.context,
+            object : ScaleGestureDetector.SimpleOnScaleGestureListener() {
+                private var savedZoomRatio: Float = 1f
+                override fun onScale(detector: ScaleGestureDetector): Boolean {
+                    viewModel.zoomRatio = if (detector.scaleFactor < 1) {
+                        savedZoomRatio * detector.scaleFactor
+                    } else {
+                        savedZoomRatio + ((detector.scaleFactor - 1))
+                    }
+                    return super.onScale(detector)
+                }
+
+                override fun onScaleBegin(detector: ScaleGestureDetector): Boolean {
+                    detector.currentSpan
+                    savedZoomRatio = viewModel.zoomRatio
+                    return super.onScaleBegin(detector)
+                }
+            })
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -26,9 +66,14 @@ class PreviewFragment : Fragment() {
         return binding.root
     }
 
-    @SuppressLint("MissingPermission")
+    @SuppressLint("MissingPermission", "ClickableViewAccessibility")
     override fun onResume() {
         super.onResume()
+
+        // Listen to touch for zoom
+        binding.apiVideoView.setOnTouchListener { _, event ->
+            pinchGesture.onTouchEvent(event)
+        }
 
         viewModel.buildLiveStream(binding.apiVideoView)
         binding.liveButton.setOnCheckedChangeListener { _, isChecked ->
@@ -50,7 +95,6 @@ class PreviewFragment : Fragment() {
         binding.switchButton.setOnClickListener {
             viewModel.switchCamera()
         }
-
 
         binding.muteButton.setOnClickListener {
             viewModel.toggleMute()

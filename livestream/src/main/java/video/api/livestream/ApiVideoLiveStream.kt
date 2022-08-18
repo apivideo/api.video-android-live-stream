@@ -241,6 +241,26 @@ constructor(
             streamer.settings.audio.isMuted = value
         }
 
+
+    /**
+     * Set/get the zoom ratio.
+     */
+    var zoomRatio: Float
+        /**
+         * Get the zoom ratio.
+         *
+         * @return the zoom ratio
+         */
+        get() = streamer.settings.camera.zoom.zoomRatio
+        /**
+         * Set the zoom ratio.
+         *
+         * @param value the zoom ratio
+         */
+        set(value) {
+            streamer.settings.camera.zoom.zoomRatio = value
+        }
+
     /**
      * Start a new RTMP stream.
      *

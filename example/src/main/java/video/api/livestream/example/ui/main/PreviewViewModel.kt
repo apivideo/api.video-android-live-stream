@@ -6,9 +6,9 @@ import androidx.annotation.RequiresPermission
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import video.api.livestream.ApiVideoLiveStream
-import video.api.livestream.example.ui.utils.Configuration
 import video.api.livestream.enums.CameraFacingDirection
 import video.api.livestream.enums.Resolution
+import video.api.livestream.example.ui.utils.Configuration
 import video.api.livestream.interfaces.IConnectionChecker
 import video.api.livestream.models.AudioConfig
 import video.api.livestream.models.VideoConfig
@@ -21,6 +21,12 @@ class PreviewViewModel(application: Application) : AndroidViewModel(application)
 
     val onError = MutableLiveData<String>()
     val onDisconnect = MutableLiveData<Boolean>()
+
+    var zoomRatio: Float
+        get() = liveStream.zoomRatio
+        set(value) {
+            liveStream.zoomRatio = value
+        }
 
     @RequiresPermission(allOf = [Manifest.permission.RECORD_AUDIO, Manifest.permission.CAMERA])
     fun buildLiveStream(apiVideoView: ApiVideoView) {
