@@ -123,27 +123,7 @@ constructor(
          */
         @SuppressLint("MissingPermission")
         override fun surfaceCreated(holder: SurfaceHolder) {
-            // Selects appropriate preview size and configures view finder
-            streamer.camera.let {
-                val previewSize = getPreviewOutputSize(
-                    apiVideoView.display,
-                    context.getCameraCharacteristics(it),
-                    SurfaceHolder::class.java
-                )
-                Log.d(
-                    TAG,
-                    "View finder size: ${apiVideoView.width} x ${apiVideoView.height}"
-                )
-                Log.d(TAG, "Selected preview size: $previewSize")
-                apiVideoView.setAspectRatio(previewSize.width, previewSize.height)
-
-                // To ensure that size is set, initialize camera in the view's thread
-                if (videoConfig != null) {
-                    apiVideoView.post {
-                        streamer.startPreview(apiVideoView.holder.surface)
-                    }
-                }
-            }
+            startPreview()
         }
 
         /**
@@ -219,6 +199,12 @@ constructor(
         }
         videoConfig?.let {
             streamer.configure(it.toSdkConfig())
+            // Try to start in case [SurfaceView] has already been created
+            try {
+                startPreview()
+            } catch (e: Exception) {
+                Log.i(TAG, "Failed to start preview. Surface might not be created yet", e)
+            }
         }
     }
 
@@ -328,10 +314,27 @@ constructor(
      */
     @RequiresPermission(Manifest.permission.CAMERA)
     fun startPreview() {
-        if (apiVideoView.holder.surface.isValid) {
-            streamer.startPreview(apiVideoView.holder.surface)
-        } else {
-            throw UnsupportedOperationException("surface is not valid")
+        // Selects appropriate preview size and configures view finder
+        streamer.camera.let {
+            val previewSize = getPreviewOutputSize(
+                apiVideoView.display,
+                context.getCameraCharacteristics(it),
+                SurfaceHolder::class.java
+            )
+            Log.d(
+                TAG,
+                "View finder size: ${apiVideoView.width} x ${apiVideoView.height}"
+            )
+            Log.d(TAG, "Selected preview size: $previewSize")
+            apiVideoView.setAspectRatio(previewSize.width, previewSize.height)
+
+            // To ensure that size is set, initialize camera in the view's thread
+            apiVideoView.post {
+                streamer.startPreview(
+                    apiVideoView.holder.surface,
+                    it
+                )
+            }
         }
     }
 
