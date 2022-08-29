@@ -282,9 +282,12 @@ constructor(
      * @see [startStreaming]
      */
     fun stopStreaming() {
+        val isConnected = streamer.isConnected
         streamer.stopStream()
         streamer.disconnect()
-        connectionChecker.onDisconnect()
+        if (isConnected) {
+            connectionChecker.onDisconnect()
+        }
         _isStreaming = false
     }
 
