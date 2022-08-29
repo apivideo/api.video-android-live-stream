@@ -2,11 +2,13 @@ package video.api.livestream.example.ui.main
 
 import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import com.tbruyelle.rxpermissions3.RxPermissions
+import androidx.core.content.ContextCompat
 import video.api.livestream.app.R
 import video.api.livestream.app.databinding.ActivityMainBinding
 import video.api.livestream.example.ui.preferences.PreferencesActivity
@@ -16,7 +18,6 @@ class MainActivity : AppCompatActivity() {
     private val binding: ActivityMainBinding by lazy {
         ActivityMainBinding.inflate(layoutInflater)
     }
-    private val rxPermissions: RxPermissions by lazy { RxPermissions(this) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,17 +29,58 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
 
-        rxPermissions
-            .requestEachCombined(Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO)
-            .subscribe { permission ->
-                if (!permission.granted) {
-                    showPermissionErrorAndFinish()
-                } else {
-                    supportFragmentManager.beginTransaction()
-                        .replace(R.id.container, PreviewFragment())
-                        .commitNow()
-                }
+        when {
+            (ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.CAMERA
+            ) == PackageManager.PERMISSION_GRANTED) && (ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.RECORD_AUDIO
+            ) == PackageManager.PERMISSION_GRANTED) -> {
+                launchFragment()
             }
+            shouldShowRequestPermissionRationale(Manifest.permission.CAMERA)
+                    || shouldShowRequestPermissionRationale(Manifest.permission.RECORD_AUDIO) -> {
+                DialogHelper.showAlertDialog(
+                    this,
+                    getString(R.string.permissions),
+                    getString(R.string.permission_not_granted)
+                )
+                requestPermissionLauncher.launch(
+                    arrayOf(
+                        Manifest.permission.CAMERA,
+                        Manifest.permission.RECORD_AUDIO
+                    )
+                )
+            }
+            else -> {
+                requestPermissionLauncher.launch(
+                    arrayOf(
+                        Manifest.permission.CAMERA,
+                        Manifest.permission.RECORD_AUDIO
+                    )
+                )
+            }
+        }
+    }
+
+    private val requestPermissionLauncher =
+        registerForActivityResult(
+            ActivityResultContracts.RequestMultiplePermissions()
+        ) { permissions ->
+            if ((permissions[Manifest.permission.CAMERA] == true)
+                && (permissions[Manifest.permission.RECORD_AUDIO] == true)
+            ) {
+                launchFragment()
+            } else {
+                showPermissionErrorAndFinish()
+            }
+        }
+
+    private fun launchFragment() {
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.container, PreviewFragment())
+            .commitNow()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
