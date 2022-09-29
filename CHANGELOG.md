@@ -1,6 +1,12 @@
 # Changelog
 All changes to this project will be documented in this file.
 
+## [1.2.1] - 2022-09-29
+- Fix preview when `ApiVideoView` has already been created 
+- Only call `onDisconnect` when application was connected
+- Release workflow is triggered on release published (instead of created)
+- Example: remove rxpermission usage
+
 ## [1.2.0] - 2022-08-18
 - Adds API to set zoom ratio
 
