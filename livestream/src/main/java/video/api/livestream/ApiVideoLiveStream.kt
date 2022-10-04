@@ -87,7 +87,7 @@ constructor(
                 try {
                     startPreview()
                 } catch (e: UnsupportedOperationException) {
-                    Log.w(TAG, "${e.message}", e)
+                    Log.i(TAG, "Can't start preview: ${e.message}")
                 }
             }
             field = value
@@ -203,7 +203,7 @@ constructor(
             try {
                 startPreview()
             } catch (e: Exception) {
-                Log.i(TAG, "Failed to start preview. Surface might not be created yet", e)
+                Log.i(TAG, "Can't start preview in constructor: ${e.message}")
             }
         }
     }
@@ -317,6 +317,9 @@ constructor(
      */
     @RequiresPermission(Manifest.permission.CAMERA)
     fun startPreview() {
+        if (apiVideoView.display == null) {
+            throw UnsupportedOperationException("display is null")
+        }
         // Selects appropriate preview size and configures view finder
         streamer.camera.let {
             val previewSize = getPreviewOutputSize(
