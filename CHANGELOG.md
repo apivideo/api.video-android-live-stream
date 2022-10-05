@@ -1,6 +1,9 @@
 # Changelog
 All changes to this project will be documented in this file.
 
+## [1.2.2] - 2022-10-05
+- Fix preview when `videoConfig` is set before the `view.display` exists
+
 ## [1.2.1] - 2022-09-29
 - Fix preview when `ApiVideoView` has already been created 
 - Only call `onDisconnect` when application was connected
