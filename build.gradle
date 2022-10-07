@@ -15,7 +15,7 @@ buildscript {
         targetSdkVersion = 31
 
         // StreamPack
-        streamPackVersion = "2.4.0"
+        streamPackVersion = "2.4.1"
     }
     repositories {
         google()
