@@ -1,6 +1,9 @@
 # Changelog
 All changes to this project will be documented in this file.
 
+## [1.2.3] - 2022-10-10
+- Fix a crash on `stopStreaming` due to a `free` in `rtmpdroid`
+
 ## [1.2.2] - 2022-10-05
 - Fix preview when `videoConfig` is set before the `view.display` exists
 
