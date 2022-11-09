@@ -20,13 +20,19 @@ class VideoConfig(
     /**
      * Video frame rate.
      */
-    val fps: Int = 30
+    val fps: Int = 30,
+
+    /**
+     * The time interval between two consecutive key frames.
+     */
+    val gopSize: Float = 1f,
 ) {
     internal fun toSdkConfig(): io.github.thibaultbee.streampack.data.VideoConfig {
         return io.github.thibaultbee.streampack.data.VideoConfig(
             startBitrate = bitrate,
             resolution = resolution.size,
-            fps = fps
+            fps = fps,
+            gopSize = gopSize
         )
     }
 
@@ -35,7 +41,8 @@ class VideoConfig(
             return VideoConfig(
                 bitrate = config.startBitrate,
                 resolution = Resolution.valueOf(config.resolution),
-                fps = config.fps
+                fps = config.fps,
+                gopSize = config.gopSize
             )
         }
 
