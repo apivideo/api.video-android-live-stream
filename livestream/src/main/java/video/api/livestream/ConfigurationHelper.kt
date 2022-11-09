@@ -10,7 +10,7 @@ import io.github.thibaultbee.streampack.utils.getCameraList
 import io.github.thibaultbee.streampack.utils.getFrontCameraList
 
 object ConfigurationHelper {
-    private val helper = CameraStreamerConfigurationHelper.createFlvHelper()
+    private val helper = CameraStreamerConfigurationHelper.flvHelper
     val audio = AudioConfigurationHelper(helper.audio)
     val video = VideoStreamerConfigurationHelper(helper.video)
 }
