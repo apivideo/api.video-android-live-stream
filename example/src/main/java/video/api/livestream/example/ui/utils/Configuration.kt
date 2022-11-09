@@ -34,11 +34,11 @@ class Configuration(context: Context) {
                 )
             }
 
-        var bitrate: Int = 2000 * 1024  // to bps
+        var bitrate: Int = 2000
             get() = sharedPref.getInt(
                 resources.getString(R.string.video_bitrate_key),
                 field
-            ) * 1024 // to bps
+            )
     }
 
     class Audio(private val sharedPref: SharedPreferences, private val resources: Resources) {

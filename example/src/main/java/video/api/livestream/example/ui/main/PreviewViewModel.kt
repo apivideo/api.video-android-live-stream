@@ -38,7 +38,7 @@ class PreviewViewModel(application: Application) : AndroidViewModel(application)
             noiseSuppressor = configuration.audio.enableEchoCanceler
         )
         val videoConfig = VideoConfig(
-            bitrate = configuration.video.bitrate,
+            bitrate = configuration.video.bitrate * 1024, // to bps
             resolution = Resolution.valueOf(configuration.video.resolution),
             fps = configuration.video.fps,
         )
