@@ -45,10 +45,10 @@ class PreviewViewModel(application: Application) : AndroidViewModel(application)
         liveStream =
             ApiVideoLiveStream(
                 context = getApplication(),
+                apiVideoView = apiVideoView,
                 connectionChecker = this,
                 initialAudioConfig = audioConfig,
-                initialVideoConfig = videoConfig,
-                apiVideoView = apiVideoView
+                initialVideoConfig = videoConfig
             )
     }
 

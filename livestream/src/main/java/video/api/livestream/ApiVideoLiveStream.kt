@@ -34,11 +34,11 @@ class ApiVideoLiveStream
 @RequiresPermission(allOf = [Manifest.permission.RECORD_AUDIO, Manifest.permission.CAMERA])
 constructor(
     private val context: Context,
+    private val apiVideoView: ApiVideoView,
     private val connectionChecker: IConnectionChecker,
     private val initialAudioConfig: AudioConfig? = null,
     private val initialVideoConfig: VideoConfig? = null,
     private val initialCamera: CameraFacingDirection = CameraFacingDirection.BACK,
-    private val apiVideoView: ApiVideoView
 ) {
     companion object {
         private const val TAG = "ApiVideoLiveStream"
