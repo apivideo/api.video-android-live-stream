@@ -1,6 +1,11 @@
 # Changelog
 All changes to this project will be documented in this file.
 
+## [1.3.0] - 2023-01-06
+- Add an API to set the interval between to key frames
+- Synchronize video and audio RTMP packets
+- Fix a crash when microphone is muted on few devices
+
 ## [1.2.3] - 2022-10-10
 - Fix a crash on `stopStreaming` due to a `free` in `rtmpdroid`
 
