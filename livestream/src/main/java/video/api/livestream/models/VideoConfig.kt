@@ -32,7 +32,7 @@ class VideoConfig(
             startBitrate = bitrate,
             resolution = resolution.size,
             fps = fps,
-            gopSize = gopDuration
+            gopDuration = gopDuration
         )
     }
 
@@ -42,7 +42,7 @@ class VideoConfig(
                 bitrate = config.startBitrate,
                 resolution = Resolution.valueOf(config.resolution),
                 fps = config.fps,
-                gopDuration = config.gopSize
+                gopDuration = config.gopDuration
             )
         }
 
