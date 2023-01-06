@@ -77,10 +77,10 @@ constructor(
             if (isStreaming) {
                 throw UnsupportedOperationException("You have to stop streaming first")
             }
-            if (videoConfig?.resolution != value.resolution) {
+            if ((videoConfig?.resolution != value.resolution) || (videoConfig?.fps != value.fps)) {
                 Log.i(
                     this::class.simpleName,
-                    "Resolution has been changed from ${videoConfig?.resolution} to ${value.resolution}. Restarting preview."
+                    "Resolution has been changed from ${videoConfig?.resolution} to ${value.resolution} or fps from ${videoConfig?.fps} to ${value.fps}. Restarting preview."
                 )
                 stopPreview()
                 streamer.configure(value.toSdkConfig())
