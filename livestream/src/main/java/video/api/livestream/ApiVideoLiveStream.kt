@@ -267,8 +267,15 @@ constructor(
         scope.launch {
             withContext(context = Dispatchers.IO) {
                 try {
-                    streamer.startStream(url.addTrailingSlashIfNeeded() + streamKey)
-                    _isStreaming = true
+                    streamer.connect(url.addTrailingSlashIfNeeded() + streamKey)
+                    try {
+                        streamer.startStream()
+                        _isStreaming = true
+                    } catch (e: Exception) {
+                        streamer.disconnect()
+                        connectionChecker.onConnectionFailed("$e")
+                        throw e
+                    }
                 } catch (e: Exception) {
                     Log.e(TAG, "Failed to start stream", e)
                 }
