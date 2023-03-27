@@ -1,6 +1,9 @@
 # Changelog
 All changes to this project will be documented in this file.
 
+## [1.3.1] - 2023-03-27
+- Return a `onConnectionFailed` when `connectStream` failed.
+
 ## [1.3.0] - 2023-01-06
 - Add an API to set the interval between to key frames
 - Synchronize video and audio RTMP packets
