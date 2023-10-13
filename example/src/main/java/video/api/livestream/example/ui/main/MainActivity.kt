@@ -8,6 +8,7 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import video.api.livestream.app.R
 import video.api.livestream.app.databinding.ActivityMainBinding
@@ -39,8 +40,12 @@ class MainActivity : AppCompatActivity() {
             ) == PackageManager.PERMISSION_GRANTED) -> {
                 launchFragment()
             }
-            shouldShowRequestPermissionRationale(Manifest.permission.CAMERA)
-                    || shouldShowRequestPermissionRationale(Manifest.permission.RECORD_AUDIO) -> {
+
+            ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.CAMERA)
+                    || ActivityCompat.shouldShowRequestPermissionRationale(
+                this,
+                Manifest.permission.RECORD_AUDIO
+            ) -> {
                 DialogHelper.showAlertDialog(
                     this,
                     getString(R.string.permissions),
@@ -53,6 +58,7 @@ class MainActivity : AppCompatActivity() {
                     )
                 )
             }
+
             else -> {
                 requestPermissionLauncher.launch(
                     arrayOf(
@@ -94,6 +100,7 @@ class MainActivity : AppCompatActivity() {
                 goToPreferencesActivity()
                 true
             }
+
             else -> super.onOptionsItemSelected(item)
         }
     }

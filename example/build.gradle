@@ -8,7 +8,7 @@ android {
     defaultConfig {
         applicationId "video.api.livestream.example"
 
-        minSdk 23
+        minSdk rootProject.minSdk
         targetSdk rootProject.targetSdk
         compileSdk rootProject.compileSdk
 
