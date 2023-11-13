@@ -1,3 +1,4 @@
+<!--<documentation_excluded>-->
 [![badge](https://img.shields.io/twitter/follow/api_video?style=social)](https://twitter.com/intent/follow?screen_name=api_video)
 &nbsp; [![badge](https://img.shields.io/github/stars/apivideo/api.video-android-live-stream?style=social)](https://github.com/apivideo/api.video-android-live-stream)
 &nbsp; [![badge](https://img.shields.io/discourse/topics?server=https%3A%2F%2Fcommunity.api.video)](https://community.api.video)
@@ -8,29 +9,43 @@
 video APIs for integrating, scaling, and managing on-demand & low latency live streaming features in
 your app.
 
-# Table of contents
+## Table of contents
 
 - [Table of contents](#table-of-contents)
 - [Project description](#project-description)
 - [Getting started](#getting-started)
-    - [Installation](#installation)
-        - [Gradle](#gradle)
-    - [Permissions](#permissions)
-    - [Code sample](#code-sample)
+  - [Installation](#installation)
+    - [Gradle](#gradle)
+  - [Permissions](#permissions)
+  - [Code sample](#code-sample)
+- [Tips](#tips)
 - [Documentation](#documentation)
 - [Dependencies](#dependencies)
 - [Sample application](#sample-application)
 - [FAQ](#faq)
 
-# Project description
+<!--</documentation_excluded>-->
+<!--<documentation_only>
+---
+title: Android live stream module
+meta: 
+  description: The official Android live stream module for api.video. [api.video](https://api.video/) is the video infrastructure for product builders. Lightning fast video APIs for integrating, scaling, and managing on-demand & low latency live streaming features in your app.
+---
+
+# api.video Android Live stream module
+
+[api.video](https://api.video/) is the video infrastructure for product builders. Lightning fast video APIs for integrating, scaling, and managing on-demand & low latency live streaming features in your app.
+
+</documentation_only>-->
+## Project description
 
 This library is an easy way to broadcast livestream to api.video platform on Android.
 
-# Getting started
+## Getting started
 
-## Installation
+### Installation
 
-### Gradle
+#### Gradle
 
 On build.gradle add the following code in dependencies:
 
@@ -40,7 +55,7 @@ dependencies {
 }
 ```
 
-## Permissions
+### Permissions
 
 ```xml
 
@@ -54,7 +69,7 @@ dependencies {
 Your application must dynamically require `android.permission.CAMERA`
 and `android.permission.RECORD_AUDIO`.
 
-## Code sample
+### Code sample
 
 1. Add [permissions](#permissions) to your `AndroidManifest.xml` and request them in your
    Activity/Fragment.
@@ -126,16 +141,16 @@ class MyFragment : Fragment(), ConnectionChecker {
 For detailed information on this livestream library API, refers
 to [API documentation](https://apivideo.github.io/api.video-android-live-stream/).
 
-# Tips
+## Tips
 
 You can check device supported configurations by using the helper: `Helper`
 
-# Documentation
+## Documentation
 
 * [API documentation](https://apivideo.github.io/api.video-android-live-stream/)
-* [api.video documentation](https://docs.api.video)
+* [api.video documentation](https://docs.api.video/)
 
-# Dependencies
+## Dependencies
 
 We are using external library
 
@@ -143,11 +158,11 @@ We are using external library
 | ------ | ------ |
 | [StreamPack](https://github.com/ThibaultBee/StreamPack) | [README.md](https://github.com/ThibaultBee/StreamPack/blob/master/README.md) |
 
-# Sample application
+## Sample application
 
 A demo application demonstrates how to use this livestream library. See `/example` folder.
 
-# FAQ
+## FAQ
 
 If you have any questions, ask us here:  https://community.api.video . Or use [Issues].
 
