@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.preference.ListPreference
 import androidx.preference.PreferenceFragmentCompat
 import video.api.livestream.ConfigurationHelper
-import video.api.livestream.app.R
+import video.api.livestream.example.R
 import video.api.livestream.enums.Resolution
 
 class PreferencesFragment : PreferenceFragmentCompat() {

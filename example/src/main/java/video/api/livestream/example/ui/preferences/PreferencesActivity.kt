@@ -2,7 +2,7 @@ package video.api.livestream.example.ui.preferences
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import video.api.livestream.app.R
+import video.api.livestream.example.R
 
 class PreferencesActivity : AppCompatActivity() {
 

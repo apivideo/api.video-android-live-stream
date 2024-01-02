@@ -5,7 +5,7 @@ import android.content.SharedPreferences
 import android.content.res.Resources
 import android.util.Size
 import androidx.preference.PreferenceManager
-import video.api.livestream.app.R
+import video.api.livestream.example.R
 
 class Configuration(context: Context) {
     private val sharedPref = PreferenceManager.getDefaultSharedPreferences(context)

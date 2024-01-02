@@ -3,7 +3,7 @@ package video.api.livestream.example.ui.utils
 import android.content.Context
 import android.content.DialogInterface
 import androidx.appcompat.app.AlertDialog
-import video.api.livestream.app.R
+import video.api.livestream.example.R
 
 object DialogHelper {
     fun showAlertDialog(context: Context, title: String, message: String = "") {

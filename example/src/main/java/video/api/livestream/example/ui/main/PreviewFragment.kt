@@ -10,8 +10,8 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import video.api.livestream.app.R
-import video.api.livestream.app.databinding.FragmentPreviewBinding
+import video.api.livestream.example.R
+import video.api.livestream.example.databinding.FragmentPreviewBinding
 import video.api.livestream.example.ui.utils.DialogHelper
 
 class PreviewFragment : Fragment() {

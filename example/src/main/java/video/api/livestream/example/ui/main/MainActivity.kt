@@ -10,8 +10,8 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import video.api.livestream.app.R
-import video.api.livestream.app.databinding.ActivityMainBinding
+import video.api.livestream.example.R
+import video.api.livestream.example.databinding.ActivityMainBinding
 import video.api.livestream.example.ui.preferences.PreferencesActivity
 import video.api.livestream.example.ui.utils.DialogHelper
 
