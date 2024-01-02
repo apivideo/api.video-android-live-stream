@@ -6,6 +6,7 @@ import android.content.Context
 import android.util.Log
 import android.view.SurfaceHolder
 import androidx.annotation.RequiresPermission
+import androidx.core.app.ActivityCompat
 import io.github.thibaultbee.streampack.error.StreamPackError
 import io.github.thibaultbee.streampack.ext.rtmp.streamers.CameraRtmpLiveStreamer
 import io.github.thibaultbee.streampack.listeners.OnConnectionListener
@@ -25,11 +26,12 @@ import video.api.livestream.views.ApiVideoView
 class ApiVideoLiveStream
 /**
  * @param context application context
+ * @param apiVideoView where to display preview. Could be null if you don't have a preview.
  * @param connectionChecker connection callbacks
  * @param initialAudioConfig initial audio configuration. Could be change later with [audioConfig] field.
  * @param initialVideoConfig initial video configuration. Could be change later with [videoConfig] field.
  * @param initialCamera initial camera. Could be change later with [camera] field.
- * @param apiVideoView where to display preview. Could be null if you don't have a preview.
+ * @param permissionRequester permission requester. Called when permissions are required. Always call [onGranted] when permissions are granted.
  */
 @RequiresPermission(allOf = [Manifest.permission.RECORD_AUDIO, Manifest.permission.CAMERA])
 constructor(
@@ -39,6 +41,7 @@ constructor(
     private val initialAudioConfig: AudioConfig? = null,
     private val initialVideoConfig: VideoConfig? = null,
     private val initialCamera: CameraFacingDirection = CameraFacingDirection.BACK,
+    private val permissionRequester: (List<String>, onGranted: () -> Unit) -> Unit = { _, onGranted -> onGranted() }
 ) {
     companion object {
         private const val TAG = "ApiVideoLiveStream"
@@ -56,7 +59,14 @@ constructor(
             if (isStreaming) {
                 throw UnsupportedOperationException("You have to stop streaming first")
             }
-            streamer.configure(value.toSdkConfig())
+            permissionRequester(
+                listOf(
+                    Manifest.permission.RECORD_AUDIO,
+                )
+            ) {
+                streamer.configure(value.toSdkConfig())
+            }
+
             field = value
         }
 
@@ -187,7 +197,13 @@ constructor(
             if (((value == CameraFacingDirection.BACK) && (context.isFrontCamera(streamer.camera)))
                 || ((value == CameraFacingDirection.FRONT) && (context.isBackCamera(streamer.camera)))
             ) {
-                streamer.camera = value.toCameraId(context)
+                permissionRequester(
+                    listOf(
+                        Manifest.permission.CAMERA,
+                    )
+                ) {
+                    streamer.camera = value.toCameraId(context)
+                }
             }
         }
 
@@ -343,10 +359,16 @@ constructor(
 
             // To ensure that size is set, initialize camera in the view's thread
             apiVideoView.post {
-                streamer.startPreview(
-                    apiVideoView.holder.surface,
-                    it
-                )
+                permissionRequester(
+                    listOf(
+                        Manifest.permission.CAMERA,
+                    )
+                ) {
+                    streamer.startPreview(
+                        apiVideoView.holder.surface,
+                        it
+                    )
+                }
             }
         }
     }
