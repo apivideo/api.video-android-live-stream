@@ -9,13 +9,13 @@ import video.api.livestream.ApiVideoLiveStream
 import video.api.livestream.enums.CameraFacingDirection
 import video.api.livestream.enums.Resolution
 import video.api.livestream.example.ui.utils.Configuration
-import video.api.livestream.interfaces.IConnectionChecker
+import video.api.livestream.interfaces.IConnectionListener
 import video.api.livestream.models.AudioConfig
 import video.api.livestream.models.VideoConfig
 import video.api.livestream.views.ApiVideoView
 
 class PreviewViewModel(application: Application) : AndroidViewModel(application),
-    IConnectionChecker {
+    IConnectionListener {
     private lateinit var liveStream: ApiVideoLiveStream
     private val configuration = Configuration(getApplication())
 
@@ -46,7 +46,7 @@ class PreviewViewModel(application: Application) : AndroidViewModel(application)
             ApiVideoLiveStream(
                 context = getApplication(),
                 apiVideoView = apiVideoView,
-                connectionChecker = this,
+                connectionListener = this,
                 initialAudioConfig = audioConfig,
                 initialVideoConfig = videoConfig
             )

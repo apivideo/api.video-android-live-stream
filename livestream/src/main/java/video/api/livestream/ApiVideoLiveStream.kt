@@ -6,7 +6,6 @@ import android.content.Context
 import android.util.Log
 import android.view.SurfaceHolder
 import androidx.annotation.RequiresPermission
-import androidx.core.app.ActivityCompat
 import io.github.thibaultbee.streampack.error.StreamPackError
 import io.github.thibaultbee.streampack.ext.rtmp.streamers.CameraRtmpLiveStreamer
 import io.github.thibaultbee.streampack.listeners.OnConnectionListener
@@ -15,7 +14,7 @@ import io.github.thibaultbee.streampack.utils.*
 import io.github.thibaultbee.streampack.views.getPreviewOutputSize
 import kotlinx.coroutines.*
 import video.api.livestream.enums.CameraFacingDirection
-import video.api.livestream.interfaces.IConnectionChecker
+import video.api.livestream.interfaces.IConnectionListener
 import video.api.livestream.models.AudioConfig
 import video.api.livestream.models.VideoConfig
 import video.api.livestream.views.ApiVideoView
@@ -27,7 +26,7 @@ class ApiVideoLiveStream
 /**
  * @param context application context
  * @param apiVideoView where to display preview. Could be null if you don't have a preview.
- * @param connectionChecker connection callbacks
+ * @param connectionListener connection callbacks
  * @param initialAudioConfig initial audio configuration. Could be change later with [audioConfig] field.
  * @param initialVideoConfig initial video configuration. Could be change later with [videoConfig] field.
  * @param initialCamera initial camera. Could be change later with [camera] field.
@@ -37,7 +36,7 @@ class ApiVideoLiveStream
 constructor(
     private val context: Context,
     private val apiVideoView: ApiVideoView,
-    private val connectionChecker: IConnectionChecker,
+    private val connectionListener: IConnectionListener,
     private val initialAudioConfig: AudioConfig? = null,
     private val initialVideoConfig: VideoConfig? = null,
     private val initialCamera: CameraFacingDirection = CameraFacingDirection.BACK,
@@ -103,17 +102,17 @@ constructor(
             field = value
         }
 
-    private val connectionListener = object : OnConnectionListener {
+    private val internalConnectionListener = object : OnConnectionListener {
         override fun onFailed(message: String) {
-            connectionChecker.onConnectionFailed(message)
+            connectionListener.onConnectionFailed(message)
         }
 
         override fun onLost(message: String) {
-            connectionChecker.onDisconnect()
+            connectionListener.onDisconnect()
         }
 
         override fun onSuccess() {
-            connectionChecker.onConnectionSuccess()
+            connectionListener.onConnectionSuccess()
         }
     }
 
@@ -155,7 +154,7 @@ constructor(
         context = context,
         enableAudio = true,
         initialOnErrorListener = errorListener,
-        initialOnConnectionListener = connectionListener
+        initialOnConnectionListener = internalConnectionListener
     )
 
     /**
@@ -289,7 +288,7 @@ constructor(
                         _isStreaming = true
                     } catch (e: Exception) {
                         streamer.disconnect()
-                        connectionChecker.onConnectionFailed("$e")
+                        connectionListener.onConnectionFailed("$e")
                         throw e
                     }
                 } catch (e: Exception) {
@@ -309,7 +308,7 @@ constructor(
         streamer.stopStream()
         streamer.disconnect()
         if (isConnected) {
-            connectionChecker.onDisconnect()
+            connectionListener.onDisconnect()
         }
         _isStreaming = false
     }

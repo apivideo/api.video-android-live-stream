@@ -4,7 +4,7 @@ package video.api.livestream.interfaces
  * Connection callbacks interface.
  * Use it to manage a connection.
  */
-interface IConnectionChecker {
+interface IConnectionListener {
     /**
      * Triggered when connection failed.
      *
