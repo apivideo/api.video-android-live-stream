@@ -5,9 +5,9 @@ import android.media.MediaFormat
 import io.github.thibaultbee.streampack.streamers.helpers.AudioStreamerConfigurationHelper
 import io.github.thibaultbee.streampack.streamers.helpers.CameraStreamerConfigurationHelper
 import io.github.thibaultbee.streampack.streamers.helpers.VideoCameraStreamerConfigurationHelper
-import io.github.thibaultbee.streampack.utils.getBackCameraList
-import io.github.thibaultbee.streampack.utils.getCameraList
-import io.github.thibaultbee.streampack.utils.getFrontCameraList
+import io.github.thibaultbee.streampack.utils.backCameraList
+import io.github.thibaultbee.streampack.utils.cameraList
+import io.github.thibaultbee.streampack.utils.frontCameraList
 
 object ConfigurationHelper {
     private val helper = CameraStreamerConfigurationHelper.flvHelper
@@ -87,7 +87,7 @@ class VideoStreamerConfigurationHelper(private val videoHelper: VideoCameraStrea
      * @param context application context
      * @return list of camera
      */
-    fun getCamerasList(context: Context) = context.getCameraList()
+    fun getCamerasList(context: Context) = context.cameraList
 
     /**
      * Get back cameras list
@@ -95,7 +95,7 @@ class VideoStreamerConfigurationHelper(private val videoHelper: VideoCameraStrea
      * @param context application context
      * @return list of back camera
      */
-    fun getBackCamerasList(context: Context) = context.getBackCameraList()
+    fun getBackCamerasList(context: Context) = context.backCameraList
 
     /**
      * Get front cameras list
@@ -103,5 +103,5 @@ class VideoStreamerConfigurationHelper(private val videoHelper: VideoCameraStrea
      * @param context application context
      * @return list of front camera
      */
-    fun getFrontCamerasList(context: Context) = context.getFrontCameraList()
+    fun getFrontCamerasList(context: Context) = context.frontCameraList
 }

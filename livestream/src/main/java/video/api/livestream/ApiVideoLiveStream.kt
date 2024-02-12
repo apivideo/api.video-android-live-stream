@@ -305,12 +305,16 @@ constructor(
      */
     fun stopStreaming() {
         val isConnected = streamer.isConnected
-        streamer.stopStream()
-        streamer.disconnect()
-        if (isConnected) {
-            connectionListener.onDisconnect()
+        scope.launch {
+            withContext(context = Dispatchers.IO) {
+                streamer.stopStream()
+                streamer.disconnect()
+                if (isConnected) {
+                    connectionListener.onDisconnect()
+                }
+                _isStreaming = false
+            }
         }
-        _isStreaming = false
     }
 
 
