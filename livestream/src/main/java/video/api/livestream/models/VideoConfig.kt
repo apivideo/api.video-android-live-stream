@@ -1,5 +1,6 @@
 package video.api.livestream.models
 
+import android.util.Size
 import video.api.livestream.enums.Resolution
 
 /**
@@ -10,7 +11,7 @@ class VideoConfig(
      * Video resolution.
      * @see [Resolution]
      */
-    val resolution: Resolution = Resolution.RESOLUTION_720,
+    val resolution: Size = Resolution.RESOLUTION_720.size,
 
     /**
      * Video bitrate in bps.
@@ -27,10 +28,17 @@ class VideoConfig(
      */
     val gopDuration: Float = 1f,
 ) {
+    constructor(
+        resolution: Resolution,
+        bitrate: Int,
+        fps: Int,
+        gopDuration: Float
+    ) : this(resolution.size, bitrate, fps, gopDuration)
+
     internal fun toSdkConfig(): io.github.thibaultbee.streampack.data.VideoConfig {
         return io.github.thibaultbee.streampack.data.VideoConfig(
             startBitrate = bitrate,
-            resolution = resolution.size,
+            resolution = resolution,
             fps = fps,
             gopDuration = gopDuration
         )
@@ -40,19 +48,19 @@ class VideoConfig(
         internal fun fromSdkConfig(config: io.github.thibaultbee.streampack.data.VideoConfig): VideoConfig {
             return VideoConfig(
                 bitrate = config.startBitrate,
-                resolution = Resolution.valueOf(config.resolution),
+                resolution = config.resolution,
                 fps = config.fps,
                 gopDuration = config.gopDuration
             )
         }
 
-        private fun getDefaultBitrate(resolution: Resolution): Int {
-            return when (resolution) {
-                Resolution.RESOLUTION_240 -> 800000
-                Resolution.RESOLUTION_360 -> 1000000
-                Resolution.RESOLUTION_480 -> 1300000
-                Resolution.RESOLUTION_720 -> 2000000
-                Resolution.RESOLUTION_1080 -> 3500000
+        private fun getDefaultBitrate(size: Size): Int {
+            return when (size.width * size.height) {
+                in 0..102_240 -> 800_000 // for 4/3 and 16/9 240p
+                in 102_241..230_400 -> 1_000_000 // for 16/9 360p
+                in 230_401..409_920 -> 1_300_000 // for 4/3 and 16/9 480p
+                in 409_921..921_600 -> 2_000_000 // for 4/3 600p, 4/3 768p and 16/9 720p
+                else -> 3_000_000 // for 16/9 1080p
             }
         }
     }

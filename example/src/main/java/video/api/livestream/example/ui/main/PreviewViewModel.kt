@@ -39,7 +39,7 @@ class PreviewViewModel(application: Application) : AndroidViewModel(application)
         )
         val videoConfig = VideoConfig(
             bitrate = configuration.video.bitrate * 1024, // to bps
-            resolution = Resolution.valueOf(configuration.video.resolution),
+            resolution = configuration.video.resolution,
             fps = configuration.video.fps,
         )
         liveStream =
