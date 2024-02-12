@@ -7,7 +7,6 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import video.api.livestream.ApiVideoLiveStream
 import video.api.livestream.enums.CameraFacingDirection
-import video.api.livestream.enums.Resolution
 import video.api.livestream.example.ui.utils.Configuration
 import video.api.livestream.interfaces.IConnectionListener
 import video.api.livestream.models.AudioConfig
@@ -70,10 +69,10 @@ class PreviewViewModel(application: Application) : AndroidViewModel(application)
     }
 
     fun switchCamera() {
-        if (liveStream.camera == CameraFacingDirection.BACK) {
-            liveStream.camera = CameraFacingDirection.FRONT
+        if (liveStream.cameraPosition == CameraFacingDirection.BACK) {
+            liveStream.cameraPosition = CameraFacingDirection.FRONT
         } else {
-            liveStream.camera = CameraFacingDirection.BACK
+            liveStream.cameraPosition = CameraFacingDirection.BACK
         }
     }
 

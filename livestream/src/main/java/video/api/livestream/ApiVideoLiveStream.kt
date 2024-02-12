@@ -29,7 +29,7 @@ class ApiVideoLiveStream
  * @param connectionListener connection callbacks
  * @param initialAudioConfig initial audio configuration. Could be change later with [audioConfig] field.
  * @param initialVideoConfig initial video configuration. Could be change later with [videoConfig] field.
- * @param initialCamera initial camera. Could be change later with [camera] field.
+ * @param initialCamera initial camera. Could be change later with [cameraPosition] field.
  * @param permissionRequester permission requester. Called when permissions are required. Always call [onGranted] when permissions are granted.
  */
 @RequiresPermission(allOf = [Manifest.permission.RECORD_AUDIO, Manifest.permission.CAMERA])
@@ -179,8 +179,10 @@ constructor(
 
     /**
      * Get/set current camera facing direction.
+     *
+     * @see [camera]
      */
-    var camera: CameraFacingDirection
+    var cameraPosition: CameraFacingDirection
         /**
          * Get current camera facing direction.
          *
@@ -206,9 +208,31 @@ constructor(
             }
         }
 
+    /**
+     * Get/set current camera.
+     *
+     * @see [cameraPosition]
+     */
+    var camera: String
+        /**
+         * Gets current camera.
+         * It is often like "0" for back camera and "1" for front camera.
+         *
+         * @return the current camera
+         */
+        get() = streamer.camera
+        /**
+         * Sets current camera.
+         *
+         * @param value the current camera
+         */
+        set(value) {
+            streamer.camera = value
+        }
+
     init {
         apiVideoView.holder.addCallback(surfaceCallback)
-        camera = initialCamera
+        cameraPosition = initialCamera
         audioConfig?.let {
             streamer.configure(it.toSdkConfig())
         }
@@ -334,7 +358,7 @@ constructor(
         get() = _isStreaming
 
     /**
-     * Starts camera preview of [camera].
+     * Starts camera preview of [cameraPosition].
      *
      * The surface provided in the constructor already manages [startPreview] and [stopPreview].
      * Use this method only if you need to explicitly start preview.
