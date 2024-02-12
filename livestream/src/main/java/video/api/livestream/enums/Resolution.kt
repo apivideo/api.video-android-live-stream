@@ -27,6 +27,6 @@ enum class Resolution(val size: Size) {
          * @return corresponding [Resolution]
          */
         fun valueOf(size: Size) =
-            values().first { it.size.width == size.width && it.size.height == size.height }
+            entries.first { it.size.width == size.width && it.size.height == size.height }
     }
 }
