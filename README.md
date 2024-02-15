@@ -83,10 +83,10 @@ and `android.permission.RECORD_AUDIO`.
     android:layout_height="match_parent" />
 ```
 
-3. Implement a `ConnectionChecker`.
+3. Implement a `IConnectionListener`.
 
 ```kotlin
-val connectionChecker = object : ConnectionChecker {
+val connectionListener = object : IConnectionListener {
     override fun onConnectionSuccess() {
         //Add your code here
     }
@@ -101,10 +101,10 @@ val connectionChecker = object : ConnectionChecker {
 }
 ```
 
-4. Creates an `ApiVideoLiveStream` instance.
+4. Create an `ApiVideoLiveStream` instance.
 
 ```kotlin
-class MyFragment : Fragment(), ConnectionChecker {
+class MyFragment : Fragment(), IConnectionListener {
     private var apiVideoView: ApiVideoView? = null
     private lateinit var apiVideo: ApiVideoLiveStream
 
@@ -127,7 +127,7 @@ class MyFragment : Fragment(), ConnectionChecker {
         apiVideo =
             ApiVideoLiveStream(
                 context = getContext(),
-                connectionChecker = this,
+                connectionListener = this,
                 initialAudioConfig = audioConfig,
                 initialVideoConfig = videoConfig,
                 apiVideoView = apiVideoView
