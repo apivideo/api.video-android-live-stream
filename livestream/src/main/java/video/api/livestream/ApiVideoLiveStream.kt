@@ -19,6 +19,38 @@ import video.api.livestream.models.AudioConfig
 import video.api.livestream.models.VideoConfig
 import video.api.livestream.views.ApiVideoView
 
+
+/**
+ * @param context application context
+ * @param apiVideoView where to display preview. Could be null if you don't have a preview.
+ * @param connectionListener connection callbacks
+ * @param initialAudioConfig initial audio configuration. Could be change later with [audioConfig] field.
+ * @param initialVideoConfig initial video configuration. Could be change later with [videoConfig] field.
+ * @param initialCameraPosition initial camera. Could be change later with [cameraPosition] field.
+ * @param permissionRequester permission requester. Called when permissions are required. Always call [onGranted] when permissions are granted.
+ */
+@RequiresPermission(allOf = [Manifest.permission.RECORD_AUDIO, Manifest.permission.CAMERA])
+fun ApiVideoLiveStream(
+    context: Context,
+    apiVideoView: ApiVideoView,
+    connectionListener: IConnectionListener,
+    initialAudioConfig: AudioConfig? = null,
+    initialVideoConfig: VideoConfig? = null,
+    initialCameraPosition: CameraFacingDirection = CameraFacingDirection.BACK,
+    permissionRequester: (List<String>, onGranted: () -> Unit) -> Unit = { _, onGranted -> onGranted() }
+): ApiVideoLiveStream {
+    return ApiVideoLiveStream(
+        context,
+        apiVideoView,
+        connectionListener,
+        permissionRequester
+    ).apply {
+        audioConfig = initialAudioConfig
+        videoConfig = initialVideoConfig
+        cameraPosition = initialCameraPosition
+    }
+}
+
 /**
  * Manages both livestream and camera preview.
  */
@@ -27,9 +59,6 @@ class ApiVideoLiveStream
  * @param context application context
  * @param apiVideoView where to display preview. Could be null if you don't have a preview.
  * @param connectionListener connection callbacks
- * @param initialAudioConfig initial audio configuration. Could be change later with [audioConfig] field.
- * @param initialVideoConfig initial video configuration. Could be change later with [videoConfig] field.
- * @param initialCamera initial camera. Could be change later with [cameraPosition] field.
  * @param permissionRequester permission requester. Called when permissions are required. Always call [onGranted] when permissions are granted.
  */
 @RequiresPermission(allOf = [Manifest.permission.RECORD_AUDIO, Manifest.permission.CAMERA])
@@ -37,9 +66,6 @@ constructor(
     private val context: Context,
     private val apiVideoView: ApiVideoView,
     private val connectionListener: IConnectionListener,
-    private val initialAudioConfig: AudioConfig? = null,
-    private val initialVideoConfig: VideoConfig? = null,
-    private val initialCamera: CameraFacingDirection = CameraFacingDirection.BACK,
     private val permissionRequester: (List<String>, onGranted: () -> Unit) -> Unit = { _, onGranted -> onGranted() }
 ) {
     companion object {
@@ -51,7 +77,7 @@ constructor(
     /**
      * Set/get audio configuration once you have created the a [ApiVideoLiveStream] instance.
      */
-    var audioConfig: AudioConfig? = initialAudioConfig
+    var audioConfig: AudioConfig? = null
         @RequiresPermission(Manifest.permission.RECORD_AUDIO)
         set(value) {
             require(value != null) { "Audio config must not be null" }
@@ -72,7 +98,7 @@ constructor(
     /**
      * Set/get video configuration once you have created the a [ApiVideoLiveStream] instance.
      */
-    var videoConfig: VideoConfig? = initialVideoConfig
+    var videoConfig: VideoConfig? = null
         /**
          * Set new video configuration.
          * It will restart preview if resolution has been changed.
@@ -232,19 +258,6 @@ constructor(
 
     init {
         apiVideoView.holder.addCallback(surfaceCallback)
-        cameraPosition = initialCamera
-        audioConfig?.let {
-            streamer.configure(it.toSdkConfig())
-        }
-        videoConfig?.let {
-            streamer.configure(it.toSdkConfig())
-            // Try to start in case [SurfaceView] has already been created
-            try {
-                startPreview()
-            } catch (e: Exception) {
-                Log.i(TAG, "Can't start preview in constructor: ${e.message}")
-            }
-        }
     }
 
     /**
