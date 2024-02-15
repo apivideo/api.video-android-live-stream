@@ -19,7 +19,7 @@ jobs:
       - name: Generate API documentation
         run: ./gradlew dokkaHtml
       - name: Deploy API documentation to Github Pages
-        uses: JamesIves/github-pages-deploy-action@4
+        uses: JamesIves/github-pages-deploy-action@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           branch: gh-pages
