@@ -10,7 +10,6 @@
     <string name="stop">Stop</string>
     <string name="endpoint">Endpoint</string>
     <string name="error">Error</string>
-    <string name="authentication_failed">Authentication failed</string>
     <string name="disconnection">You have been disconnected</string>
 
     <!-- Strings used for preferences -->

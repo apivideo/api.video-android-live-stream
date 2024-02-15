@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="primary_orange">#FA5B30</color>
-    <color name="secondary_orange">#FFB39E</color>
     <color name="light_blue">#D9E1EC</color>
-    <color name="dark_blue">#414F6E</color>
-    <color name="black">#0B0F17</color>
     <color name="white">#FFFFFF</color>
     <color name="transparent_white">#66FFFFFF</color>
 </resources>
