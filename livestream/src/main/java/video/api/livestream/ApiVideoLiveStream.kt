@@ -158,7 +158,11 @@ constructor(
          */
         @SuppressLint("MissingPermission")
         override fun surfaceCreated(holder: SurfaceHolder) {
-            startPreview()
+            try {
+                startPreview()
+            } catch (e: UnsupportedOperationException) {
+                Log.i(TAG, "Can't start preview: ${e.message}")
+            }
         }
 
         /**
@@ -395,15 +399,20 @@ constructor(
                 "View finder size: ${apiVideoView.width} x ${apiVideoView.height}"
             )
             Log.d(TAG, "Selected preview size: $previewSize")
-            apiVideoView.setAspectRatio(previewSize.width, previewSize.height)
 
             // To ensure that size is set, initialize camera in the view's thread
             apiVideoView.post {
+                apiVideoView.setAspectRatio(previewSize.width, previewSize.height)
+
                 permissionRequester(
                     listOf(
                         Manifest.permission.CAMERA,
                     )
                 ) {
+                    if (videoConfig == null) {
+                        Log.w(TAG, "Video config is not set")
+                        return@permissionRequester
+                    }
                     streamer.startPreview(
                         apiVideoView.holder.surface,
                         it
