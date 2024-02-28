@@ -1,17 +1,14 @@
 package video.api.livestream
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.content.Context
 import android.util.Log
-import android.view.SurfaceHolder
 import androidx.annotation.RequiresPermission
 import io.github.thibaultbee.streampack.error.StreamPackError
 import io.github.thibaultbee.streampack.ext.rtmp.streamers.CameraRtmpLiveStreamer
 import io.github.thibaultbee.streampack.listeners.OnConnectionListener
 import io.github.thibaultbee.streampack.listeners.OnErrorListener
 import io.github.thibaultbee.streampack.utils.*
-import io.github.thibaultbee.streampack.views.getPreviewOutputSize
 import kotlinx.coroutines.*
 import video.api.livestream.enums.CameraFacingDirection
 import video.api.livestream.interfaces.IConnectionListener
@@ -75,7 +72,7 @@ constructor(
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
 
     /**
-     * Set/get audio configuration once you have created the a [ApiVideoLiveStream] instance.
+     * Sets/gets audio configuration once you have created the a [ApiVideoLiveStream] instance.
      */
     var audioConfig: AudioConfig? = null
         @RequiresPermission(Manifest.permission.RECORD_AUDIO)
@@ -96,36 +93,47 @@ constructor(
         }
 
     /**
-     * Set/get video configuration once you have created the a [ApiVideoLiveStream] instance.
+     * Sets/gets video configuration once you have created the a [ApiVideoLiveStream] instance.
      */
     var videoConfig: VideoConfig? = null
         /**
-         * Set new video configuration.
+         * Sets the new video configuration.
          * It will restart preview if resolution has been changed.
          * Encoders settings will be applied in next [startStreaming].
          *
          * @param value new video configuration
          */
-        @RequiresPermission(allOf = [Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO])
+        @RequiresPermission(Manifest.permission.CAMERA)
         set(value) {
             require(value != null) { "Audio config must not be null" }
             if (isStreaming) {
                 throw UnsupportedOperationException("You have to stop streaming first")
             }
-            if ((videoConfig?.resolution != value.resolution) || (videoConfig?.fps != value.fps)) {
+
+            val mustRestartPreview = if (videoConfig?.fps != value.fps) {
                 Log.i(
-                    this::class.simpleName,
-                    "Resolution has been changed from ${videoConfig?.resolution} to ${value.resolution} or fps from ${videoConfig?.fps} to ${value.fps}. Restarting preview."
+                    TAG,
+                    "Frame rate has been changed from ${videoConfig?.fps} to ${value.fps}. Restarting preview."
                 )
+                true
+            } else {
+                false
+            }
+
+            if (mustRestartPreview) {
                 stopPreview()
-                streamer.configure(value.toSdkConfig())
+            }
+
+            streamer.configure(value.toSdkConfig())
+            field = value
+
+            if (mustRestartPreview) {
                 try {
                     startPreview()
                 } catch (e: UnsupportedOperationException) {
                     Log.i(TAG, "Can't start preview: ${e.message}")
                 }
             }
-            field = value
         }
 
     private val internalConnectionListener = object : OnConnectionListener {
@@ -146,37 +154,6 @@ constructor(
         override fun onError(error: StreamPackError) {
             _isStreaming = false
             Log.e(TAG, "An error happened", error)
-        }
-    }
-
-    /**
-     * [SurfaceHolder.Callback] implementation.
-     */
-    private val surfaceCallback = object : SurfaceHolder.Callback {
-        /**
-         * Calls when the provided surface is created. This is for internal purpose only. Do not call it.
-         */
-        @SuppressLint("MissingPermission")
-        override fun surfaceCreated(holder: SurfaceHolder) {
-            try {
-                startPreview()
-            } catch (e: UnsupportedOperationException) {
-                Log.i(TAG, "Can't start preview: ${e.message}")
-            }
-        }
-
-        /**
-         * Calls when the surface size has been changed. This is for internal purpose only. Do not call it.
-         */
-        override fun surfaceChanged(holder: SurfaceHolder, format: Int, width: Int, height: Int) =
-            Unit
-
-        /**
-         * Calls when the surface size has been destroyed. This is for internal purpose only. Do not call it.
-         */
-        override fun surfaceDestroyed(holder: SurfaceHolder) {
-            stopStreaming()
-            stopPreview()
         }
     }
 
@@ -261,7 +238,7 @@ constructor(
         }
 
     init {
-        apiVideoView.holder.addCallback(surfaceCallback)
+        apiVideoView.streamer = streamer
     }
 
     /**
@@ -384,41 +361,16 @@ constructor(
      */
     @RequiresPermission(Manifest.permission.CAMERA)
     fun startPreview() {
-        if (apiVideoView.display == null) {
-            throw UnsupportedOperationException("display is null")
-        }
-        // Selects appropriate preview size and configures view finder
-        streamer.camera.let {
-            val previewSize = getPreviewOutputSize(
-                apiVideoView.display,
-                context.getCameraCharacteristics(it),
-                SurfaceHolder::class.java
+        permissionRequester(
+            listOf(
+                Manifest.permission.CAMERA,
             )
-            Log.d(
-                TAG,
-                "View finder size: ${apiVideoView.width} x ${apiVideoView.height}"
-            )
-            Log.d(TAG, "Selected preview size: $previewSize")
-
-            // To ensure that size is set, initialize camera in the view's thread
-            apiVideoView.post {
-                apiVideoView.setAspectRatio(previewSize.width, previewSize.height)
-
-                permissionRequester(
-                    listOf(
-                        Manifest.permission.CAMERA,
-                    )
-                ) {
-                    if (videoConfig == null) {
-                        Log.w(TAG, "Video config is not set")
-                        return@permissionRequester
-                    }
-                    streamer.startPreview(
-                        apiVideoView.holder.surface,
-                        it
-                    )
-                }
+        ) {
+            if (videoConfig == null) {
+                Log.w(TAG, "Video config is not set")
+                return@permissionRequester
             }
+            apiVideoView.startPreview()
         }
     }
 
@@ -430,7 +382,7 @@ constructor(
      *
      * @see [startPreview]
      */
-    fun stopPreview() = streamer.stopPreview()
+    fun stopPreview() = apiVideoView.stopPreview()
 
     /**
      * Release internal elements.
