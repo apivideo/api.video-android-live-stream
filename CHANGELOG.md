@@ -2,6 +2,12 @@
 
 All changes to this project will be documented in this file.
 
+## [1.4.1] - 2024-03-01
+
+- Fix preview aspect ratio
+- Fix 480p resolution
+- Fix crashes due to missing permissions
+
 ## [1.4.0] - 2024-02-15
 
 - Add an API to explicitly set the camera to use
