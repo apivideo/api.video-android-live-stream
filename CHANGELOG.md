@@ -2,6 +2,11 @@
 
 All changes to this project will be documented in this file.
 
+## [1.4.2] - 2024-07-11
+
+- Update to StreamPack 2.6.1
+- View uses PreviewView
+
 ## [1.4.1] - 2024-03-01
 
 - Fix preview aspect ratio
