@@ -15,7 +15,7 @@ buildscript {
         versionName = "${properties['VERSION_NAME']}"
 
         // StreamPack
-        streamPackVersion = "2.6.1"
+        streamPackVersion = "3.0.0"
     }
 }
 plugins {
