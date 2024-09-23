@@ -59,6 +59,7 @@ dependencies {
     implementation "io.github.thibaultbee.streampack:streampack-core:$streamPackVersion"
     implementation "io.github.thibaultbee.streampack:streampack-ui:$streamPackVersion"
     implementation "io.github.thibaultbee.streampack:streampack-extension-rtmp:$streamPackVersion"
+    implementation "io.github.thibaultbee.streampack:streampack-extension-srt:$streamPackVersion"
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.2.1'

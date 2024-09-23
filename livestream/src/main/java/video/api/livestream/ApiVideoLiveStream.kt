@@ -2,15 +2,17 @@ package video.api.livestream
 
 import android.Manifest
 import android.content.Context
+import android.net.Uri
 import android.util.Log
 import androidx.annotation.RequiresPermission
+import io.github.thibaultbee.streampack.core.data.mediadescriptor.MediaDescriptor
 import io.github.thibaultbee.streampack.core.data.mediadescriptor.UriMediaDescriptor
 import io.github.thibaultbee.streampack.core.internal.endpoints.MediaSinkType
 import io.github.thibaultbee.streampack.core.streamers.callbacks.DefaultCameraCallbackStreamer
 import io.github.thibaultbee.streampack.core.streamers.interfaces.ICallbackStreamer
-import io.github.thibaultbee.streampack.core.streamers.interfaces.startStream
 import io.github.thibaultbee.streampack.core.utils.extensions.isBackCamera
 import io.github.thibaultbee.streampack.core.utils.extensions.isFrontCamera
+import io.github.thibaultbee.streampack.ext.srt.data.mediadescriptor.SrtMediaDescriptor
 import kotlinx.coroutines.*
 import video.api.livestream.enums.CameraFacingDirection
 import video.api.livestream.interfaces.IConnectionListener
@@ -287,31 +289,96 @@ constructor(
         }
 
     /**
-     * Start a new RTMP stream.
+     * Start a new RTMP or SRT stream.
      *
-     * @param streamKey RTMP stream key. For security purpose, you must not expose it.
-     * @param url RTMP Url. Default value (not set or null) is api.video RTMP broadcast url.
+     * Example of RTMP server url:
+     * ```
+     * rtmp://broadcast.api.video/s
+     * ```
+     *
+     * Example of SRT server url:
+     * ```
+     * srt://broadcast.api.video:6200
+     * ```
+     * Other query parameters will be ignored.
+     *
+     * @param streamKey The RTMP stream key or SRT stream id. For security purpose, you must not expose it.
+     * @param url The RTMP or SRT server Url. Default value (not set or null) is api.video RTMP broadcast url.
      * @see [stopStreaming]
      */
     fun startStreaming(
         streamKey: String,
-        url: String = context.getString(R.string.default_rtmp_url),
+        url: String = context.getString(R.string.default_server_url),
     ) {
         require(!isStreaming) { "Stream is already running" }
         require(streamKey.isNotEmpty()) { "Stream key must not be empty" }
         require(url.isNotEmpty()) { "Url must not be empty" }
-        require(audioConfig != null) { "Audio config must be set" }
-        require(videoConfig != null) { "Video config must be set" }
+        requireNotNull(audioConfig) { "Audio config must be set" }
+        requireNotNull(videoConfig) { "Video config must be set" }
 
-        val descriptor = UriMediaDescriptor(url.addTrailingSlashIfNeeded() + streamKey)
-        require(descriptor.type.sinkType == MediaSinkType.RTMP) { "URL must be RTMP" }
+        val descriptor = if (url.startsWith("srt://")) {
+            val uri = Uri.parse(url)
+            SrtMediaDescriptor(
+                host = requireNotNull(uri.host),
+                port = uri.port,
+                streamId = streamKey
+            )
+        } else {
+            UriMediaDescriptor(url.addTrailingSlashIfNeeded() + streamKey)
+        }
+
+        startStreaming(descriptor)
+    }
+
+    /**
+     * Start a new RTMP or SRT stream.
+     *
+     * Example of RTMP url:
+     * ```
+     * rtmp://broadcast.api.video/s/{streamKey}
+     * ```
+     *
+     * Example of SRT url:
+     * ```
+     * srt://broadcast.api.video:6200?streamid={streamKey}
+     * ```
+     *
+     * Get the stream key from the api.video dashboard or through the API.
+     *
+     * @param url The RTMP or SRT server Url with stream key (RTMP) or stream id (SRT).
+     * @see [stopStreaming]
+     */
+    fun startStreaming(
+        url: String
+    ) {
+        require(!isStreaming) { "Stream is already running" }
+        require(url.isNotEmpty()) { "Url must not be empty" }
+        requireNotNull(audioConfig) { "Audio config must be set" }
+        requireNotNull(videoConfig) { "Video config must be set" }
+
+        startStreaming(UriMediaDescriptor(url))
+    }
+
+    /**
+     * Start a new RTMP or SRT stream.
+     *
+     * @param descriptor The media descriptor
+     * @see [stopStreaming]
+     */
+    private fun startStreaming(
+        descriptor: MediaDescriptor
+    ) {
+        require(!isStreaming) { "Stream is already running" }
+        requireNotNull(audioConfig) { "Audio config must be set" }
+        requireNotNull(videoConfig) { "Video config must be set" }
+
+        require((descriptor.type.sinkType == MediaSinkType.RTMP) || (descriptor.type.sinkType == MediaSinkType.SRT)) { "URL must be RTMP or SRT" }
 
         try {
-            streamer.startStream(url)
-        } catch (e: Exception) {
-            streamer.close()
-            connectionListener.onConnectionFailed("$e")
-            throw e
+            streamer.startStream(descriptor)
+        } catch (t: Throwable) {
+            connectionListener.onConnectionFailed("$t")
+            throw t
         }
     }
 

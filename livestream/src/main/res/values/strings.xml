@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="default_rtmp_url">rtmp://broadcast.api.video/s/</string>
+    <string name="default_server_url">rtmp://broadcast.api.video/s/</string>
 </resources>
