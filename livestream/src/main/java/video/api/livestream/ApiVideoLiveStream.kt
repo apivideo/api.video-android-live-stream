@@ -238,7 +238,11 @@ constructor(
         }
 
     init {
-        apiVideoView.streamer = streamer
+        try {
+            apiVideoView.streamer = streamer
+        } catch (e: Exception) {
+            Log.w(TAG, "Can't set streamer to ApiVideoView: ${e.message}")
+        }
     }
 
     /**
@@ -370,7 +374,11 @@ constructor(
                 Log.w(TAG, "Video config is not set")
                 return@permissionRequester
             }
-            apiVideoView.startPreview()
+            try {
+                apiVideoView.startPreview()
+            } catch (t: Throwable) {
+                Log.e(TAG, "Can't start preview: ${t.message}")
+            }
         }
     }
 

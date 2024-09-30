@@ -2,6 +2,7 @@ package video.api.livestream.views
 
 import android.content.Context
 import android.util.AttributeSet
+import android.util.Log
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import io.github.thibaultbee.streampack.streamers.interfaces.ICameraStreamer
@@ -25,7 +26,11 @@ class ApiVideoView @JvmOverloads constructor(
          * @param value the [ICameraStreamer] to use
          */
         set(value) {
-            previewView.streamer = value
+            try {
+                previewView.streamer = value
+            } catch (t: Throwable) {
+                Log.w(TAG, "Failed to set streamer: $t")
+            }
         }
 
     init {
@@ -60,5 +65,9 @@ class ApiVideoView @JvmOverloads constructor(
 
     internal fun startPreview() {
         previewView.startPreview()
+    }
+
+    companion object {
+        private const val TAG = "ApiVideoView"
     }
 }
