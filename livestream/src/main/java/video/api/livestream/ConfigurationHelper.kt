@@ -2,27 +2,30 @@ package video.api.livestream
 
 import android.content.Context
 import android.media.MediaFormat
-import io.github.thibaultbee.streampack.streamers.helpers.AudioStreamerConfigurationHelper
-import io.github.thibaultbee.streampack.streamers.helpers.CameraStreamerConfigurationHelper
-import io.github.thibaultbee.streampack.streamers.helpers.VideoCameraStreamerConfigurationHelper
-import io.github.thibaultbee.streampack.utils.backCameraList
-import io.github.thibaultbee.streampack.utils.cameraList
-import io.github.thibaultbee.streampack.utils.frontCameraList
+import io.github.thibaultbee.streampack.core.internal.endpoints.composites.CompositeEndpoint
+import io.github.thibaultbee.streampack.core.internal.endpoints.composites.muxers.flv.FlvMuxerInfo
+import io.github.thibaultbee.streampack.core.streamers.infos.AudioStreamerConfigurationInfo
+import io.github.thibaultbee.streampack.core.streamers.infos.CameraStreamerConfigurationInfo
+import io.github.thibaultbee.streampack.core.streamers.infos.VideoCameraStreamerConfigurationInfo
+import io.github.thibaultbee.streampack.core.utils.extensions.backCameras
+import io.github.thibaultbee.streampack.core.utils.extensions.cameras
+import io.github.thibaultbee.streampack.core.utils.extensions.frontCameras
 
 object ConfigurationHelper {
-    private val helper = CameraStreamerConfigurationHelper.flvHelper
+    private val helper =
+        CameraStreamerConfigurationInfo(CompositeEndpoint.EndpointInfo(FlvMuxerInfo))
     val audio = AudioConfigurationHelper(helper.audio)
     val video = VideoStreamerConfigurationHelper(helper.video)
 }
 
-class AudioConfigurationHelper(private val audioHelper: AudioStreamerConfigurationHelper) {
+class AudioConfigurationHelper(private val audioInfo: AudioStreamerConfigurationInfo) {
     /**
      * Get supported bitrate range.
      *
      * @return bitrate range
      */
     fun getSupportedBitrates() =
-        audioHelper.getSupportedBitrates(MediaFormat.MIMETYPE_AUDIO_AAC)
+        audioInfo.getSupportedBitrates(MediaFormat.MIMETYPE_AUDIO_AAC)
 
     /**
      * Get maximum supported number of channel by encoder.
@@ -30,7 +33,7 @@ class AudioConfigurationHelper(private val audioHelper: AudioStreamerConfigurati
      * @return maximum number of channel supported by the encoder
      */
     fun getSupportedInputChannelRange() =
-        audioHelper.getSupportedInputChannelRange(MediaFormat.MIMETYPE_AUDIO_AAC)
+        audioInfo.getSupportedInputChannelRange(MediaFormat.MIMETYPE_AUDIO_AAC)
 
     /**
      * Get audio supported sample rates.
@@ -38,10 +41,10 @@ class AudioConfigurationHelper(private val audioHelper: AudioStreamerConfigurati
      * @return sample rates list in Hz.
      */
     fun getSupportedSampleRates() =
-        audioHelper.getSupportedSampleRates(MediaFormat.MIMETYPE_AUDIO_AAC)
+        audioInfo.getSupportedSampleRates(MediaFormat.MIMETYPE_AUDIO_AAC)
 }
 
-class VideoStreamerConfigurationHelper(private val videoHelper: VideoCameraStreamerConfigurationHelper) {
+class VideoStreamerConfigurationHelper(private val videoInfo: VideoCameraStreamerConfigurationInfo) {
 
     /**
      * Get supported bitrate range.
@@ -49,7 +52,7 @@ class VideoStreamerConfigurationHelper(private val videoHelper: VideoCameraStrea
      * @return bitrate range
      */
     fun getSupportedBitrates() =
-        videoHelper.getSupportedBitrates(MediaFormat.MIMETYPE_VIDEO_AVC)
+        videoInfo.getSupportedBitrates(MediaFormat.MIMETYPE_VIDEO_AVC)
 
     /**
      * Get encoder supported resolutions range.
@@ -57,7 +60,7 @@ class VideoStreamerConfigurationHelper(private val videoHelper: VideoCameraStrea
      * @return pair that contains supported width ([Pair.first]) and supported height ([Pair.second]).
      */
     fun getSupportedResolutions() =
-        videoHelper.getSupportedResolutions(MediaFormat.MIMETYPE_VIDEO_AVC)
+        videoInfo.getSupportedResolutions(MediaFormat.MIMETYPE_VIDEO_AVC)
 
     /**
      * Get camera supported resolutions that are also supported by the encoder.
@@ -66,7 +69,7 @@ class VideoStreamerConfigurationHelper(private val videoHelper: VideoCameraStrea
      * @return list of resolutions
      */
     fun getCameraSupportedResolutions(context: Context) =
-        videoHelper.getSupportedResolutions(context, MediaFormat.MIMETYPE_VIDEO_AVC)
+        videoInfo.getSupportedResolutions(context, MediaFormat.MIMETYPE_VIDEO_AVC)
 
 
     /**
@@ -79,7 +82,7 @@ class VideoStreamerConfigurationHelper(private val videoHelper: VideoCameraStrea
     fun getSupportedFrameRates(
         context: Context,
         cameraId: String
-    ) = videoHelper.getSupportedFramerates(context, MediaFormat.MIMETYPE_VIDEO_AVC, cameraId)
+    ) = videoInfo.getSupportedFramerates(context, MediaFormat.MIMETYPE_VIDEO_AVC, cameraId)
 
     /**
      * Get cameras list
@@ -87,7 +90,7 @@ class VideoStreamerConfigurationHelper(private val videoHelper: VideoCameraStrea
      * @param context application context
      * @return list of camera
      */
-    fun getCamerasList(context: Context) = context.cameraList
+    fun getCamerasList(context: Context) = context.cameras
 
     /**
      * Get back cameras list
@@ -95,7 +98,7 @@ class VideoStreamerConfigurationHelper(private val videoHelper: VideoCameraStrea
      * @param context application context
      * @return list of back camera
      */
-    fun getBackCamerasList(context: Context) = context.backCameraList
+    fun getBackCamerasList(context: Context) = context.backCameras
 
     /**
      * Get front cameras list
@@ -103,5 +106,5 @@ class VideoStreamerConfigurationHelper(private val videoHelper: VideoCameraStrea
      * @param context application context
      * @return list of front camera
      */
-    fun getFrontCamerasList(context: Context) = context.frontCameraList
+    fun getFrontCamerasList(context: Context) = context.frontCameras
 }

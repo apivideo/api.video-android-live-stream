@@ -35,8 +35,8 @@ class VideoConfig(
         gopDuration: Float
     ) : this(resolution.size, bitrate, fps, gopDuration)
 
-    internal fun toSdkConfig(): io.github.thibaultbee.streampack.data.VideoConfig {
-        return io.github.thibaultbee.streampack.data.VideoConfig(
+    internal fun toSdkConfig(): io.github.thibaultbee.streampack.core.data.VideoConfig {
+        return io.github.thibaultbee.streampack.core.data.VideoConfig(
             startBitrate = bitrate,
             resolution = resolution,
             fps = fps,
@@ -45,7 +45,7 @@ class VideoConfig(
     }
 
     companion object {
-        internal fun fromSdkConfig(config: io.github.thibaultbee.streampack.data.VideoConfig): VideoConfig {
+        internal fun fromSdkConfig(config: io.github.thibaultbee.streampack.core.data.VideoConfig): VideoConfig {
             return VideoConfig(
                 bitrate = config.startBitrate,
                 resolution = config.resolution,
