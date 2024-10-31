@@ -2,6 +2,11 @@
 
 All changes to this project will be documented in this file.
 
+## [1.4.3] - 2024-10-31
+
+- Try/catch on `startPreview` calls
+- Upgrade dependencies
+
 ## [1.4.2] - 2024-07-11
 
 - Update to StreamPack 2.6.1

@@ -51,7 +51,7 @@ On build.gradle add the following code in dependencies:
 
 ```groovy
 dependencies {
-    implementation 'video.api:android-live-stream:1.4.2'
+    implementation 'video.api:android-live-stream:1.4.3'
 }
 ```
 
