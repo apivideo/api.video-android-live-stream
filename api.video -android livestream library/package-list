@@ -46,6 +46,7 @@ $dokka.location:video.api.livestream.models/VideoConfig/fps/#/PointingToDeclarat
 $dokka.location:video.api.livestream.models/VideoConfig/gopDuration/#/PointingToDeclaration/api.video -android livestream library/video.api.livestream.models/-video-config/gop-duration.html
 $dokka.location:video.api.livestream.models/VideoConfig/resolution/#/PointingToDeclaration/api.video -android livestream library/video.api.livestream.models/-video-config/resolution.html
 $dokka.location:video.api.livestream.views////PointingToDeclaration/api.video -android livestream library/video.api.livestream.views/index.html
+$dokka.location:video.api.livestream.views/ApiVideoView.Companion///PointingToDeclaration/api.video -android livestream library/video.api.livestream.views/-api-video-view/-companion/index.html
 $dokka.location:video.api.livestream.views/ApiVideoView///PointingToDeclaration/api.video -android livestream library/video.api.livestream.views/-api-video-view/index.html
 $dokka.location:video.api.livestream.views/ApiVideoView/ApiVideoView/#android.content.Context#android.util.AttributeSet?#kotlin.Int/PointingToDeclaration/api.video -android livestream library/video.api.livestream.views/-api-video-view/-api-video-view.html
 $dokka.location:video.api.livestream.views/ApiVideoView/requestLayout/#/PointingToDeclaration/api.video -android livestream library/video.api.livestream.views/-api-video-view/request-layout.html
