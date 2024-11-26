@@ -2,13 +2,17 @@ package video.api.livestream
 
 import android.Manifest
 import android.content.Context
+import android.net.Uri
 import android.util.Log
 import androidx.annotation.RequiresPermission
-import io.github.thibaultbee.streampack.error.StreamPackError
-import io.github.thibaultbee.streampack.ext.rtmp.streamers.CameraRtmpLiveStreamer
-import io.github.thibaultbee.streampack.listeners.OnConnectionListener
-import io.github.thibaultbee.streampack.listeners.OnErrorListener
-import io.github.thibaultbee.streampack.utils.*
+import io.github.thibaultbee.streampack.core.data.mediadescriptor.MediaDescriptor
+import io.github.thibaultbee.streampack.core.data.mediadescriptor.UriMediaDescriptor
+import io.github.thibaultbee.streampack.core.internal.endpoints.MediaSinkType
+import io.github.thibaultbee.streampack.core.streamers.callbacks.DefaultCameraCallbackStreamer
+import io.github.thibaultbee.streampack.core.streamers.interfaces.ICallbackStreamer
+import io.github.thibaultbee.streampack.core.utils.extensions.isBackCamera
+import io.github.thibaultbee.streampack.core.utils.extensions.isFrontCamera
+import io.github.thibaultbee.streampack.ext.srt.data.mediadescriptor.SrtMediaDescriptor
 import kotlinx.coroutines.*
 import video.api.livestream.enums.CameraFacingDirection
 import video.api.livestream.interfaces.IConnectionListener
@@ -69,12 +73,11 @@ constructor(
         private const val TAG = "ApiVideoLiveStream"
     }
 
-    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
-
     /**
      * Sets/gets audio configuration once you have created the a [ApiVideoLiveStream] instance.
      */
-    var audioConfig: AudioConfig? = null
+    var audioConfig: AudioConfig?
+        get() = streamer.audioConfig?.let { AudioConfig.fromSdkConfig(it) }
         @RequiresPermission(Manifest.permission.RECORD_AUDIO)
         set(value) {
             require(value != null) { "Audio config must not be null" }
@@ -88,14 +91,20 @@ constructor(
             ) {
                 streamer.configure(value.toSdkConfig())
             }
-
-            field = value
         }
 
     /**
      * Sets/gets video configuration once you have created the a [ApiVideoLiveStream] instance.
      */
-    var videoConfig: VideoConfig? = null
+    var videoConfig: VideoConfig?
+        get() {
+            val videoConfig = streamer.videoConfig
+            return if (videoConfig != null) {
+                VideoConfig.fromSdkConfig(videoConfig)
+            } else {
+                null
+            }
+        }
         /**
          * Sets the new video configuration.
          * It will restart preview if resolution has been changed.
@@ -105,7 +114,7 @@ constructor(
          */
         @RequiresPermission(Manifest.permission.CAMERA)
         set(value) {
-            require(value != null) { "Audio config must not be null" }
+            require(value != null) { "Video config must not be null" }
             if (isStreaming) {
                 throw UnsupportedOperationException("You have to stop streaming first")
             }
@@ -125,44 +134,40 @@ constructor(
             }
 
             streamer.configure(value.toSdkConfig())
-            field = value
 
             if (mustRestartPreview) {
                 try {
                     startPreview()
-                } catch (e: UnsupportedOperationException) {
-                    Log.i(TAG, "Can't start preview: ${e.message}")
+                } catch (t: Throwable) {
+                    Log.i(TAG, "Can't start preview: ${t.message}")
                 }
             }
         }
 
-    private val internalConnectionListener = object : OnConnectionListener {
-        override fun onFailed(message: String) {
-            connectionListener.onConnectionFailed(message)
+    private val internalListener = object : ICallbackStreamer.Listener {
+        override fun onOpenFailed(t: Throwable) {
+            connectionListener.onConnectionFailed(t.message ?: "Unknown error")
         }
 
-        override fun onLost(message: String) {
-            connectionListener.onDisconnect()
+        override fun onIsOpenChanged(isOpen: Boolean) {
+            if (isOpen) {
+                connectionListener.onConnectionSuccess()
+            } else {
+                connectionListener.onDisconnect()
+            }
         }
 
-        override fun onSuccess() {
-            connectionListener.onConnectionSuccess()
-        }
-    }
-
-    private val errorListener = object : OnErrorListener {
-        override fun onError(error: StreamPackError) {
-            _isStreaming = false
-            Log.e(TAG, "An error happened", error)
+        override fun onError(throwable: Throwable) {
+            Log.e(TAG, "An error happened", throwable)
         }
     }
 
-    private val streamer = CameraRtmpLiveStreamer(
+    private val streamer = DefaultCameraCallbackStreamer(
         context = context,
-        enableAudio = true,
-        initialOnErrorListener = errorListener,
-        initialOnConnectionListener = internalConnectionListener
-    )
+        enableMicrophone = true
+    ).apply {
+        addListener(internalListener)
+    }
 
     /**
      * Get/set video bitrate during a streaming in bps.
@@ -174,14 +179,14 @@ constructor(
          *
          * @return video bitrate in bps
          */
-        get() = streamer.settings.video.bitrate
+        get() = streamer.videoEncoder?.bitrate ?: 0
         /**
          * Set video bitrate.
          *
          * @param value video bitrate in bps
          */
         set(value) {
-            streamer.settings.video.bitrate = value
+            streamer.videoEncoder?.bitrate = value
         }
 
     /**
@@ -254,16 +259,15 @@ constructor(
          *
          * @return [Boolean.true] if audio is muted, [Boolean.false] if audio is not muted.
          */
-        get() = streamer.settings.audio.isMuted
+        get() = streamer.audioSource?.isMuted ?: true
         /**
          * Set mute value.
          *
          * @param value [Boolean.true] to mute audio, [Boolean.false] to unmute audio.
          */
         set(value) {
-            streamer.settings.audio.isMuted = value
+            streamer.audioSource?.isMuted = value
         }
-
 
     /**
      * Set/get the zoom ratio.
@@ -274,49 +278,107 @@ constructor(
          *
          * @return the zoom ratio
          */
-        get() = streamer.settings.camera.zoom.zoomRatio
+        get() = streamer.videoSource.settings.zoom.zoomRatio
         /**
          * Set the zoom ratio.
          *
          * @param value the zoom ratio
          */
         set(value) {
-            streamer.settings.camera.zoom.zoomRatio = value
+            streamer.videoSource.settings.zoom.zoomRatio = value
         }
 
     /**
-     * Start a new RTMP stream.
+     * Start a new RTMP or SRT stream.
      *
-     * @param streamKey RTMP stream key. For security purpose, you must not expose it.
-     * @param url RTMP Url. Default value (not set or null) is api.video RTMP broadcast url.
+     * Example of RTMP server url:
+     * ```
+     * rtmp://broadcast.api.video/s
+     * ```
+     *
+     * Example of SRT server url:
+     * ```
+     * srt://broadcast.api.video:6200
+     * ```
+     * Other query parameters will be ignored.
+     *
+     * @param streamKey The RTMP stream key or SRT stream id. For security purpose, you must not expose it.
+     * @param url The RTMP or SRT server Url. Default value (not set or null) is api.video RTMP broadcast url.
      * @see [stopStreaming]
      */
     fun startStreaming(
         streamKey: String,
-        url: String = context.getString(R.string.default_rtmp_url),
+        url: String = context.getString(R.string.default_server_url),
     ) {
         require(!isStreaming) { "Stream is already running" }
         require(streamKey.isNotEmpty()) { "Stream key must not be empty" }
         require(url.isNotEmpty()) { "Url must not be empty" }
-        require(audioConfig != null) { "Audio config must be set" }
-        require(videoConfig != null) { "Video config must be set" }
+        requireNotNull(audioConfig) { "Audio config must be set" }
+        requireNotNull(videoConfig) { "Video config must be set" }
 
-        scope.launch {
-            withContext(context = Dispatchers.IO) {
-                try {
-                    streamer.connect(url.addTrailingSlashIfNeeded() + streamKey)
-                    try {
-                        streamer.startStream()
-                        _isStreaming = true
-                    } catch (e: Exception) {
-                        streamer.disconnect()
-                        connectionListener.onConnectionFailed("$e")
-                        throw e
-                    }
-                } catch (e: Exception) {
-                    Log.e(TAG, "Failed to start stream", e)
-                }
-            }
+        val descriptor = if (url.startsWith("srt://")) {
+            val uri = Uri.parse(url)
+            SrtMediaDescriptor(
+                host = requireNotNull(uri.host),
+                port = uri.port,
+                streamId = streamKey
+            )
+        } else {
+            UriMediaDescriptor(url.addTrailingSlashIfNeeded() + streamKey)
+        }
+
+        startStreaming(descriptor)
+    }
+
+    /**
+     * Start a new RTMP or SRT stream.
+     *
+     * Example of RTMP url:
+     * ```
+     * rtmp://broadcast.api.video/s/{streamKey}
+     * ```
+     *
+     * Example of SRT url:
+     * ```
+     * srt://broadcast.api.video:6200?streamid={streamKey}
+     * ```
+     *
+     * Get the stream key from the api.video dashboard or through the API.
+     *
+     * @param url The RTMP or SRT server Url with stream key (RTMP) or stream id (SRT).
+     * @see [stopStreaming]
+     */
+    fun startStreaming(
+        url: String
+    ) {
+        require(!isStreaming) { "Stream is already running" }
+        require(url.isNotEmpty()) { "Url must not be empty" }
+        requireNotNull(audioConfig) { "Audio config must be set" }
+        requireNotNull(videoConfig) { "Video config must be set" }
+
+        startStreaming(UriMediaDescriptor(url))
+    }
+
+    /**
+     * Start a new RTMP or SRT stream.
+     *
+     * @param descriptor The media descriptor
+     * @see [stopStreaming]
+     */
+    private fun startStreaming(
+        descriptor: MediaDescriptor
+    ) {
+        require(!isStreaming) { "Stream is already running" }
+        requireNotNull(audioConfig) { "Audio config must be set" }
+        requireNotNull(videoConfig) { "Video config must be set" }
+
+        require((descriptor.type.sinkType == MediaSinkType.RTMP) || (descriptor.type.sinkType == MediaSinkType.SRT)) { "URL must be RTMP or SRT" }
+
+        try {
+            streamer.startStream(descriptor)
+        } catch (t: Throwable) {
+            connectionListener.onConnectionFailed("$t")
+            throw t
         }
     }
 
@@ -326,34 +388,19 @@ constructor(
      * @see [startStreaming]
      */
     fun stopStreaming() {
-        val isConnected = streamer.isConnected
-        scope.launch {
-            withContext(context = Dispatchers.IO) {
-                streamer.stopStream()
-                streamer.disconnect()
-                if (isConnected) {
-                    connectionListener.onDisconnect()
-                }
-                _isStreaming = false
-            }
-        }
+        streamer.stopStream()
+        streamer.close()
     }
 
-
     /**
-     * Hack for private setter of [isStreaming].
-     */
-    private var _isStreaming: Boolean = false
-
-    /**
-     * Check the streaming state.
+     * Whether you are streaming or not.
      *
      * @return true if you are streaming, false otherwise
      * @see [startStreaming]
      * @see [stopStreaming]
      */
     val isStreaming: Boolean
-        get() = _isStreaming
+        get() = streamer.isStreaming
 
     /**
      * Starts camera preview of [cameraPosition].
@@ -399,6 +446,5 @@ constructor(
      */
     fun release() {
         streamer.release()
-        scope.cancel()
     }
 }

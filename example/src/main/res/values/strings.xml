@@ -31,11 +31,11 @@
     <string name="audio_enable_echo_canceler_key">audio_enable_echo_canceler_key</string>
     <string name="audio_enable_noise_suppressor_key">audio_enable_noise_suppressor_key</string>
     <string name="audio_enable_noise_suppressor">Enable noise suppressor</string>
-    <string name="default_rtmp_endpoint">rtmp://broadcast.api.video/s/</string>
-    <string name="rtmp_endpoint_url_key">rtmp_address_key</string>
-    <string name="rtmp_endpoint_url">RTMP endpoint</string>
-    <string name="rtmp_stream_key_key">rtmp_stream_key_key</string>
-    <string name="rtmp_stream_key">Stream key</string>
+    <string name="default_server_url">rtmp://broadcast.api.video/s/</string>
+    <string name="server_url_key">server_url_key</string>
+    <string name="server_url">RTMP or SRT server URL</string>
+    <string name="stream_key_key">stream_key_key</string>
+    <string name="stream_key">RTMP Stream key or SRT stream id</string>
     <string name="permissions">Permissions</string>
     <string name="permission_not_granted">Permissions not granted: leaving!</string>
 </resources>

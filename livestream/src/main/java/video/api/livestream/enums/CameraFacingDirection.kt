@@ -1,10 +1,10 @@
 package video.api.livestream.enums
 
 import android.content.Context
-import io.github.thibaultbee.streampack.utils.backCameraList
-import io.github.thibaultbee.streampack.utils.frontCameraList
-import io.github.thibaultbee.streampack.utils.isBackCamera
-import io.github.thibaultbee.streampack.utils.isFrontCamera
+import io.github.thibaultbee.streampack.core.utils.extensions.backCameras
+import io.github.thibaultbee.streampack.core.utils.extensions.frontCameras
+import io.github.thibaultbee.streampack.core.utils.extensions.isBackCamera
+import io.github.thibaultbee.streampack.core.utils.extensions.isFrontCamera
 
 /**
  * Represents camera facing direction.
@@ -28,9 +28,9 @@ enum class CameraFacingDirection {
      */
     fun toCameraId(context: Context): String {
         val cameraList = if (this == BACK) {
-            context.backCameraList
+            context.backCameras
         } else {
-            context.frontCameraList
+            context.frontCameras
         }
         return cameraList[0]
     }
