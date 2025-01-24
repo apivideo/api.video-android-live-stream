@@ -4,8 +4,8 @@ import android.os.Bundle
 import androidx.preference.ListPreference
 import androidx.preference.PreferenceFragmentCompat
 import video.api.livestream.ConfigurationHelper
-import video.api.livestream.example.R
 import video.api.livestream.enums.Resolution
+import video.api.livestream.example.R
 
 class PreferencesFragment : PreferenceFragmentCompat() {
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
@@ -30,7 +30,7 @@ class PreferencesFragment : PreferenceFragmentCompat() {
         (findPreference(getString(R.string.video_fps_key)) as ListPreference?)!!.apply {
             val supportedFramerates = ConfigurationHelper.video.getSupportedFrameRates(
                 requireContext(),
-                "0"
+                ConfigurationHelper.video.getBackCamerasList(requireContext()).first()
             )
             entryValues.filter { fps ->
                 supportedFramerates.any { it.contains(fps.toString().toInt()) }
