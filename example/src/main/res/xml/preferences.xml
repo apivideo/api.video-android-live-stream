@@ -62,15 +62,15 @@
 
     <PreferenceCategory app:title="@string/endpoint">
         <EditTextPreference
-            android:defaultValue="@string/default_rtmp_endpoint"
-            app:key="@string/rtmp_endpoint_url_key"
-            app:title="@string/rtmp_endpoint_url"
+            android:defaultValue="@string/default_server_url"
+            app:key="@string/server_url_key"
+            app:title="@string/server_url"
             app:useSimpleSummaryProvider="true" />
 
         <EditTextPreference
             android:defaultValue=""
-            app:key="@string/rtmp_stream_key_key"
-            app:title="@string/rtmp_stream_key"
+            app:key="@string/stream_key_key"
+            app:title="@string/stream_key"
             app:useSimpleSummaryProvider="true" />
     </PreferenceCategory>
 </PreferenceScreen>

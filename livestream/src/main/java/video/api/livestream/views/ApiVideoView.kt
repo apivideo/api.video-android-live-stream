@@ -5,8 +5,8 @@ import android.util.AttributeSet
 import android.util.Log
 import android.view.ViewGroup
 import android.widget.FrameLayout
-import io.github.thibaultbee.streampack.streamers.interfaces.ICameraStreamer
-import io.github.thibaultbee.streampack.views.PreviewView
+import io.github.thibaultbee.streampack.core.streamers.interfaces.ICameraStreamer
+import io.github.thibaultbee.streampack.ui.views.PreviewView
 
 /**
  * View where to display camera preview.

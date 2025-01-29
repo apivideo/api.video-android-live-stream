@@ -55,9 +55,11 @@ dokkaHtml {
 dependencies {
     implementation 'androidx.core:core-ktx:1.13.1'
     implementation 'androidx.appcompat:appcompat:1.7.0'
-    implementation "io.github.thibaultbee:streampack:$streamPackVersion"
-    implementation "io.github.thibaultbee:streampack-extension-rtmp:$streamPackVersion"
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3'
+
+    implementation "io.github.thibaultbee.streampack:streampack-core:$streamPackVersion"
+    implementation "io.github.thibaultbee.streampack:streampack-ui:$streamPackVersion"
+    implementation "io.github.thibaultbee.streampack:streampack-extension-rtmp:$streamPackVersion"
+    implementation "io.github.thibaultbee.streampack:streampack-extension-srt:$streamPackVersion"
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.2.1'

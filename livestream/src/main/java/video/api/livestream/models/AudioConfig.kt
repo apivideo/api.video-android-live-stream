@@ -21,37 +21,21 @@ data class AudioConfig(
      * [Boolean.false] for mono.
      */
     val stereo: Boolean = true,
-
-    /**
-     * [Boolean.true] if you want to activate echo canceler.
-     * [Boolean.false] to deactivate.
-     */
-    val echoCanceler: Boolean = true,
-
-    /**
-     * [Boolean.true] if you want to activate noise suppressor.
-     * [Boolean.false] to deactivate.
-     */
-    val noiseSuppressor: Boolean = true
 ) {
-    internal fun toSdkConfig(): io.github.thibaultbee.streampack.data.AudioConfig {
-        return io.github.thibaultbee.streampack.data.AudioConfig(
+    internal fun toSdkConfig(): io.github.thibaultbee.streampack.core.data.AudioConfig {
+        return io.github.thibaultbee.streampack.core.data.AudioConfig(
             startBitrate = bitrate,
             sampleRate = sampleRate,
-            channelConfig = if (stereo) AudioFormat.CHANNEL_IN_STEREO else AudioFormat.CHANNEL_IN_MONO,
-            enableEchoCanceler = echoCanceler,
-            enableNoiseSuppressor = noiseSuppressor
+            channelConfig = if (stereo) AudioFormat.CHANNEL_IN_STEREO else AudioFormat.CHANNEL_IN_MONO
         )
     }
 
     companion object {
-        internal fun fromSdkConfig(config: io.github.thibaultbee.streampack.data.AudioConfig): AudioConfig {
+        internal fun fromSdkConfig(config: io.github.thibaultbee.streampack.core.data.AudioConfig): AudioConfig {
             return AudioConfig(
                 bitrate = config.startBitrate,
                 sampleRate = config.sampleRate,
-                stereo = config.channelConfig == AudioFormat.CHANNEL_IN_STEREO,
-                echoCanceler = config.enableEchoCanceler,
-                noiseSuppressor = config.enableNoiseSuppressor
+                stereo = config.channelConfig == AudioFormat.CHANNEL_IN_STEREO
             )
         }
     }

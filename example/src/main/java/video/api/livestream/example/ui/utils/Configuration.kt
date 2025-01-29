@@ -76,11 +76,11 @@ class Configuration(context: Context) {
     class Endpoint(private val sharedPref: SharedPreferences, private val resources: Resources) {
         var url: String = ""
             get() = sharedPref.getString(
-                resources.getString(R.string.rtmp_endpoint_url_key),
+                resources.getString(R.string.server_url_key),
                 field
             )!!
 
         var streamKey: String = ""
-            get() = sharedPref.getString(resources.getString(R.string.rtmp_stream_key_key), field)!!
+            get() = sharedPref.getString(resources.getString(R.string.stream_key_key), field)!!
     }
 }
